@@ -1,5 +1,15 @@
 import requests, sys, time, os, argparse
+import sched
+from datetime import datetime
 
+# Set time scheduler
+scheduler = sched.scheduler(time.time, time.sleep)
+#set global variables
+output_dir = "output/"
+api_key = ""
+country_codes = ""
+format_date = "%d-%m-%Y %H:%M"
+dt = datetime.now()
 # List of simple to collect features
 snippet_features = ["title",
                     "publishedAt",
@@ -11,10 +21,9 @@ snippet_features = ["title",
 unsafe_characters = ['\n', '"']
 
 # Used to identify columns, currently hardcoded order
-header = ["video_id"] + snippet_features + ["trending_date", "tags", "view_count", "likes", "dislikes",
+header = ["timestamp"] + ["video_id"] + snippet_features + ["trending_date", "tags", "view_count", "likes", "dislikes",
                                             "comment_count", "thumbnail_link", "comments_disabled",
                                             "ratings_disabled", "description"]
-
 
 def setup(api_path, code_path):
     with open(api_path, 'r') as file:
@@ -95,7 +104,7 @@ def get_videos(items):
             comment_count = 0
 
         # Compiles all of the various bits of info into one consistently formatted line
-        line = [video_id] + features + [prepare_feature(x) for x in [trending_date, tags, view_count, likes, dislikes,
+        line = [dt.strftime(format_date)] + [video_id] + features + [prepare_feature(x) for x in [trending_date, tags, view_count, likes, dislikes,
                                                                        comment_count, thumbnail_link, comments_disabled,
                                                                        ratings_disabled, description]]
         lines.append(",".join(line))
@@ -130,7 +139,7 @@ def write_to_file(country_code, country_data):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    with open(f"{output_dir}/{time.strftime('%y.%d.%m')}_{country_code}_videos.csv", "w+", encoding='utf-8') as file:
+    with open(f"{output_dir}/{time.strftime('%Y.%m.%d')}_{country_code}_videos.csv", "a+", encoding='utf-8') as file:
         for row in country_data:
             file.write(f"{row}\n")
 
@@ -139,18 +148,25 @@ def get_data():
     for country_code in country_codes:
         country_data = [",".join(header)] + get_pages(country_code)
         write_to_file(country_code, country_data)
+    print("last write: ", dt.strftime(format_date))
 
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--key_path', help='Path to the file containing the api key, by default will use api_key.txt in the same directory', default='api_key.txt')
-    parser.add_argument('--country_code_path', help='Path to the file containing the list of country codes to scrape, by default will use country_codes.txt in the same directory', default='country_codes.txt')
-    parser.add_argument('--output_dir', help='Path to save the outputted files in', default='output_23-12-19/')
-
-    args = parser.parse_args()
-
-    output_dir = args.output_dir
-    api_key, country_codes = setup(args.key_path, args.country_code_path)
+def scrape(n_scheduler):
+    global output_dir
+    global api_key, country_codes
+    global dt
     
+    key_path = "api_key.txt"
+    country_code_path = "country_codes.txt"
+    output_dir = "output_timed/"
+
+    api_key, country_codes = setup(key_path, country_code_path)
+    dt = datetime.now()
+   
     get_data()
+    #scheduler waits
+    scheduler.enter(900, 1, scrape, (n_scheduler,))
+
+#scheduler starts
+scheduler.enter(5, 1, scrape, (scheduler,))
+scheduler.run()    
+
