@@ -20,3 +20,8 @@ __Idea 2__: Fare un'analisi descrittiva in modo da estrarre il modello di video 
 __Idea 3__: correlarlo con qualcos'altro che secondo me l'unico difetto di questa analisi è che usamo "solo" i dati di youtube
 
 Ovviamente si può pensare di utilizzare altri attributi, esplorate il dataset per vedere se vi viene qualche idea.
+
+### Appunti chiamata 23-12-19
+__Chistian__: capire se posso fare scraping dei canali, numero visualizzazioni, iscritti ... <br>
+__Marco__: capire se nei paesi dove sono concentrati il maggior numero di iscritti ci sia qualcosa di interessante ... (normalizzare sulla popolazione) <br>
+__Fede__: sono riuscito a scrapare i canali Youtube tramite API ufficiali, ho il numero di iscritti e le visualizzazioni totali
