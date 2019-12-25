@@ -164,7 +164,7 @@ def scrape(n_scheduler):
    
     get_data()
     #scheduler waits
-    scheduler.enter(900, 1, scrape, (n_scheduler,))
+    scheduler.enter(1800, 1, scrape, (n_scheduler,))
 
 #scheduler starts
 scheduler.enter(5, 1, scrape, (scheduler,))
