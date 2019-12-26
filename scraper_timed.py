@@ -1,6 +1,7 @@
 import requests, sys, time, os, argparse
 import sched
 from datetime import datetime
+import yagmail
 
 # Set time scheduler
 scheduler = sched.scheduler(time.time, time.sleep)
@@ -25,6 +26,17 @@ header = ["timestamp"] + ["video_id"] + snippet_features + ["trending_date", "ta
                                             "comment_count", "thumbnail_link", "comments_disabled",
                                             "ratings_disabled", "description"]
 
+# Prepare code for sending email in case of error
+
+
+#password = input("Type your password and press enter: ")
+#username = "christian.uccheddu@gmail.com"
+receiver = "christian.uccheddu@gmail.com"
+body = "Il codice si è bloccato perché ha ricevuto un errore"
+def register(username, password):
+    """ Use this to add a new gmail account to your OS' keyring so it can be used in yagmail """
+    keyring.set_password("yagmail", username, password)
+
 def setup(api_path, code_path):
     with open(api_path, 'r') as file:
         api_key = file.readline().strip()
@@ -47,10 +59,17 @@ def api_request(page_token, country_code):
     request_url = f"https://www.googleapis.com/youtube/v3/videos?part=id,statistics,snippet{page_token}chart=mostPopular&regionCode={country_code}&maxResults=50&key={api_key}"
     request = requests.get(request_url)
     if request.status_code >= 400:
-       print(f"error {request.status_code}")
-       print(request.json())
-       #print("Temp-Banned due to excess requests, please wait and continue later")
-       sys.exit()
+        print(f"error {request.status_code}")
+        print(request.json())
+        #print("Temp-Banned due to excess requests, please wait and continue later")
+
+        yag = yagmail.SMTP("christian.uccheddu@gmail.com")
+        yag.send(
+            to=receiver,
+            subject="Errore codice",
+            contents=body, 
+        )   
+        sys.exit()
     return request.json()
 
 
@@ -169,4 +188,5 @@ def scrape(n_scheduler):
 #scheduler starts
 scheduler.enter(5, 1, scrape, (scheduler,))
 scheduler.run()    
+
 
