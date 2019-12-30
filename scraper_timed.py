@@ -57,7 +57,17 @@ def prepare_feature(feature):
 def api_request(page_token, country_code):
     # Builds the URL and requests the JSON from it
     request_url = f"https://www.googleapis.com/youtube/v3/videos?part=id,statistics,snippet{page_token}chart=mostPopular&regionCode={country_code}&maxResults=50&key={api_key}"
-    request = requests.get(request_url)
+    try:
+        request = requests.get(request_url)
+    except ValueError:
+        yag = yagmail.SMTP("christian.uccheddu@gmail.com")
+        yag.send(
+            to=receiver,
+            subject="Errore codice",
+            contents=body, 
+        )   
+        sys.exit()
+    
     if request.status_code >= 400:
         print(f"error {request.status_code}")
         print(request.json())
