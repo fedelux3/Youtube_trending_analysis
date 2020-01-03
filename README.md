@@ -36,3 +36,10 @@ Potremmo calcolare:
 #### SCADENZE:
 - 10.01.20: presentazione a Cabitza
 - 16.01.20: scritto
+
+#### PROCEDURA per fare il "mergione":
+run del file fuori dalla directory data con cartelle dei dati
+1. create_data (mergione) su tutti
+2. delete_dir (elimina le intestazioni)
+3. add date columns 
+4. dataFrame gigante
