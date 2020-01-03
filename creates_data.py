@@ -15,7 +15,7 @@ args = parser.parse_args()
 data = os.chdir(args.data)
 
 # Mi occupo ora di importarli nella maniera corretta in pandas. Per prima cosa mette tutti i file in una lista e poi li importa
-# come dataframe pandas.
+# come dataframe pandas. Questo funziona bene quando ho una directory sola.
 '''
 files = os.listdir(data)
 
@@ -30,28 +30,19 @@ for file in files_csv:
 #   Adesso faccio la concatenazione dei dataframe presenti nella lista
 df = pd.concat(dfs)
 '''
+
+# Provo a fare la stessa cosa ma avendo file in più directory, non capisco perchè ma non trova i file quando devono essere concatenati
 files_csv = []
 dfs = []
 dyr = os.listdir(data)
 
 
 for directory in dyr:
-    #os.chdir(directory)
     files = os.listdir(directory)
     for i in files:
         if i.endswith('.csv'):
             files_csv.append(i)
-            #dfs.append(pd.read_csv(files_csv))
+            #dfs.append(pd.read_csv(i))
             #df = pd.concat(dfs)  
 
 print(files_csv)
-#   Fino a qua funziona bene     
-'''
-for file in files_csv:
-    dfs.append(pd.read_csv(file))  
-
-
-#   Adesso faccio la concatenazione dei dataframe presenti nella lista
-df = pd.concat(dfs)
-
-'''
