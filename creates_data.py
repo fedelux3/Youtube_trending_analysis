@@ -4,7 +4,8 @@ import pandas as pd
 import argparse
 import numpy as np
 import  os
-
+from fix_datasets import delete
+from fix_datasets import date_columns
 
 #   Inizio con l'aprire tutti i dati presenti con nella directory data:
 parser = argparse.ArgumentParser()
@@ -35,7 +36,7 @@ def conc_dataframe():
 # Provo a fare la stessa cosa ma avendo file in più directory, non capisco perchè ma non trova i file quando devono essere concatenati
 def conc_dataframe():
     files_csv = []
-    dfs = []
+    dfl = [] #lista dei dataset da mergiare
     dyr = os.listdir(data)
 
 
@@ -44,13 +45,13 @@ def conc_dataframe():
         for i in files:
             if i.endswith('.csv'):
                 files_csv.append(i)
-                dfs.append(pd.read_csv(directory + "\\" + i))
-                #print(i)
-                #pd.read_csv(directory + "\\" + i)
-                df = pd.concat(dfs)  
+                dfs = pd.read_csv(directory + "\\" + i) #dataset che sto pulendo
+                dfs_fixed = delete(dfs) #elimino le intestazioni sbagliate
+                date_columns(dfs_fixed) #aggiungo le colonne delle date
+                #se dobbiamo fare qualcosa prima del merge gigante
+                #AGGIUNGI QUI :-) (btw occhio agli slash)
+                dfl.append(dfs_fixed)
+                df = pd.concat(dfl)  
 
     print(files_csv)
     print(df.tail())
-
-if __name__ == '__main__':
-    conc_dataframe()

@@ -21,7 +21,7 @@ def date_columns(df):
 
 #prende tutti i file nella cartella e gli fa eseguire il delete
 def delete_dir(dir):
-    files = os.listdir('.\\' + dir)
+    files = os.listdir('/' + dir)
     dir_output = dir + 'fixed\\'
     os.mkdir(dir_output)
 
@@ -33,7 +33,7 @@ def delete_dir(dir):
 
 #prende tutti i file nella cartella e gli fa eseguire le funzioni per fixare
 def fix_dir(dir):
-    files = os.listdir('.\\' + dir)
+    files = os.listdir('/' + dir)
     dir_output = dir + 'fixed\\'
     os.mkdir(dir_output)
 
@@ -44,12 +44,6 @@ def fix_dir(dir):
         df_fixed.to_csv(dir_output + file, index = False)
         print("fatto")
 
-if __name__ == '__main__':
-    #!!!
-    #dir è il nome della cartella in cui devo fixare i dati
-    #importante che:
-    # - non ci siano altri dati se non i csv
-    # - mettere i due \\ in fondo alla stringa
-    #se no non funziona
-    dir = '24.12.19 09_00 csv files\\'
-    fix_dir(dir)
+
+dir = 'output_timed'
+
