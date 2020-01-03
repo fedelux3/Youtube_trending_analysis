@@ -43,13 +43,14 @@ def conc_dataframe():
         files = os.listdir(directory)
         for i in files:
             if i.endswith('.csv'):
-                #files_csv.append(i)
-                #dfs.append(pd.read_csv(i))
-                print(i)
-                #pd.read_csv(i)
-                #df = pd.concat(dfs)  
+                files_csv.append(i)
+                dfs.append(pd.read_csv(directory + "\\" + i))
+                #print(i)
+                #pd.read_csv(directory + "\\" + i)
+                df = pd.concat(dfs)  
 
-    #print(files_csv)
+    print(files_csv)
+    print(df.tail())
 
 if __name__ == '__main__':
     conc_dataframe()
