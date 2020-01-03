@@ -16,7 +16,7 @@ data = os.chdir(args.data)
 
 # Mi occupo ora di importarli nella maniera corretta in pandas. Per prima cosa mette tutti i file in una lista e poi li importa
 # come dataframe pandas.
-
+'''
 files = os.listdir(data)
 
 # Uso la lista dfs per salvare i data frame pandas, una volta messi dentro posso concatenarli.
@@ -29,5 +29,25 @@ for file in files_csv:
 
 #   Adesso faccio la concatenazione dei dataframe presenti nella lista
 df = pd.concat(dfs)
+'''
+files_csv = []
+dfs = []
+dyr = os.listdir(data)
 
-print(df)
+
+for directory in dyr:
+    files = os.listdir(directory)
+    for i in files:
+        if i.endswith('.csv'):
+            files_csv.append(i)
+            
+#   Fino a qua funziona bene     
+'''
+for file in files_csv:
+    dfs.append(pd.read_csv(file))  
+
+
+#   Adesso faccio la concatenazione dei dataframe presenti nella lista
+df = pd.concat(dfs)
+
+'''
