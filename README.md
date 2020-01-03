@@ -25,3 +25,14 @@ Ovviamente si può pensare di utilizzare altri attributi, esplorate il dataset p
 __Chistian__: capire se posso fare scraping dei canali, numero visualizzazioni, iscritti ... <br>
 __Marco__: capire se nei paesi dove sono concentrati il maggior numero di iscritti ci sia qualcosa di interessante ... (normalizzare sulla popolazione) <br>
 __Fede__: sono riuscito a scrapare i canali Youtube tramite API ufficiali, ho il numero di iscritti e le visualizzazioni totali
+
+### Appunti telefonata 30.12.19
+Potremmo calcolare:
+- indice di partecipazione (chi fa più like/visual) se ci indica che il video è in tendenza
+- analisi dei tag, salvarli in un dataset mongo e vedere se possono essere studiati
+- trovare video-modello che va più in tendenza nel periodo natalizio (tag + usati e titoli)
+- se replichiamo i dati (nella raccolta) fa niente, poi eliminiamo i doppioni
+
+#### SCADENZE:
+- 10.01.20: presentazione a Cabitza
+- 16.01.20: scritto
