@@ -18,6 +18,7 @@ def date_columns(df):
     df['year'] = df['timestamp'].apply(lambda x: x[6:10])
     df['hour'] = df['timestamp'].apply(lambda x: x[11:13])
     df['min'] = df['timestamp'].apply(lambda x: x[14:16])
+    df.drop('timestamp', axis = 1)
 
 #prende tutti i file nella cartella e gli fa eseguire il delete
 def delete_dir(dir):
@@ -45,5 +46,4 @@ def fix_dir(dir):
         print("fatto")
 
 
-dir = 'output_timed'
 
