@@ -3,7 +3,7 @@
 import pandas as pd 
 import argparse
 import numpy as np
-import glob, os
+import  os
 
 
 #   Inizio con l'aprire tutti i dati presenti con nella directory data:
@@ -14,9 +14,20 @@ parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la 
 args = parser.parse_args()
 data = os.chdir(args.data)
 
-# Mi occupo ora di importarli nella maniera corretta in pandas.
+# Mi occupo ora di importarli nella maniera corretta in pandas. Per prima cosa mette tutti i file in una lista e poi li importa
+# come dataframe pandas.
 
-for file in glob.glob("*.csv"):
-    file =  pd.read_csv(file)
+files = os.listdir(data)
 
-print(file.head())
+# Uso la lista dfs per salvare i data frame pandas, una volta messi dentro posso concatenarli.
+dfs = []
+files_csv = [i for i in files if i.endswith('.csv')]
+
+
+for file in files_csv:
+    dfs.append(pd.read_csv(file))  
+
+#   Adesso faccio la concatenazione dei dataframe presenti nella lista
+df = pd.concat(dfs)
+
+print(df)
