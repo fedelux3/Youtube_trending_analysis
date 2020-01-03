@@ -36,11 +36,15 @@ dyr = os.listdir(data)
 
 
 for directory in dyr:
+    #os.chdir(directory)
     files = os.listdir(directory)
     for i in files:
         if i.endswith('.csv'):
             files_csv.append(i)
-            
+            #dfs.append(pd.read_csv(files_csv))
+            #df = pd.concat(dfs)  
+
+print(files_csv)
 #   Fino a qua funziona bene     
 '''
 for file in files_csv:
