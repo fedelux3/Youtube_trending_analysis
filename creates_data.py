@@ -36,5 +36,7 @@ def conc_dataframe():
                 #AGGIUNGI QUI :-) (btw occhio agli slash)
                 dfl.append(dfs_fixed)
                 df = pd.concat(dfl)  
-
-    print(df.tail())
+    
+    print(df)
+    # Salva il dataframe risultanete i un csv salvato in una cartella di output.
+    df.to_csv('merge.csv')
