@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2019.12.11)  3 JAN 2020 22:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2019.12.11)  11 JAN 2020 11:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -388,15 +388,15 @@ e
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * bindingoffset: 14.22636pt
 * modes: heightrounded 
-* h-part:(L,W,R)=(56.9055pt, 469.4705pt, 56.9055pt)
-* v-part:(T,H,B)=(28.45274pt, 759.6886pt, 56.9055pt)
+* h-part:(L,W,R)=(85.35826pt, 412.56499pt, 85.35826pt)
+* v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=469.4705pt
-* \textheight=754.0pt
-* \oddsidemargin=-1.13812pt
-* \evensidemargin=-15.36449pt
-* \topmargin=-80.81725pt
+* \textwidth=412.56499pt
+* \textheight=730.0pt
+* \oddsidemargin=27.31464pt
+* \evensidemargin=13.08827pt
+* \topmargin=-52.36449pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=10.0pt
@@ -416,24 +416,25 @@ e
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./report.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 5179 strings out of 492167
- 64609 string characters out of 6131557
- 162179 words of memory out of 5000000
- 9466 multiletter control sequences out of 15000+600000
- 6722 words of font info for 18 fonts, out of 8000000 for 9000
+ 5185 strings out of 492167
+ 64674 string characters out of 6131557
+ 164182 words of memory out of 5000000
+ 9469 multiletter control sequences out of 15000+600000
+ 8948 words of font info for 21 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 46i,5n,45p,795b,154s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/shar
-e/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fo
-nts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf-dist/fonts/type1/publi
-c/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm
-1000.pfb>
-Output written on report.pdf (1 page, 44879 bytes).
+ 46i,5n,45p,1013b,128s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/
+share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dis
+t/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf-dist/fonts/type1/p
+ublic/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/
+sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></
+usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on report.pdf (2 pages, 93056 bytes).
 PDF statistics:
- 21 PDF objects out of 1000 (max. 8388607)
- 14 compressed objects within 1 object stream
+ 32 PDF objects out of 1000 (max. 8388607)
+ 22 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
