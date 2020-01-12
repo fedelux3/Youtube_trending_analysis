@@ -24,7 +24,7 @@ def box_plot(data):
                     rotation=45, fontsize=8)
     
 
-    colors = ['pink', 'lightblue', 'lightgreen', 'pink', 'lightblue', 'lightgreen']
+    colors = [(0.2,0.1,0.3), (0.9,0.8,0.4), (0.2,0.3,0.7), (0.7,0.2,0.4), (0.5,0.3,0.2), (0.3,0.2,0.5)]
 
     for box, color in zip(bp['boxes'], colors):
         box.set(color= color, linewidth=2)
@@ -50,7 +50,7 @@ def violin_plot(data):
     ax.set_xticklabels(['0', 'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','totale'],
                     rotation=45, fontsize=8)
 
-    colors = ['pink', 'lightblue', 'lightgreen', 'pink', 'lightblue', 'lightgreen']
+    colors = [(0.2,0.1,0.3), (0.9,0.8,0.4), (0.2,0.3,0.7), (0.7,0.2,0.4), (0.5,0.3,0.2), (0.3,0.2,0.5)]
 
     for pc, color in zip(bp['bodies'],colors):
         pc.set_facecolor(color)
@@ -63,7 +63,7 @@ def violin_plot(data):
 def scatter_plot(x, y):
         
     fig = plt.figure(figsize=(15,8))
-    plt.plot(x,y, '+', color = "red")
+    plt.plot(x,y, '+', color = (0.2,0.1,0.3))
 
     
     #Plot of the bisector, the line in which the poinst must be in the neighborhood
