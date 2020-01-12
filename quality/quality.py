@@ -3,6 +3,8 @@ import pandas as pd
 
 
 def box_plot(data):
+    # Se si vuole visualizzare in stile seaborn (a me non piace)
+    #plt.style.use('seaborn')
     fig, ax= plt.subplots(figsize=(9, 4))
 
     bp = ax.boxplot(data, sym='k+', 
@@ -17,6 +19,7 @@ def box_plot(data):
     ax.set_ylim(0,6.5)
     ax.set_xticklabels(['chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','percepito'],
                     rotation=45, fontsize=8)
+    
 
     colors = ['pink', 'lightblue', 'lightgreen', 'pink', 'lightblue', 'lightgreen']
 
@@ -42,7 +45,8 @@ def violin_plot(data):
     ax.set_xlabel('Distribuzione')
     ax.set_ylabel('Valori')
     ax.set_ylim(0,6.5)
-    ax.set_xticklabels(['chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','percepito'],
+    # Non so perché ma scala le etichette dei valori a destra di 1, quindi inserisco un valore prima in modo da averli tutti
+    ax.set_xticklabels(['0', 'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','percepito'],
                     rotation=45, fontsize=8)
 
     colors = ['pink', 'lightblue', 'lightgreen', 'pink', 'lightblue', 'lightgreen']
@@ -77,7 +81,12 @@ def pulizia():
 
     # Creates the new summarize column
     print(risposte)
+    print('-----------------------------------------------------')
+    a = pd.DataFrame(round(risposte.describe(),2))
+    print(a)
     dati = [risposte['chiarezza'], risposte['utilità'], risposte['bellezza'], risposte['intuitività'], risposte['informatività'], risposte['percepito']]
+
+    # Implemento anche l'indice R^2 per vedere come si comporta.
     box_plot(dati)
     violin_plot(dati)
 
