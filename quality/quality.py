@@ -2,11 +2,33 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from scipy.stats import linregress
+import seaborn as sns
 import argparse
+from matplotlib.collections import EllipseCollection
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-d', '--output', type=str, required=True, help="Inserire la directory corrente")
 args = parser.parse_args()
+
+
+def correlation_plot(data):
+    corr = data.corr()
+    mask = np.zeros_like(corr, dtype=np.bool)
+    mask[np.triu_indices_from(mask)] = True
+
+    # Set up the matplotlib figure
+    fig, ax = plt.subplots(figsize=(11, 9))
+
+    # Generate a custom diverging colormap
+    cmap = sns.diverging_palette(h_neg=130, h_pos=10, s=99, l=55, sep=3, as_cmap=True)
+
+    # Draw the heatmap with the mask and correct aspect ratio
+    
+    sns.heatmap(corr, cmap=cmap,  annot=True, 
+            linewidths=1.3, linecolor='black', cbar=True, ax=ax)
+    plt.yticks(rotation = 0)
+    plt.show()
+    fig.savefig(args.output + '/correlation_plot.png', bbox_inches='tight')
 
 def box_plot(data):
     # Se si vuole visualizzare in stile seaborn (a me non piace)
@@ -123,6 +145,11 @@ def quality():
 
     # Disegno tutti i grafici.
 
-    box_plot(dati)
+    #box_plot(dati)
     violin_plot(dati)
-    scatter_plot(risposte['totale'], risposte['percepito'])
+    #scatter_plot(risposte['totale'], risposte['percepito'])
+    #plot_corr(risposte)
+    correlation_plot(risposte)
+    
+
+    
