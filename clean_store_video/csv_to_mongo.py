@@ -14,6 +14,7 @@ def time_struct(row):
     out['month'] = row['month']
     out['day'] = row['day']
     out['hour'] = row['hour']
+    out['min'] = row['min']
     return out
 
 #restituisce in un dict le statistics del video
@@ -30,7 +31,7 @@ def row_to_dict(row):
     line = {}
     line['video_id'] = row['video_id'] 
     line['timestamp'] = row['timestamp']
-    line['time'] = time_struct(row)
+    #line['time'] = time_struct(row) NON SERVE
     line['country_code'] = row['country_code'] #CAPIRE COME GESTIRE IL COUNTRY_CODE
     line['title'] = row['title']
     line['publishedAt'] = row['publishedAt']
@@ -50,10 +51,10 @@ def df_to_mongo(df, col):
         out_dict.append(row_to_dict(row))
     
     col.insert_many(out_dict)
-    #insert_video_mongo(out_dict)
     print("inserimento completato")
-    
-if __name__ == "__main__": 
-    dirt = "data/"
-    df = pd.read_csv(dirt + "2020.01.01_IT_videos.csv")
-    df_to_mongo(df)
+    #return out_dict
+
+#if __name__ == "__main__": 
+    #dirt = "data/"
+    #df = pd.read_csv(dirt + "2020.01.01_IT_videos.csv")
+    #df_to_mongo(df)

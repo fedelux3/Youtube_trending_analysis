@@ -14,23 +14,27 @@ def conc_dataframe(directory):
     #carico il dizionario dei nomi dei paesi con i fusi orario
     with open("country_names.json", "r") as read_file:
         c_gmt = json.load(read_file)
-    data = os.chdir(directory)
-    files = os.listdir(data)
+    #data = os.chdir(directory)
+    files = os.listdir(directory)
 
     for file in files:
         if file.endswith('.csv'):
+            print(file)
             files_csv.append(file)
-            dfs = pd.read_csv(file) #dataset che sto pulendo
+            dfs = pd.read_csv(directory + "\\" + file) #dataset che sto pulendo
             dfs_fixed = delete(dfs) #elimino le intestazioni sbagliate
             add_country(dfs_fixed,file) #aggiungo colonna del country_code
             fix_timestamp(dfs_fixed, c_gmt) #sistemo il timestamp in base al fuso orario
-            date_columns(dfs_fixed) #aggiungo le colonne delle date
+            ########################################################################
+            #date_columns(dfs_fixed) #aggiungo le colonne delle date NON SERVONO
+            ########################################################################
             #se dobbiamo fare qualcosa prima del merge gigante
             #AGGIUNGI QUI :-) (btw occhio agli slash)
             dfl.append(dfs_fixed)
             df = pd.concat(dfl)  
     
-    print(df)
+    #os.chdir("..")
+    #print(df)
     return df
     #salvo il dataframe risultate nel database mongoDB
     # Salva il dataframe risultanete i un csv salvato in una cartella di output.

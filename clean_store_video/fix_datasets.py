@@ -23,7 +23,7 @@ def row_timestamp(row, c_gmt):
     fuso = c_gmt[str(row['country_code'])]['GMT']
     dt = datetime.strptime(row['timestamp'], "%d-%m-%Y %H:%M")
     dt_new = dt + timedelta(hours=fuso)
-    row['timestamp'] = dt_new.strftime("%d-%m-%Y %H:%M")
+    row['timestamp'] = dt_new.strftime("%m-%d-%Y %H:%M") #riscrivo in modo americano per tableau
     
 # corregge i timestamp in base ai fusi orario
 # NB fare solo dopo aver aggiunto il country_code
