@@ -19,7 +19,9 @@
 
 \begin{document}
 \begin{center}
-\textbf{Analisi delle correlazioni tra le tendenze di youtube e quelle di instagram}
+\huge\textbf{Come avere successo su Youtube?}
+
+Un'analisi dei video in tendenza
 \end{center}
 
 \begin{center}
@@ -31,7 +33,10 @@ Gabriele \textbf{inserire cognome}, Federico Luzzi,  Marco Peracchi , Christian 
 
 \centering\textbf{{Introduzione e obiettivi}}
 \\
-Questo lavoro si occupa di analizzare le correlazioni presenti tra le tendenze di youtube e quelle di instagram nel tempo. In particolare attraverso l'uso di indicatori creati ad hoc ci si è occupati di cercare il prototipo di personaggio con video ideale per un dato periodo dell'anno, in questo caso le festività natalizie.
+
+In questo lavoro l'obiettivo è quello di capire come un video di Youtube riesce ad avere successo. Per raggiungere questo scopo abbiamo deciso di analizzare i video di Youtube che si trovano in trending nelle varie ore delle giornata, studiandone caratteristiche, categorie di appartenenza, insieme a visualizzazioni, likes, dislikes, commenti e altro.
+L'obiettivo è anche quello di comprendere come cambiano le caratteristiche nei vari paesi, e cosa serve per avere successo in ognuno di questi.
+%Questo lavoro si occupa di analizzare le correlazioni presenti tra le tendenze di youtube e quelle di instagram nel tempo. In particolare attraverso l'uso di indicatori creati ad hoc ci si è occupati di cercare il prototipo di personaggio con video ideale per un dato periodo dell'anno, in questo caso le festività natalizie.
 \vspace{0.5cm}
 \hrule
 
@@ -39,11 +44,18 @@ Questo lavoro si occupa di analizzare le correlazioni presenti tra le tendenze d
 \section*{Raccolta dati}
 
 In questa sezione del report verrà esposta la procedura con cui sono stati acquisiti i dati e come sono state affrontate le problematiche riscontrate.
-\subsection*{Scelta strumenti}
-Per prima cosa ci siamo dovuti occupare della scelta degli strumenti più adatti per effettuare la nostra presa dati. Per farlo abbiamo dovuto per prima cosa capire su quali V dei Big Data il nostro progetto sarebbe andato a focalizzarsi. Nel nostro caso è risultato subito evidente come fossero la V di Velocity e quella di Volume. In questo caso abbiamo deciso di utilizzare un database NoSQL quale MongoDB per lo storage dei dati. Il fatto che tramite le API di Youtube riuscissimo a scaricare i dati in formato JSON ci ha indotti ad utilizzare MongoDB che è pensato apposta per i database document based. Per rendere ottimizzato questo procedimento abbiamo usato due script python separati: \textit{scraper\_consumer.py} e \textit{scraper\_producer.py.} In particolzare abbiamo così effettuato una presa dati che può risultare efficace anche con una raccolta dati di volume maggiore. Il nostro oggetto producer si occupa infatti di scaricare i dati da Youtbue attraverso le API
+\subsection*{Scelta degli strumenti}
+La prima domanda che ci siamo posti riguardo al progetto è stata: "Quali sono le "V" su cui focalizzare la nostra attenzione?".
+Dopo qualche indagine preliminare abbiamo deciso che che ci saremmo concentrati su "Volume" e su "Velocity", perchè i nostri dati venivano raccolti in tempo reale dalle api di Youtube e la quantità di dati aumenta costantemente con l'aumentare del tempo di presa dati.
+
+Per gestire il flusso di dati ci siamo affidati al software Kafka, permettendoci così di poter separare temporalmente la lettura dei dati dalla raccolta. Uno script python (\textit{scraper\_producer.py}) si occupava del producer, continuando ad effettuare richieste alle api di youtube, mentre lo script consumer (\textit{scraper\_consumer.py}) si occupava di leggere i file memorizzati nel topic di kafka, e successivamente immagazzinarli in un database MongoDB in formato ovviamente JSON. La scelta di MongoDB è stata dettata dalla sorgente dei dati, che venivano forniti in formato documentale.
+ 
+%Per prima cosa ci siamo dovuti occupare della scelta degli strumenti più adatti per effettuare la nostra presa dati. Per farlo abbiamo dovuto per prima cosa capire su quali V dei Big Data il nostro progetto sarebbe andato a focalizzarsi. Nel nostro caso è risultato subito evidente come fossero la V di Velocity e quella di Volume. In questo caso abbiamo deciso di utilizzare un database NoSQL quale MongoDB per lo storage dei dati. Il fatto che tramite le API di Youtube riuscissimo a scaricare i dati in formato JSON ci ha indotti ad utilizzare MongoDB che è pensato apposta per i database document based. Per rendere ottimizzato questo procedimento abbiamo usato due script python separati: \textit{scraper\_consumer.py} e \textit{scraper\_producer.py.} In particolzare abbiamo così effettuato una presa dati che può risultare efficace anche con una raccolta dati di volume maggiore. Il nostro oggetto producer si occupa infatti di scaricare i dati da Youtbue attraverso le API
 
 \subsection*{Qualità dati}
 \textit{Mostrare le analisi di qualità effettuate sul dataset} Esempio: c'erano missing values? se sì come abbiamo deciso di replicarli?
+ 
+Il problema principale riguardante la qualità dei dati è la ridondanza. I trending di Youtube vengono presi ogni mezz'ora, con il risultato di avere molti dati simili riguardanti le stesse fasce della giornata. La problematica si può risolvere aggregando i dati. Ma come? Boh
 
 \subsection*{Scalabilità dell'algoritmo}
 
