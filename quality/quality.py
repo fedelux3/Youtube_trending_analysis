@@ -28,7 +28,7 @@ def correlation_plot(data):
             linewidths=1.3, linecolor='black', cbar=True, ax=ax)
     plt.yticks(rotation = 0)
     plt.show()
-    fig.savefig(args.output + '/correlation_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_correlation_plot.png', bbox_inches='tight')
 
 def box_plot(data):
     # Se si vuole visualizzare in stile seaborn (a me non piace)
@@ -57,7 +57,7 @@ def box_plot(data):
         box.set(hatch = '/')
 
     plt.show()
-    fig.savefig(args.output + '/box_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_box_plot.png', bbox_inches='tight')
 def violin_plot(data):
     fig, ax= plt.subplots(figsize=(15, 8))
 
@@ -66,14 +66,17 @@ def violin_plot(data):
     ax.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
                alpha=0.5)
 
+    pos   = [1, 2, 3,4,5,6]
+    label = ['chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','totale']
     ax.set_axisbelow(True)
     ax.set_title('Visualizzazione della questionario di qualità')
     ax.set_xlabel('Distribuzione')
     ax.set_ylabel('Valori')
+    ax.set_xticks(pos)
+    ax.set_xticklabels(label)
     ax.set_ylim(0,6.5)
     # Non so perché ma scala le etichette dei valori a destra di 1, quindi inserisco un valore prima in modo da averli tutti
-    ax.set_xticklabels(['0', 'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','totale'],
-                    rotation=45, fontsize=8)
+    
 
     colors = [(0.2,0.1,0.3), (0.9,0.8,0.4), (0.2,0.3,0.7), (0.7,0.2,0.4), (0.5,0.3,0.2), (0.3,0.2,0.5)]
 
@@ -83,7 +86,7 @@ def violin_plot(data):
         pc.set_alpha(1)
 
     plt.show()
-    fig.savefig(args.output + '/violin_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_violin_plot.png', bbox_inches='tight')
 
 def scatter_plot(x, y):
         
@@ -102,7 +105,7 @@ def scatter_plot(x, y):
     plt.legend(loc="best", prop={'size': 15})
     plt.show()
     plt.ioff()
-    fig.savefig(args.output + '/scatter_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_scatter_plot.png', bbox_inches='tight')
 
 def quality():
     primo_coefficiente = 0.213
