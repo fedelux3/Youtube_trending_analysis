@@ -30,7 +30,11 @@ def row_timestamp(row, c_gmt):
 def fix_timestamp(df, c_gmt):
     for index, row in df.iterrows():
         row_timestamp(row, c_gmt)
-        
+
+# aggiunge colonna del nome country
+def add_country_name(df, c_gmt):
+    df['country_name'] = df['country_code'].apply(lambda x: c_gmt[str(x)]['name']) #aggiungo il nome del paese per esteso
+
 #aggiunge le colonne dei componenti della date
 def date_columns(df):
     df['day'] = df['timestamp'].apply(lambda x: x[0:2])

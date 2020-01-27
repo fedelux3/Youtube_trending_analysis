@@ -6,6 +6,7 @@ from fix_datasets import delete
 from fix_datasets import date_columns
 from fix_datasets import add_country
 from fix_datasets import fix_timestamp
+from fix_datasets import add_country_name
 
 # questa funzione pulisce i dati e restituisce il dataframe concatenato corretto (input la directory dei file)
 def conc_dataframe(directory):
@@ -25,6 +26,7 @@ def conc_dataframe(directory):
             dfs_fixed = delete(dfs) #elimino le intestazioni sbagliate
             add_country(dfs_fixed,file) #aggiungo colonna del country_code
             fix_timestamp(dfs_fixed, c_gmt) #sistemo il timestamp in base al fuso orario
+            add_country_name(dfs_fixed, c_gmt)
             ########################################################################
             #date_columns(dfs_fixed) #aggiungo le colonne delle date NON SERVONO
             ########################################################################

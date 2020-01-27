@@ -33,6 +33,7 @@ def row_to_dict(row):
     line['timestamp'] = row['timestamp']
     #line['time'] = time_struct(row) NON SERVE
     line['country_code'] = row['country_code'] #CAPIRE COME GESTIRE IL COUNTRY_CODE
+    line['country_name'] = row['country_name'] #aggiunto nome paese
     line['title'] = row['title']
     line['publishedAt'] = row['publishedAt']
     line['channelId'] = row['channelId']
