@@ -18,6 +18,19 @@ def add_country(df, nameFile):
     code = nameFile[11:13] #DA MIGLIORARE
     df['country_code'] = code
 
+# aggiunge colonna nome categoria
+def add_category_name(df, categorys):
+    df['category_name'] = df['categoryId'].apply(lambda  x : row_category(x,categorys))
+
+# aggiunge riga nome categoria
+def row_category(cat, categorys):
+    for category in categorys:
+        #print(category['id'])
+        #print(cat)
+        if category['id'] == str(cat):
+            return category['snippet']['title']
+            #break
+
 #sistema una riga del timestamp
 def row_timestamp(row, c_gmt):
     fuso = c_gmt[str(row['country_code'])]['GMT']
