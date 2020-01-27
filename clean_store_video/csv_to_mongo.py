@@ -39,6 +39,7 @@ def row_to_dict(row):
     line['channelId'] = row['channelId']
     line['channelTitle'] = row['channelTitle']
     line['categoryId'] = row['categoryId']
+    line['category_name'] = row['category_name']
     line['trending_date'] = row['trending_date']
     line['tags'] = tag_list(row['tags']) 
     line['statistics'] = statistics_to_dict(row)

@@ -21,8 +21,8 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--user', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="")
     parser.add_argument('-p', '--password', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="")
     parser.add_argument('-port', '--port', type=str, required=False, help="Inserire la directory da cui prendere i dati", default=27017)
-    parser.add_argument('-db', '--database', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="Youtube_data")
-    parser.add_argument('-c', '--collection', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="prova_new")
+    parser.add_argument('-db', '--database', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="YT_data")
+    parser.add_argument('-c', '--collection', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="videos")
     
     args = parser.parse_args()
     
