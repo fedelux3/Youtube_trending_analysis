@@ -37,7 +37,7 @@ def violin_plot(data):
         pc.set_alpha(1)
 
     plt.show()
-    fig.savefig(args.output + '/tempi_violin_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/tempi_violin_plot.png', bbox_inches='tight', dpi = 600)
 
 
 def times():

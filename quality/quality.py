@@ -28,7 +28,7 @@ def correlation_plot(data):
             linewidths=1.3, linecolor='black', cbar=True, ax=ax)
     plt.yticks(rotation = 0)
     plt.show()
-    fig.savefig(args.output + '/risposte_correlation_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
 
 def box_plot(data):
     # Se si vuole visualizzare in stile seaborn (a me non piace)
@@ -57,7 +57,7 @@ def box_plot(data):
         box.set(hatch = '/')
 
     plt.show()
-    fig.savefig(args.output + '/risposte_box_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_box_plot.png', bbox_inches='tight', dpi = 600)
 def violin_plot(data):
     fig, ax= plt.subplots(figsize=(15, 8))
 
@@ -86,7 +86,7 @@ def violin_plot(data):
         pc.set_alpha(1)
 
     plt.show()
-    fig.savefig(args.output + '/risposte_violin_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_violin_plot.png', bbox_inches='tight', dpi = 600)
 
 def scatter_plot(x, y):
         
@@ -105,7 +105,7 @@ def scatter_plot(x, y):
     plt.legend(loc="best", prop={'size': 15})
     plt.show()
     plt.ioff()
-    fig.savefig(args.output + '/risposte_scatter_plot.png', bbox_inches='tight')
+    fig.savefig(args.output + '/risposte_scatter_plot.png', bbox_inches='tight', dpi = 600)
 
 def quality():
     primo_coefficiente = 0.213
