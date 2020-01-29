@@ -41,8 +41,47 @@ L'obiettivo è anche quello di comprendere come cambiano le caratteristiche nei 
 \end{center}
 
 \section*{Raccolta dati}
+La raccolta dati è stata fatta quasi interamente tramite le API di Youtube. La raccolta si è subito concentrata sui video dell tendenze di Youtube. Questi video variano, anche se di poco, ogni 15 minuti circa (fonte: https://support.google.com/youtube/answer/7239739?hl=it). Le chiavi di richiesta gratuite fornite da Google developer però ci permettono di effettuare solo una certa quantità di richieste. Dopo alcune prove abbiamo capito che raccogliendo i dati ogni 30 minuti avendo a disposizione 3 chiavi ci entravamo nei limiti. 
+\\
+Abbiamo deciso di raccogliere dati dei seguenti paesi:
 
-In questa sezione del report verrà esposta la procedura con cui sono stati acquisiti i dati e come sono state affrontate le problematiche riscontrate.
+Italia, USA, Regno Unito, India, Germania, Canada, Francia, Corea del sud, Russia, Giappone, Brasile, Messico\\
+
+\subsection*{Dati in csv}
+Inizialmente abbiamo pensato di salvare i dati in formato \textit{.csv} in modo tale che siano facilmente utilizzabili e schematizzati. Gli attributi scelti per i file csv sono:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l|l}
+		\textbf{Attributo} & \textbf{Descrizione} \\
+		\hline
+		\textbf{timestamp} & data, ora e minuto della nostra rilevazione \\\hline
+		\textbf{video\_id} & identificativo unico del video\\\hline
+		\textbf{title} & nome del video per esteso\\\hline
+		\textbf{publishedAt} & data di pubblicazione\\\hline
+		\textbf{channelId} & identificativo unico del canale che ha pubblicato il video\\\hline
+		\textbf{channelTitle} & nome del canale per esteso\\\hline
+		\textbf{categoryId} & identificativo unico della categoria\\\hline
+		\textbf{trending\_date} & data in cui il video è in tendenza\\\hline
+		\textbf{tags} & stringa dei tag usati separati dal carattere "|"\\\hline
+		\textbf{view\_count} & numero di visualizzazioni\\\hline
+		\textbf{likes} & numero di like (mi piace)\\\hline
+		\textbf{dislikes} & numero di dislike (non mi piace)\\\hline
+		\textbf{comment\_count} & numero di commenti sotto il video\\\hline
+		\textbf{thumbnail\_link} & url all'immagine di copertina del video\\\hline
+		\textbf{comments\_disabled} & booleano che dichiara se i commenti sono disabilitati\\\hline
+		\textbf{ratings\_disabled} & booleano che dichiara se i like/dislike sono disabilitati\\\hline
+		\textbf{description} & descrizione del video\\
+		\hline
+	\end{tabular}
+	\caption{schema degli attributi dei dati csv}
+\end{table}
+
+Lo script \textit{scraper\_timed.py} si occupa delle richieste API da effettuare, riceve i dati in formato Json, estrae quelli scelti da noi e li rimappa in file csv secondo lo schema precedente. Un file corrisponde a tutte le rilevazioni fatte nell'arco di una giornata per un determinato paese identificato secondo il \textit{country\_code}, codice di due lettere identificativo del paese. I file estratti si trovano nella cartella [INSERIRE CARTELLA DOVE SONO I CSV].
+
+\subsection{Dati tramite Kafka}
+qua parlare del perchè abbiamo abbandonato l'idea dei csv e perche abbiamo preferito kafka con i dati in formato json, mostrando lo schema di quest'ultimo.
+
 \subsection*{Scelta degli strumenti}
 La prima domanda che ci siamo posti riguardo al progetto è stata: "Quali sono le "V" su cui focalizzare la nostra attenzione?".
 Dopo qualche indagine preliminare abbiamo deciso che che ci saremmo concentrati su "Volume" e su "Velocity", perché i nostri dati venivano raccolti in tempo reale dalle API di Youtube e la quantità di dati aumenta costantemente con l'aumentare del tempo di presa dati.
