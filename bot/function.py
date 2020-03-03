@@ -10,8 +10,4 @@ def send(chat_id, token=my_token):
 	bot.sendMessage(chat_id=group_id, text=msg)
 
 
-def update(chat_id, token=my_token):	
-	bot = telegram.Bot(token=token)
-	updates = bot.get_updates()
-	print([u.message.text for u in updates])
 	
