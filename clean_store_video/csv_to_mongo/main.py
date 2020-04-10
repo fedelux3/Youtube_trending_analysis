@@ -2,7 +2,7 @@ from creates_data import conc_dataframe
 from csv_to_mongo import df_to_mongo
 from pymongo import MongoClient
 import argparse
-import  os
+import os
 import json
 
 def list_directory(data):
