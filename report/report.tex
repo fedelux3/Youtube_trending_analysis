@@ -9,16 +9,18 @@
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage{geometry}
+\usepackage{url}
+\usepackage[ruled,vlined]{algorithm2e}
 \geometry{a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,%
 	heightrounded,bindingoffset=5mm}
-
 \usepackage{amssymb}
 \usepackage{amsthm}
 
 
 \begin{document}
+
 \begin{center}
-\huge\textbf{Come avere successo su Youtube?}
+\huge\textbf{Effetto del Covid-19 su Youtube?} (titolo provvisorio) [fede]
 
 Un'analisi dei video in tendenza
 \end{center}
@@ -30,7 +32,7 @@ Gabriele Celeri, Federico Luzzi,  Marco Peracchi, Christian Uccheddu
 \hrule
 \vspace{0.5cm}
 
-\begin{center}\textbf{{Introduzione e obiettivi}}
+\begin{center}\textbf{{Introduzione e obiettivi} (DA RISCRIVERE)}
 \\
 
 In questo lavoro l'obiettivo è quello di capire come un video di Youtube riesca ad avere successo. Per raggiungere questo scopo abbiamo deciso di analizzare i video di Youtube che si trovano in trending nelle varie ore delle giornata, studiandone caratteristiche, categorie di appartenenza, insieme a visualizzazioni, likes, dislikes, commenti e altro.
@@ -39,57 +41,12 @@ L'obiettivo è anche quello di comprendere come cambiano le caratteristiche nei 
 \vspace{0.5cm}
 \hrule
 \end{center}
+\textbf{IO SCRIVEREI TUTTO AL PRESENTE CON MAGARI COME SOGGETTO "NOI" (ALTRIMENTI SI PUÒ SCRIVERE IMPERSONALE) [fede]}
 
-\section*{Raccolta dati}
-La raccolta dati è stata fatta quasi interamente tramite le API di Youtube. La raccolta si è subito concentrata sui video dell tendenze di Youtube. Questi video variano, anche se di poco, ogni 15 minuti circa (fonte: https://support.google.com/youtube/answer/7239739?hl=it). Le chiavi di richiesta gratuite fornite da Google developer però ci permettono di effettuare solo una certa quantità di richieste. Dopo alcune prove abbiamo capito che raccogliendo i dati ogni 30 minuti avendo a disposizione 3 chiavi ci entravamo nei limiti. 
-\\
-Abbiamo deciso di raccogliere dati dei seguenti paesi:
-
-Italia, USA, Regno Unito, India, Germania, Canada, Francia, Corea del sud, Russia, Giappone, Brasile, Messico\\
-
-\subsection*{Dati in csv}
-Inizialmente abbiamo pensato di salvare i dati in formato \textit{.csv} in modo tale che siano facilmente utilizzabili e schematizzati. Gli attributi scelti per i file csv sono:
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{l|l}
-		\textbf{Attributo} & \textbf{Descrizione} \\
-		\hline
-		\textbf{timestamp} & data, ora e minuto della nostra rilevazione \\\hline
-		\textbf{video\_id} & identificativo unico del video\\\hline
-		\textbf{title} & nome del video per esteso\\\hline
-		\textbf{publishedAt} & data di pubblicazione\\\hline
-		\textbf{channelId} & identificativo unico del canale che ha pubblicato il video\\\hline
-		\textbf{channelTitle} & nome del canale per esteso\\\hline
-		\textbf{categoryId} & identificativo unico della categoria\\\hline
-		\textbf{trending\_date} & data in cui il video è in tendenza\\\hline
-		\textbf{tags} & stringa dei tag usati separati dal carattere "|"\\\hline
-		\textbf{view\_count} & numero di visualizzazioni\\\hline
-		\textbf{likes} & numero di like (mi piace)\\\hline
-		\textbf{dislikes} & numero di dislike (non mi piace)\\\hline
-		\textbf{comment\_count} & numero di commenti sotto il video\\\hline
-		\textbf{thumbnail\_link} & url all'immagine di copertina del video\\\hline
-		\textbf{comments\_disabled} & booleano che dichiara se i commenti sono disabilitati\\\hline
-		\textbf{ratings\_disabled} & booleano che dichiara se i like/dislike sono disabilitati\\\hline
-		\textbf{description} & descrizione del video\\
-		\hline
-	\end{tabular}
-	\caption{schema degli attributi dei dati csv}
-\end{table}
-
-Lo script \textit{scraper\_timed.py} si occupa delle richieste API da effettuare, riceve i dati in formato Json, estrae quelli scelti da noi e li rimappa in file csv secondo lo schema precedente. Un file corrisponde a tutte le rilevazioni fatte nell'arco di una giornata per un determinato paese identificato secondo il \textit{country\_code}, codice di due lettere identificativo del paese. I file estratti si trovano nella cartella [INSERIRE CARTELLA DOVE SONO I CSV].
-
-\subsection{Dati tramite Kafka}
-qua parlare del perchè abbiamo abbandonato l'idea dei csv e perche abbiamo preferito kafka con i dati in formato json, mostrando lo schema di quest'ultimo.
-
-\subsection*{Scelta degli strumenti}
-La prima domanda che ci siamo posti riguardo al progetto è stata: "Quali sono le "V" su cui focalizzare la nostra attenzione?".
-Dopo qualche indagine preliminare abbiamo deciso che che ci saremmo concentrati su "Volume" e su "Velocity", perché i nostri dati venivano raccolti in tempo reale dalle API di Youtube e la quantità di dati aumenta costantemente con l'aumentare del tempo di presa dati.
-
-Per gestire il flusso di dati ci siamo affidati al software Kafka, permettendoci così di poter disaccoppiare la fase di lettura dei dati dalla fase di  raccolta. Uno script python (\textit{scraper\_producer.py}) si occupava del producer, continuando ad effettuare richieste alle API di youtube, mentre lo script consumer (\textit{scraper\_consumer.py}) si occupava di leggere i file memorizzati nel topic di kafka, e successivamente di immagazzinarli in un database MongoDB in formato JSON. La scelta di MongoDB è stata dettata dalla sorgente dei dati, che venivano forniti in formato documentale.
- 
+\input{00_scelta_strumenti.tex}
+\input{01_raccolta_dati.tex}
+  
 \subsection*{Qualità dati}
-
 Avendo una grande mole di dati ci siamo dovuti anche occupare di verificare la pulizia o meno del nostro dataset. Per prima cosa abbiamo notato che non c'era presenza di Missing Values, questo è stato di per sé una grande fortuna poiché di solito il Missing Replacement è una operazione molto lunga.  Ci sono state però due problematiche principali che abbiamo dovuto affrontare:
 \begin{itemize}
 	\item Ridondanza: Questo problema è nato dal fatto che i trending di Youtube sono stati presi ogni mezz'ora, con il risultato di avere molti dati simili riguardanti le stesse fasce della giornata. 
