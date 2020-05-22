@@ -12,26 +12,19 @@ db.videos_march.aggregate(
     ]
 )
 
-Result (dati fino 16.04.20):
+### Per inserire il dato covid (true/false)
 
-{ "_id" : "Messico", "count" : 1742 }
+db.videos.update(
+    {query (stile find) con espressione regolare}, #estrae i documenti da modificare
+    {$set : {covid : true},
+    {multi : true} #fa in modo di modificare tutti i documenti trovati
+)
 
-{ "_id" : "Canada", "count" : 3242 }
+_Nota_: in teoria non è necessario negli altri documenti settare covid a false però forse è più sicuro farlo, 
+per settare tutti i documenti con covid false:
 
-{ "_id" : "Regno Unito", "count" : 2811 }
-
-{ "_id" : "Corea del sud", "count" : 39 }
-
-{ "_id" : "India", "count" : 2018 }
-
-{ "_id" : "Francia", "count" : 2717 }
-
-{ "_id" : "USA", "count" : 3236 }
-
-{ "_id" : "Russia", "count" : 122 }
-
-{ "_id" : "Italia", "count" : 1591 }
-
-{ "_id" : "Germania", "count" : 1779 }
-
-{ "_id" : "Brasile", "count" : 695 }
+db.videos.update(
+    {},
+    {$set : {covid : false},
+    {multi : true}
+)
