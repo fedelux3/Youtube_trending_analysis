@@ -32,3 +32,22 @@ db.videos.update(
 
 ### Regular expression Covid (javascript)
 /(corona|covid|virus|pandemi[aec]|epidemi[aec]|tampon[ei]|sierologico|mascherin[ae]|코로나 바이러스|fase\s*(2|due)|iorestoacasa|stayathome|lockdown|[qc]uar[ae]nt[ei]n[ea]|कोरोनावाइरस|ਕੋਰੋਨਾਵਾਇਰਸ|massisolation|distanziamento\s*sociale|social\s*distancing|감염병 세계적 유행|パンデミック|コロナウイルス|सर्वव्यापी महामारी|ਸਰਬਵਿਆਪੀ ਮਹਾਂਮਾਰੀ|пандемия|коронавирус|social\s*distancing|distanciamiento\s*social|코로나|कोविड|ਕੋਵਿਡ)/i
+
+
+### merge mongoDB
+db.database.aggregate(
+    [
+        {
+            $match : {}
+        },
+        {
+            $lookup:
+            {
+                from: covid,
+                localField: ["trending_date", "country_name"],
+                foreignField: ["date", "location"],
+                as: 
+            }
+        }
+    ]
+)
