@@ -15,7 +15,7 @@ db.videos_march.aggregate(
 ### Per inserire il dato covid (true/false)
 
 db.videos.update(
-    {query (stile find) con espressione regolare}, #estrae i documenti da modificare
+    {tags : {$in : [regex]}}, #estrae i documenti da modificare
     {$set : {covid : true},
     {multi : true} #fa in modo di modificare tutti i documenti trovati
 )
@@ -28,3 +28,7 @@ db.videos.update(
     {$set : {covid : false},
     {multi : true}
 )
+
+
+### Regular expression Covid (javascript)
+/(corona|covid|virus|pandemi[aec]|epidemi[aec]|tampon[ei]|sierologico|mascherin[ae]|코로나 바이러스|fase\s*(2|due)|iorestoacasa|stayathome|lockdown|[qc]uar[ae]nt[ei]n[ea]|कोरोनावाइरस|ਕੋਰੋਨਾਵਾਇਰਸ|massisolation|distanziamento\s*sociale|social\s*distancing|감염병 세계적 유행|パンデミック|コロナウイルス|सर्वव्यापी महामारी|ਸਰਬਵਿਆਪੀ ਮਹਾਂਮਾਰੀ|пандемия|коронавирус|social\s*distancing|distanciamiento\s*social|코로나|कोविड|ਕੋਵਿਡ)/i
