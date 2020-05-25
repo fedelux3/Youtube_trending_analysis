@@ -1,4 +1,6 @@
 import pandas as pd
+import re
+import datetime
 
 # Import the data
 dati = pd.read_csv("covid.csv", sep = ",")
@@ -28,6 +30,15 @@ dati = dati.replace(to_replace = 'Great Britain', value = 'Regno Unito')
 dati = dati.replace(to_replace = 'South Korea', value = 'Corea del sud')
 dati = dati.replace(to_replace = 'France', value = 'Francia')
 dati = dati.replace(to_replace = 'Germany', value = 'Germania')
+
+# Change the format
+
+dati['date'] = pd.to_datetime(dati['date'], format = "%Y-%m-%d", dayfirst= False, yearfirst= True)
+#dati['date'] = dati['date'].dt.strftime("%y/%d/%m")
+dati['date'] = dati['date'].apply(lambda x: datetime.datetime.strftime(x, "%y-%d-%m"))
+
+#dati['date'] = datetime.strptime(dati['date'], "%Y-%m-%d").strftime("%y-%d-%m")
+#dati['date'].replace(to_replace = r"-", value = "", regex = True)
 
 # Save the file
 dati = dati.to_csv("dati_corretti.csv")
