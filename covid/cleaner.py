@@ -13,6 +13,8 @@ dati = dati.loc[(dati['location'] == 'Italy') | (dati['location'] == 'United Sta
                 | (dati['location'] == 'Japan') | (dati['location'] == 'Mexico') | (dati['location'] == 'Germany') | (dati['location'] == 'India') | (dati['location'] == 'Russia')
                 | (dati['location'] == 'South Korea') | (dati['location'] == 'Great Britain')]
 
+# Take only useful days:
 
+dati = dati.loc[(dati['date'] <= '2020-05-06') & (dati['date'] >= '2020-03-18')]
 # Save the file
 dati = dati.to_csv("dati_corretti.csv")
