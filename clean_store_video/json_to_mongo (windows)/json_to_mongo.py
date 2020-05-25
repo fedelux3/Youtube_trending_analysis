@@ -43,7 +43,9 @@ if __name__ == '__main__':
                     j_file = json.load(read_file)
                 
                 list_videos.extend(j_file) # aggiunge gli elementi alla lista
-        
+        ##############################################
+        #merge_videos(list_videos, covid)
+        #############################################
         # carico la lista di dizionari nella collezione del database mongo specificate
         col.insert_many(list_videos)
         list_videos = []

@@ -35,7 +35,7 @@ db.videos.update(
 
 
 ### merge mongoDB
-db.database.aggregate(
+db.videos_march.aggregate(
     [
         {
             $match : {}
@@ -43,11 +43,32 @@ db.database.aggregate(
         {
             $lookup:
             {
-                from: covid,
+                from: "covid",
                 localField: ["trending_date", "country_name"],
                 foreignField: ["date", "location"],
-                as: 
+                as: "video_prova"
             }
         }
     ]
 )
+
+db.videos_march.aggregate([
+{
+    $lookup:
+        {
+          from: "covid",
+          localField: "trending_date",
+          foreignField: "date",
+          as: "merge1"
+        }
+},  
+{$unwind :"$merge1" },
+{ 
+     $project: { 
+            mid: { $cond: [ { $eq: [ '$location', '$merge1.country_name' ] }, 1, 0 ] }, 
+            date : "$merge1.country_name"
+        } 
+},
+{$match : { mid : 1}}
+
+])

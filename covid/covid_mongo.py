@@ -22,7 +22,7 @@ for x in l_covid:
 #set up mongo
 client = MongoClient("localhost", 27017)
 database = "YT_data"
-collection = "covid_test"
+collection = "covid"
 
 #upload
 db = client[database]

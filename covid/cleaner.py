@@ -35,7 +35,7 @@ dati = dati.replace(to_replace = 'Germany', value = 'Germania')
 
 dati['date'] = pd.to_datetime(dati['date'], format = "%Y-%m-%d", dayfirst= False, yearfirst= True)
 #dati['date'] = dati['date'].dt.strftime("%y/%d/%m")
-dati['date'] = dati['date'].apply(lambda x: datetime.datetime.strftime(x, "%y-%d-%m"))
+dati['date'] = dati['date'].apply(lambda x: datetime.datetime.strftime(x, "%y.%d.%m"))
 
 #dati['date'] = datetime.strptime(dati['date'], "%Y-%m-%d").strftime("%y-%d-%m")
 #dati['date'].replace(to_replace = r"-", value = "", regex = True)
