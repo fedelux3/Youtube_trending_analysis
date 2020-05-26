@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import pandas as pd
 import json
 
-df = pd.read_csv("dati_corretti.csv")
+df = pd.read_csv("covid_data.csv")
 
 #j = df.to_json(orient = "table")
 
