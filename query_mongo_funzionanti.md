@@ -16,7 +16,7 @@ db.videos_march.aggregate(
 
 db.videos.update(
     {tags : {$in : [regex]}}, #estrae i documenti da modificare
-    {$set : {covid : true},
+    {$set : {covid : true}},
     {multi : true} #fa in modo di modificare tutti i documenti trovati
 )
 
@@ -25,7 +25,7 @@ per settare tutti i documenti con covid false:
 
 db.videos.update(
     {},
-    {$set : {covid : false},
+    {$set : {covid : false}},
     {multi : true}
 )
 
@@ -72,3 +72,26 @@ db.videos_march.aggregate([
 {$match : { mid : 1}}
 
 ])
+
+## query applyed
+### Set all videos at false
+db.video_merge_test.update({},{$set : {covid_type : false, covid_title : false}},{multi : true})
+
+Result:
+
+WriteResult({ "nMatched" : 444207, "nUpserted" : 0, "nModified" : 444207 })
+
+### Per i tags
+db.video_merge_test.update({tags : {$in : [/(corona|covid|virus|pandemi[aec]|epidemi[aec]|tampon[ei]|sierologico|mascherin[ae]|코로나 바이러스|fase\s*(2|due)|iorestoacasa|stayathome|lockdown|[qc]uar[ae]nt[ei]n[ea]|कोरोनावाइरस|ਕੋਰੋਨਾਵਾਇਰਸ|massisolation|distanziamento\s*sociale|social\s*distancing|감염병 세계적 유행|パンデミック|コロナウイルス|सर्वव्यापी महामारी|ਸਰਬਵਿਆਪੀ ਮਹਾਂਮਾਰੀ|пандемия|коронавирус|social\s*distancing|distanciamiento\s*social|코로나|कोविड|ਕੋਵਿਡ)/i]}}, {$set : {covid_type: true}}, {multi : true})
+
+Result:
+
+WriteResult({ "nMatched" : 56613, "nUpserted" : 0, "nModified" : 56613 })
+
+### Per il title
+db.video_merge_test.update({title : {$in : [/(corona|covid|virus|pandemi[aec]|epidemi[aec]|tampon[ei]|sierologico|mascherin[ae]|코로나 바이러스|fase\s*(2|due)|iorestoacasa|stayathome|lockdown|[qc]uar[ae]nt[ei]n[ea]|कोरोनावाइरस|ਕੋਰੋਨਾਵਾਇਰਸ|massisolation|distanziamento\s*sociale|social\s*distancing|감염병 세계적 유행|パンデミック|コロナウイルス|सर्वव्यापी महामारी|ਸਰਬਵਿਆਪੀ ਮਹਾਂਮਾਰੀ|пандемия|коронавирус|social\s*distancing|distanciamiento\s*social|코로나|कोविड|ਕੋਵਿਡ)/i]}}, {$set : {covid_title: true}}, {multi : true})
+
+Result:
+
+WriteResult({ "nMatched" : 39183, "nUpserted" : 0, "nModified" : 39183 })
+
