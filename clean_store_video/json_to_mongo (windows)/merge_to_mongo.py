@@ -43,7 +43,6 @@ def merge_videos(videos, covid):
     video_covid = videos #output (list of dictionary)
 
     tot = len(videos)
-    #perc_prev = 0
     #per barra progressione
     printProgressBar(0, tot, prefix = 'Progress:', suffix = 'Complete', length = 50)
     for  i, video in enumerate(video_covid): #passa tutti i video
@@ -53,17 +52,22 @@ def merge_videos(videos, covid):
         row = covid.loc[(covid["date"] == date) & (covid["location"] == c_name)]
         #aggiungo i campi
         #print(video)
-        video["covid_cases_tot"] = int(row["total_cases"].values[0])
-        video["covid_cases_new"] = int(row["new_cases"].values[0])
-        video["covid_deaths_tot"] = int(row["total_deaths"].values[0])
-        video["covid_deaths_new"] = int(row["new_deaths"].values[0])
-        video["country_population"] = int(row["population"].values[0])
+        d = {
+            "cases_tot" : int(row["total_cases"].values[0]),
+            "cases_new" : int(row["new_cases"].values[0]),
+            "deaths_tot" : int(row["total_deaths"].values[0]),
+            "deaths_new" : int(row["new_deaths"].values[0]),
+            "country_population" : int(row["population"].values[0])
+            }
+
+        video["covid"] = d
+
+        #video["covid_cases_tot"] = int(row["total_cases"].values[0])
+        #video["covid_cases_new"] = int(row["new_cases"].values[0])
+        #video["covid_deaths_tot"] = int(row["total_deaths"].values[0])
+        #video["covid_deaths_new"] = int(row["new_deaths"].values[0])
+        #video["country_population"] = int(row["population"].values[0])
         
-        #perc = int(round((i/tot) *100))
-        #if perc > perc_prev:
-        #    print("merged: " + str(perc) + "%")
-        #perc_prev = perc
-        time.sleep(0.1)
         # Update Progress Bar
         printProgressBar(i + 1, tot, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
