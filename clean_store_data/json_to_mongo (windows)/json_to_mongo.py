@@ -15,11 +15,11 @@ if __name__ == '__main__':
     # ottengo la directory in cui applicare la ricerca
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="data")
-    parser.add_argument('-u', '--user', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="")
-    parser.add_argument('-p', '--password', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="")
-    parser.add_argument('-port', '--port', type=str, required=False, help="Inserire la directory da cui prendere i dati", default=27017)
-    parser.add_argument('-db', '--database', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="YT_data")
-    parser.add_argument('-c', '--collection', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="videos_march")
+    parser.add_argument('-u', '--user', type=str, required=False, help="Inserire l'user mongodb", default="")
+    parser.add_argument('-p', '--password', type=str, required=False, help="Inserire la password mongodb", default="")
+    parser.add_argument('-port', '--port', type=str, required=False, help="Inserire la porta con cui dialogare con mongodb", default=27017)
+    parser.add_argument('-db', '--database', type=str, required=False, help="Inserire il database mongo di output", default="YT_data")
+    parser.add_argument('-c', '--collection', type=str, required=False, help="Inserire la mongodb di output", default="videos_march")
     
     args = parser.parse_args()
     dir_main = args.data

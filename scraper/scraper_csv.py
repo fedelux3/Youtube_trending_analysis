@@ -192,8 +192,8 @@ def scrape(n_scheduler):
     dt = datetime.now()
    
     get_data()
-    #scheduler waits
-    scheduler.enter(1800, 1, scrape, (n_scheduler,))
+    #scheduler waits 6 hours
+    scheduler.enter(21600, 1, scrape, (n_scheduler,))
 
 #scheduler starts
 scheduler.enter(5, 1, scrape, (scheduler,))

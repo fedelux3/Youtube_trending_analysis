@@ -20,11 +20,6 @@ if __name__ == '__main__':
     # ottengo la directory in cui applicare la ricerca
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="data")
-    parser.add_argument('-u', '--user', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="")
-    parser.add_argument('-p', '--password', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="")
-    parser.add_argument('-port', '--port', type=str, required=False, help="Inserire la directory da cui prendere i dati", default=27017)
-    parser.add_argument('-db', '--database', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="YT_data")
-    parser.add_argument('-c', '--collection', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="videos")
     
     args = parser.parse_args()
     
@@ -43,11 +38,6 @@ if __name__ == '__main__':
         if df is None:
             print("df none")
             continue
-    # carico il dataframe nella collezione del database mongo specificate
-    # definizione del client mongo da utilizzare
-        #client = MongoClient('localhost', args.port, username = args.user, password = args.password)
-        #db = client[args.database]
-        #col = db[args.collection]
         
         l_dict = df_to_listdict(df) #trasformo il dataframe in un json
         #salvataggio del file json

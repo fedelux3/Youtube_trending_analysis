@@ -32,14 +32,14 @@ consumer.subscribe(["yt_video"])
 ################################################################################
 
 #preparo il code path e il client mongo
-def setup(code_path, host = 'mongo', port=27017, username = 'admin', password = 'DataMan2019!'):
+def setup(code_path): #, host = 'mongo', port=27017, username = 'admin', password = 'DataMan2019!'):
     with open(code_path) as file:
         country_codes = [x.rstrip() for x in file]
     
     #definisco il client mongo
-    client = MongoClient('mongo', 27017, username = 'admin', password = 'DataMan2019!')
+    #client = MongoClient('mongo', 27017, username = 'admin', password = 'DataMan2019!')
     
-    return country_codes, client
+    return country_codes#, client
 
 # funzione che sistema il timestamp
 def fix_timestamp(timestamp, country_code, c_gmt):
@@ -157,12 +157,11 @@ def get_data(clientMongo, database = "yt_data", collection = "videos"):
         #salvo i video su file
         write_to_file(l_video, i)
         #inserisco i video in mongoDB
-        db = clientMongo[database]
-        col = db[collection]
-        col.insert_many(l_video)
-        print("inserted in mongo")
+        #db = clientMongo[database]
+        #col = db[collection]
+        #col.insert_many(l_video)
+        #print("inserted in mongo")
         i += 1
-        #aggiungo limite ad i
         if i > 9999:
             i = 0
 
