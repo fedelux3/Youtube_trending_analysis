@@ -23,16 +23,116 @@
 \usepackage{hhline}
 \usepackage{pgf}
 \usepackage{multirow}
+ \usepackage{fancyvrb}
+\usepackage{verbatim}
 
 
 \begin{document}
-\begin{center}\large\textbf{Guida operativa}\end{center}
+\begin{center}
+\large\textbf{Guida operativa}
+\end{center}
 
 \begin{center}
  Federico Luzzi,  Marco Peracchi, Christian Uccheddu, Gabriele Centemeri (TTC)
 \end{center}
-\noindent
-Di seguito la guida operativa per eseguire il codice in modo da replicare i risultati ottenuti
+Di seguito la guida operativa per eseguire il codice in modo da replicare i risultati ottenuti:
+
+\section*{Presa dati Dicembre}
+
+Eseguire il file:
+\begin{verbatim}
+scraper/scraper_csv.py
+\end{verbatim}
+Questo script serve ad effettuare una rilevazione dati ogni 6h. I dati così estratti vengono trasformati in csv.Trasformare i dati da csv in json usando: 
+\begin{verbatim}
+csv_to_json/main.py
+\end{verbatim}
+Per eseguire lo script è necessario fornire il seguente parametro:
+\begin{itemize}
+	\item -d "directory\_dei\_dati"
+\end{itemize}
+Caricare quindi i json su mongo usando: 
+\begin{verbatim}
+json_to_mongo/json_to_mongo.py
+\end{verbatim}
+A questo script vanno forniti i seguenti parametri:
+\begin{itemize}
+	\item -d "directory dei dati"
+	\item -u "utente mongo"
+	\item -p "password utente"
+	\item -port "porta in cui è attivo l'utente"
+	\item-db "Nome del database in output"
+	\item -c "collection in cui vengono inseriti i dati"
+\end{itemize}
+
+\section*{Presa dati periodo Covid}
+Aprire il servizio mongo da terminale.
+
+Lanciare in due terminali contemporaneamente: 
+\begin{itemize}
+	\item \begin{verbatim}
+		scraper/scraper_consumer.py
+	\end{verbatim}
+	\item \begin{verbatim}
+	 scraper/scraper_producer.py
+	\end{verbatim}
+\end{itemize}
+
+Questo effettua una rilevazione dati ogni 6h attraverso il servizio kafka. L'utilizzo di kafka non è indispensabile, inizialmente però avevamo deciso di prendere i dati sia dei canali che dei video in live stream quindi kafka aveva senso in quanto venivano usati due topic diversi e fatte le prime operazioni preliminari. Abbiamo deciso di tenerlo per non stravolgere la pipeline di esecuzione.
+
+\section*{Presa dati Covid}
+Scaricare i dati in formato csv da \href{https://ourworldindata.org/coronavirus-testing}{questo sito}
+\\Eseguire il codice:
+\begin{verbatim}
+covid/cleaner.py
+\end{verbatim}
+Questo script permette di eseguire una pulizia dei dati in modo da renderli integrabili con i json raccolti in precedenza.
+
+\section*{Integrazione dei dati}
+
+Per eseguire l'integrazione tra i dati covid e i dati di youtube bisogna eseguire il seguente script:
+\begin{verbatim}
+clean_store_data/merge_to_mongo.py
+\end{verbatim}
+A questo script vanno forniti i seguenti parametri:
+\begin{itemize}
+	\item -d "directory dei dati"
+	\item -u "utente mongo"
+	\item -p "password utente"
+	\item -port "porta in cui è attivo l'utente"
+	\item-db "Nome del database in output"
+	\item -c "collection in cui vengono inseriti i dati"
+\end{itemize}
+Questo script integra i due dataset e carica tutto su mongo.
+
+\section*{Query mongo}
+
+Per le visualizzazioni che intendiamo fare abbiamo bisogno di poter distinguere quando un video contenga nel titolo o nei tag una delle parole che si rifanno al coronavirus. Per controllare questo è stata costruita l'espressione regolare che si può trovare nel file:
+\begin{verbatim}
+README.md
+\end{verbatim} 
+
+
+%/(corona|covid|virus|pandemi[aec]|epidemi[aec]|tampon[ei]*|sierologico|mascherin[ae]|코로나 바이러스|fase\s*(2|due)|iorestoacasa|stayathome|lockdown|[qc]uar[ae]nt[äae]i*n[ea]|कोरोनावाइरस|ਕੋਰੋਨਾਵਾਇਰਸ|massisolation|distanziamento\s*sociale|social\s*distancing|감염병 세계적 유행|パンデミック|コロナウイルス|सर्वव्यापी महामारी|ਸਰਬਵਿਆਪੀ ਮਹਾਂਮਾਰੀ|пандемия|коронавирус|social\s*distancing|distanciamiento\s*social|코로나|कोविड|ਕੋਵਿਡ|vaccin[oe]*|isolamento|intensiv[ao]|assembrament[io]|guant[oi]|dpi|disinfettante|swabs|emergenza|emergency|droplets*|aerosol|isolation|intensive\s*care|crowd|gloves*|disinfectant|감염병 유행|완충기|마스크|나는 집에있어|폐쇄|사회적 거리두기|백신|모임|비상 사태|비말|범 혈증|écouvillon|masques*|restealamaison|confin[ae]mento*|distanciation\s*sociale|soins\s*intensifs|rassemblements|désinfectant|urgence|gouttelettes|飛沫|タンポン|マスケリン|封鎖|人混みを避ける|ワクチン|隔離|集会|集中治療|緊急|बूंदें|फाहे|मास्क|लॉकडाउन|सोशल डिस्टन्सिंग|टीका|गहन देखभाल|समारोहों|आपातकालीन|gotas|cotonetes|m[áa]scaras|ficoemcasa|vac[iu]na|reuni[õo]n*es|emerg[êe]ncia|капли|тампоны|маски|карантин|социальное\s*дистанцирование|вакцина|интенсивная\s*терапия|сходы|чрезвычайное\s*происшествие|hisopos|mequedoencasa|cierre|Tröpfchen|Tupfer|Masken|bleibezuHause|Ausgangssperre|soziale\s*Distanzierung|Impfstoff|Intensivstation|Versammlungen|Notfall|건강\s*격리|検疫|संगरोध|[кК]арантин)/i
+
+Creare due nuovi campi chiamati \textbf{covid\_title} e \textbf{covid\_tags} settati entrambi a \textbf{False} 
+\begin{Verbatim}[frame=single,baselinestretch=0.1]
+db.video_merge.update({},{$set : {covid_tags : false, 
+				covid_title : false}},
+				{multi : true})
+\end{Verbatim}
+Eseguire le seguenti due query che controllano se l'espressione regolare è presente nel campo title o in uno dei tag per ogni video.
+\begin{Verbatim}[frame=single,baselinestretch=0.1]
+db.video_merge.update({tags : {$in : [REGEX]}}, 
+			{$set : {covid_tags: true}}, 
+			{multi : true})
+\end{Verbatim}
+ \begin{Verbatim}[frame=single,baselinestretch=0.1]
+db.video_merge.update({title : {$in : [REGEX]}}, 
+			{$set : {covid_title: true}}, 
+			{multi : true})
+\end{Verbatim}
+
 
 \end{document}
 
