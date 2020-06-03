@@ -1,45 +1,85 @@
 # Youtube_trending_analysis
-In questa repo ci sono i file e i dati relativi alla mia analisi dei trend di youtube.
-File:
-- Il file scraping.py contiene il codice per lo scraping, l'ho preso da questa repo: https://github.com/mitchelljy/Trending-YouTube-Scraper leggermente modificato perchè non funzionava
-- Il dataset di riferimento è: https://www.kaggle.com/datasnaek/youtube-new
-- Le categorie sono state estratte in formato Json 
-- Il notebook study_variables.ipynb è una mia piccolissima analisi preliminare sui dati
+In questo repository è presente la procedura schematica per poter replicare i risultati.
 
-### Le 3 V
-- __Velocity__ i dati sono presi giornalmente quindi si possono considerare real-time
-- __Variety__ i dati salvati sono in csv e le categorie in Json, di per se c'è già variety anche se è un po' debole, si potrebbe pensare di salvare i json in un documentale per rendere la cosa interessante o boh vediamo
-- __Volume__ il tizio su kaggle ha raccolto circa 500 MB in 6 mesi di rilevazioni, secondo me non ci arriveremo a 2Gb però se integriamo con altro magari sì
+## Presa dati Dicembre
 
-Lo scraping avviene tramite API di youtube: https://developers.google.com/youtube/registering_an_application (la mia chiave è salvata nel file api_text.txt - per ora se volete potete usare la mia)
-### Possibili analisi
-Come vi ho detto nell'audio vi sono possibili utilizzi del dataset:
+Eseguire il file:
 
-__Idea 1__: Studiare le tendenze del periodo natalizio, se comincio ora a farlo tutti i giorni fino a 6 gennaio abbiamo buoni dati. Si possono fare belle visualizzazioni per categoria di video, proviamo a correlare le visualizzazioni con i likes o cose del genere.  
-__Idea 2__: Fare un'analisi descrittiva in modo da estrarre il modello di video che, per ogni paese, avrebbe più successo. Attraverso semplici strumenti statistici come media e varianza, non credo che il prof voglia molto di più.  
-__Idea 3__: correlarlo con qualcos'altro che secondo me l'unico difetto di questa analisi è che usamo "solo" i dati di youtube
+scraper/scraper_csv.py
 
-Ovviamente si può pensare di utilizzare altri attributi, esplorate il dataset per vedere se vi viene qualche idea.
+Questo effettua una rilevazione dati ogni 6h.
 
-### Appunti chiamata 23-12-19
-__Chistian__: capire se posso fare scraping dei canali, numero visualizzazioni, iscritti ... <br>
-__Marco__: capire se nei paesi dove sono concentrati il maggior numero di iscritti ci sia qualcosa di interessante ... (normalizzare sulla popolazione) <br>
-__Fede__: sono riuscito a scrapare i canali Youtube tramite API ufficiali, ho il numero di iscritti e le visualizzazioni totali
+Trasformare i dati da csv in json usando: 
 
-### Appunti telefonata 30.12.19
-Potremmo calcolare:
-- indice di partecipazione (chi fa più like/visual) se ci indica che il video è in tendenza
-- analisi dei tag, salvarli in un dataset mongo e vedere se possono essere studiati
-- trovare video-modello che va più in tendenza nel periodo natalizio (tag + usati e titoli)
-- se replichiamo i dati (nella raccolta) fa niente, poi eliminiamo i doppioni
+csv_to_json/main.py
 
-#### SCADENZE:
-- 10.01.20: presentazione a Cabitza
-- 16.01.20: scritto
+fornendo il seguente parametro:
+- -d "directory_dei_dati"
 
-#### PROCEDURA per fare il "mergione":
-run del file fuori dalla directory data con cartelle dei dati
-1. create_data (mergione) su tutti
-2. delete_dir (elimina le intestazioni)
-3. add date columns 
-4. dataFrame gigante
+Caricare i json su mongo usando: 
+
+json_to_mongo/json_to_mongo.py
+
+fornendo i seguenti parametri:
+- -d "directory dei dati"
+- -u "utente mongo"
+- -p "password utente"
+- -port "porta in cui è attivo l'utente"
+- -db "Nome del database in output"
+- -c "collection in cui vengono inseriti i dati"
+
+## Presa dati periodo Covid
+
+Aprire il servizio mongo da terminale.
+
+Aprire in due terminali contemporaneamente: 
+- scraper/scraper_consumer.py
+- scraper/scraper_producer.py
+
+Questo effettua una rilevazione dati ogni 6h attraverso il servizio kafka (aveva senso per come prendevamo i dati la prima volta, abbiamo deciso di non stravolgere la pipeline).
+
+## Presa dati Covid
+
+Scaricare i dati in formato csv da:
+
+https://ourworldindata.org/coronavirus-testing
+
+Eseguire il codice:
+
+covid/cleaner.py
+
+Questo permette di eseguire una pulizia dei dati in modo da renderli integrabili con i json raccolti in precedenza.
+
+## Integrazione dei dati
+
+Per eseguire l'integrazione tra i dati covid e i dati di youtube bisogna eseguire:
+
+clean_store_data/merge_to_mongo.py
+
+Come parametri esso prende:
+- -d "directory dei dati"
+- -u "utente mongo"
+- -p "password utente"
+- -port "porta in cui è attivo l'utente"
+- -db "Nome del database in output"
+- -c "collection in cui vengono inseriti i dati"
+
+Questo script integra i due dataset e carica tutto su mongo.
+
+## Query mongo
+
+Per le visualizzazioni che intendiamo fare abbiamo bisogno di poter distinguere quando un video contenga nel titolo o nei tag una delle parole che si rifanno al coronavirus. Per controllare questo è stata costruita la seguente espressione regolare: 
+
+/(corona|covid|virus|pandemi[aec]|epidemi[aec]|tampon[ei]*|sierologico|mascherin[ae]|코로나 바이러스|fase\s*(2|due)|iorestoacasa|stayathome|lockdown|[qc]uar[ae]nt[äae]i*n[ea]|कोरोनावाइरस|ਕੋਰੋਨਾਵਾਇਰਸ|massisolation|distanziamento\s*sociale|social\s*distancing|감염병 세계적 유행|パンデミック|コロナウイルス|सर्वव्यापी महामारी|ਸਰਬਵਿਆਪੀ ਮਹਾਂਮਾਰੀ|пандемия|коронавирус|social\s*distancing|distanciamiento\s*social|코로나|कोविड|ਕੋਵਿਡ|vaccin[oe]*|isolamento|intensiv[ao]|assembrament[io]|guant[oi]|dpi|disinfettante|swabs|emergenza|emergency|droplets*|aerosol|isolation|intensive\s*care|crowd|gloves*|disinfectant|감염병 유행|완충기|마스크|나는 집에있어|폐쇄|사회적 거리두기|백신|모임|비상 사태|비말|범 혈증|écouvillon|masques*|restealamaison|confin[ae]mento*|distanciation\s*sociale|soins\s*intensifs|rassemblements|désinfectant|urgence|gouttelettes|飛沫|タンポン|マスケリン|封鎖|人混みを避ける|ワクチン|隔離|集会|集中治療|緊急|बूंदें|फाहे|मास्क|लॉकडाउन|सोशल डिस्टन्सिंग|टीका|गहन देखभाल|समारोहों|आपातकालीन|gotas|cotonetes|m[áa]scaras|ficoemcasa|vac[iu]na|reuni[õo]n*es|emerg[êe]ncia|капли|тампоны|маски|карантин|социальное\s*дистанцирование|вакцина|интенсивная\s*терапия|сходы|чрезвычайное\s*происшествие|hisopos|mequedoencasa|cierre|Tröpfchen|Tupfer|Masken|bleibezuHause|Ausgangssperre|soziale\s*Distanzierung|Impfstoff|Intensivstation|Versammlungen|Notfall|건강\s*격리|検疫|संगरोध|[кК]арантин)/i
+
+Creare due nuovi campi chiamati **covid_title** e **covid_tags** settati entrambi a **False**. 
+
+- db.video_merge.update({},{$set : {covid_tags : false, covid_title : false}},{multi : true})
+
+Eseguire le seguenti due query che controllano se l'espressione regolare è presente nel campo title o in uno dei tag per ogni video.
+
+- db.video_merge.update({tags : {$in : [REGEX]}}, {$set : {covid_tags: true}}, {multi : true})
+
+- db.video_merge.update({title : {$in : [REGEX]}}, {$set : {covid_title: true}}, {multi : true})
+
+
