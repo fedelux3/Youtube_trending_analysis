@@ -1,0 +1,7 @@
+rs.initiate({ _id: "rs0", configsvr: true, members: [{ _id : 0, host : "localhost:27019" },{ _id : 1, host : "localhost:27020" },{ _id : 2, host : "localhost:27021" }]})
+
+sh.addShard( "localhost:27022")
+
+sh.shardCollection("YT_data.video_all", {video_id : "hashed"})
+
+db.video_all.ensureIndex({"video_id" : "hashed"})
