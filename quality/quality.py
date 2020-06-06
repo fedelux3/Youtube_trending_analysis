@@ -1,3 +1,12 @@
+'''
+Breve file che mostra i grafici più significativi delle risposte
+date durante l'analisi di qualità
+In fase di importazione:
+
+@params
+    -d: directory in cui vengono salvati i plot.
+'''
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -7,11 +16,16 @@ import argparse
 from matplotlib.collections import EllipseCollection
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--output', type=str, required=True, help="Inserire la directory corrente")
+parser.add_argument('-o', '--output', type=str, required=True, help="Inserire la directory corrente")
 args = parser.parse_args()
 
 
 def correlation_plot(data):
+    '''
+    Disegna un grafico di correlazione:
+    @params:
+        data:   dati di cui diesgnare le correlazioni.
+    '''
     corr = data.corr()
     mask = np.zeros_like(corr, dtype=np.bool)
     mask[np.triu_indices_from(mask)] = True
@@ -31,8 +45,12 @@ def correlation_plot(data):
     fig.savefig(args.output + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
 
 def box_plot(data):
-    # Se si vuole visualizzare in stile seaborn (a me non piace)
-    #plt.style.use('seaborn')
+    '''
+    Disegna un box plot:
+    @params:
+        data:   dati di cui viene disegnato il box plot
+    '''
+    plt.style.use('seaborn')
     fig, ax= plt.subplots(figsize=(15, 8))
 
     bp = ax.boxplot(data, sym='k+', 
@@ -59,6 +77,11 @@ def box_plot(data):
     plt.show()
     fig.savefig(args.output + '/risposte_box_plot.png', bbox_inches='tight', dpi = 600)
 def violin_plot(data):
+    '''
+    Disegna un violin plot dei dati:
+    @params:
+        data:  dati di cui viene disegnato il violin plot 
+    '''
     fig, ax= plt.subplots(figsize=(15, 8))
 
     bp = ax.violinplot(data, showmeans=True, showmedians=True,
@@ -89,6 +112,12 @@ def violin_plot(data):
     fig.savefig(args.output + '/risposte_violin_plot.png', bbox_inches='tight', dpi = 600)
 
 def scatter_plot(x, y):
+    '''
+    Disegna uno scatter plot dei dati:
+    @params:
+        x:  Prima grandezza da confrontare 
+        y:  Seconda grandezza da confrontare
+    '''
         
     fig = plt.figure(figsize=(15,8))
     plt.plot(x,y, '+', color = (0.2,0.1,0.3))
@@ -108,6 +137,10 @@ def scatter_plot(x, y):
     fig.savefig(args.output + '/risposte_scatter_plot.png', bbox_inches='tight', dpi = 600)
 
 def quality():
+    '''
+    Esegue l'analisi di qualità dei dati. Si occupa di effettuare la regressione lineare delle grandezze
+    'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività' per valutare la bontà totale di un'infografica.
+    '''
     primo_coefficiente = 0.213
     secondo_coefficiente = 0.199
     terzo_coefficiente = 0.190

@@ -1,3 +1,11 @@
+'''
+Si occupa di effettuare un'analisi dei tempi di esecuzione dei task sulle infografiche in modo
+da capire se sono di immediata lettura.
+
+@params:
+    -o: Directory in cui vengono salvati i grafici.
+'''
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -6,11 +14,16 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--output', type=str, required=True, help="Inserire la directory corrente")
+parser.add_argument('-o', '--output', type=str, required=True, help="Inserire la directory corrente")
 args = parser.parse_args()
 
 
 def violin_plot(data):
+    '''
+    Disegna il violin plot dei dati
+    @params:
+        data:   Dati di cui disegnare i violin plot.
+    '''
     fig, ax= plt.subplots(figsize=(15, 8))
 
     bp = ax.violinplot(data, showmeans=True, showmedians=True,
@@ -41,6 +54,9 @@ def violin_plot(data):
 
 
 def times():
+    '''
+    Legge i tempi di esecuzione che sono stati registrati e disegna i violin plot.
+    '''
     tempi = pd.read_csv("tempi.csv")
 
     # Rename the columns.
