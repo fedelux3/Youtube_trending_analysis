@@ -10,14 +10,14 @@ import sched
 import json
 
 #preparo il code path e il client mongo
-def setup(code_path): #, host = 'mongo', port=27017, username = 'admin', password = 'DataMan2019!'):
+def setup(code_path, host, port, user, passw): 
     with open(code_path) as file:
         country_codes = [x.rstrip() for x in file]
     
     #definisco il client mongo
-    #client = MongoClient('mongo', 27017, username = 'admin', password = 'DataMan2019!')
+    client = MongoClient(host, port, username = user, password = passw)
     
-    return country_codes#, client
+    return country_codes, client
 
 # funzione che sistema il timestamp
 def fix_timestamp(timestamp, country_code, c_gmt):
@@ -143,23 +143,28 @@ def get_data(clientMongo, database = "yt_data", collection = "videos"):
         if i > 9999:
             i = 0
 
-def consume():
+def consume(db, col):
     '''
     Esegue tutti i passaggi per leggere da Kafka i dati, salvarli su MongoDB e in json
     '''
     global output_dir
     global country_codes
     global unsafe_characters, i
-
-    country_codes, clientMongo = setup(country_code_path)
    
-    get_data(clientMongo)
+    get_data(clientMongo, db, col)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--output', type=str, required=False, help="Inserire la directory di output", default="output_consumed/")
     parser.add_argument('-co', '--country_path', type=str, required=False, help="Inserire il path del file dove ci sono i country code", default="country_codes.txt")
     parser.add_argument('-ch', '--channel_kafka', type=str, required=False, help="Inserire il nome del canale kafka da consumare", default="yt_video")
+    parser.add_argument('-ho', '--host', type=str, required=False, help="Inserire il nome dell'host del server mongoDB", default="localhost")
+    parser.add_argument('-p', '--port', type=int, required=False, help="Inserire il numero della porta in cui comunica il server mongoDB", default=27017)
+    parser.add_argument('-u', '--user', type=str, required=False, help="Inserire il nome utente del server mongoDB", default="admin")
+    parser.add_argument('-pass', '--password', type=str, required=False, help="Inserire la password del server mongoDB", default="DataMan2019!")
+    parser.add_argument('-db', '--database', type=str, required=False, help="Inserire il nome del database mongoDB in cui salvare i dati", default="yt_data")
+    parser.add_argument('-col', '--collection', type=str, required=False, help="Inserire il nome della collezione mongoDB nella quale inserire i dati", default="videos")
+    
     args = parser.parse_args()
     
     # Setting variabili globali
@@ -168,6 +173,12 @@ if __name__ == "__main__":
     output_dir = args.output
     country_code_path = args.country_path
     channel_kafka = args.channel_kafka
+    host = args.host
+    port = args.port
+    user = args.user
+    passw = args.password
+    db = args.database
+    col = args.collection
     i = 0 #indice per la stampa su file
     country_codes = ""
     # List of simple to collect features
@@ -182,5 +193,8 @@ if __name__ == "__main__":
     auto_offset_reset="latest",
     value_deserializer=lambda v: json.loads(v.decode("utf-8")))
     consumer.subscribe([channel_kafka])
-
-    consume()
+    
+    # eseguo il setup iniziale
+    country_codes, clientMongo = setup(country_code_path, host, port, user, passw)
+    
+    consume(db, col)

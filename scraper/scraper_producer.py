@@ -5,6 +5,7 @@ API keys. Li invia poi ad un canale Kafka.
     -o: output directory
     -kp:    path dove trovare il file della API key
     -co:    path dove trovare il file dei country codes
+    -ch:    kafka topic dove scrive i dati
 '''
 
 import requests, sys, time, os, argparse
@@ -66,7 +67,7 @@ def get_pages(country_code, next_page_token="&"):
         video_data_page['service'] = { "country" : country_code, "timestamp": dt.strftime(format_date)}
         
         #Mando i dati al topic kafka
-        producer.send(topic="yt_video", value=video_data_page)
+        producer.send(topic=topic, value=video_data_page)
         #stampo per dare un feedback su console
         print("data page of " + str(country_code) + " sent")
         
@@ -95,6 +96,7 @@ def scrape(n_scheduler):
     global output_dir
     global api_key, country_codes
     global dt
+    global topic
     
     # key_path = "api_key_fede.txt"
     # country_code_path = "country_codes.txt"
@@ -112,6 +114,7 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--output', type=str, required=False, help="Inserire la directory di output", default="output/")
     parser.add_argument('-kp', '--key_path', type=str, required=False, help="Inserire il path del file dove c'è la API key", default="api_key_fede.txt")
     parser.add_argument('-co', '--country_path', type=str, required=False, help="Inserire il path del file dove ci sono i country code", default="country_codes.txt")
+    parser.add_argument('-ch', '--kafka_channel', type=str, required=False, help="Topic Kafka su cui scrivere i dati", default="yt_video")
     args = parser.parse_args()
 
     # Setting variabili globali
@@ -120,6 +123,7 @@ if __name__ == "__main__":
     output_dir = args.output
     key_path = args.key_path
     country_code_path = args.country_path
+    topic = args.kafka_channel
     api_key = ""
     country_codes = ""
     format_date = "%d-%m-%Y %H:%M"
