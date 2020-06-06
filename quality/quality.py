@@ -1,10 +1,8 @@
-'''
-Breve file che mostra i grafici più significativi delle risposte
-date durante l'analisi di qualità
-In fase di importazione:
+# -*- coding: iso-8859-15 -*-
 
-@params
-    -d: directory in cui vengono salvati i plot.
+'''
+Breve file che mostra i grafici più significativi delle risposte date durante l'analisi di qualita
+In fase di importazione:
 '''
 
 import matplotlib.pyplot as plt
@@ -12,15 +10,9 @@ import pandas as pd
 import numpy as np
 from scipy.stats import linregress
 import seaborn as sns
-import argparse
 from matplotlib.collections import EllipseCollection
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-o', '--output', type=str, required=True, help="Inserire la directory corrente")
-args = parser.parse_args()
-
-
-def correlation_plot(data):
+def correlation_plot(data, out_dir):
     '''
     Disegna un grafico di correlazione:
     @params:
@@ -42,9 +34,9 @@ def correlation_plot(data):
             linewidths=1.3, linecolor='black', cbar=True, ax=ax)
     plt.yticks(rotation = 0)
     plt.show()
-    fig.savefig(args.output + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
 
-def box_plot(data):
+def box_plot(data, out_dir):
     '''
     Disegna un box plot:
     @params:
@@ -75,8 +67,9 @@ def box_plot(data):
         box.set(hatch = '/')
 
     plt.show()
-    fig.savefig(args.output + '/risposte_box_plot.png', bbox_inches='tight', dpi = 600)
-def violin_plot(data):
+    fig.savefig(out_dir + '/risposte_box_plot.png', bbox_inches='tight', dpi = 600)
+
+def violin_plot(data, out_dir):
     '''
     Disegna un violin plot dei dati:
     @params:
@@ -109,9 +102,9 @@ def violin_plot(data):
         pc.set_alpha(1)
 
     plt.show()
-    fig.savefig(args.output + '/risposte_violin_plot.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_violin_plot.png', bbox_inches='tight', dpi = 600)
 
-def scatter_plot(x, y):
+def scatter_plot(x, y, out_dir):
     '''
     Disegna uno scatter plot dei dati:
     @params:
@@ -134,9 +127,9 @@ def scatter_plot(x, y):
     plt.legend(loc="best", prop={'size': 15})
     plt.show()
     plt.ioff()
-    fig.savefig(args.output + '/risposte_scatter_plot.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_scatter_plot.png', bbox_inches='tight', dpi = 600)
 
-def quality():
+def quality(out_dir):
     '''
     Esegue l'analisi di qualità dei dati. Si occupa di effettuare la regressione lineare delle grandezze
     'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività' per valutare la bontà totale di un'infografica.
@@ -182,10 +175,10 @@ def quality():
     # Disegno tutti i grafici.
 
     #box_plot(dati)
-    violin_plot(dati)
+    violin_plot(dati, out_dir)
     #scatter_plot(risposte['totale'], risposte['percepito'])
     #plot_corr(risposte)
-    correlation_plot(risposte)
+    correlation_plot(risposte, out_dir)
     
 
     

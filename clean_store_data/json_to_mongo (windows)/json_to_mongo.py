@@ -1,3 +1,7 @@
+'''
+File che carica i json in MongoDB
+'''
+
 from pymongo import MongoClient
 import argparse
 import os

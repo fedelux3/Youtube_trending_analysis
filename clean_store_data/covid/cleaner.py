@@ -8,10 +8,6 @@ import re
 import datetime
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--data', type=str, required=False, default="covid.csv", help="Inserire i dati")
-args = parser.parse_args()
-
 def cleaner(data):
     '''
     Riceve i dati del covid e li pulisce
@@ -55,4 +51,7 @@ if __name__ == '__main__':
     '''
     Esegue la funzione cleaner
     '''
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--data', type=str, required=False, default="covid.csv", help="Inserire i dati")
+    args = parser.parse_args()
     cleaner(args.data)

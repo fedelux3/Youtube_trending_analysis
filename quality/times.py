@@ -1,24 +1,14 @@
 '''
 Si occupa di effettuare un'analisi dei tempi di esecuzione dei task sulle infografiche in modo
 da capire se sono di immediata lettura.
-
-@params:
-    -o: Directory in cui vengono salvati i grafici.
 '''
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import seaborn as sns
-import argparse
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-o', '--output', type=str, required=True, help="Inserire la directory corrente")
-args = parser.parse_args()
-
-
-def violin_plot(data):
+def violin_plot(data, out_dir):
     '''
     Disegna il violin plot dei dati
     @params:
@@ -50,10 +40,10 @@ def violin_plot(data):
         pc.set_alpha(1)
 
     plt.show()
-    fig.savefig(args.output + '/tempi_violin_plot.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/tempi_violin_plot.png', bbox_inches='tight', dpi = 600)
 
 
-def times():
+def times(out_dir):
     '''
     Legge i tempi di esecuzione che sono stati registrati e disegna i violin plot.
     '''
@@ -76,4 +66,4 @@ def times():
     print('-----------------------------------------------------')
 
     # Disegno tutti i grafici.
-    violin_plot(dati)
+    violin_plot(dati, out_dir)

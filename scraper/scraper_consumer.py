@@ -1,35 +1,13 @@
+'''
+asdf
+'''
+
 from kafka import KafkaConsumer
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 import requests, sys, time, os, argparse
 import sched
 import json
-
-# Set time scheduler
-scheduler = sched.scheduler(time.time, time.sleep)
-#set global variables
-i = 0 #indice per la stampa su file
-output_dir = "output/"
-api_key = ""
-country_codes = ""
-# List of simple to collect features
-snippet_features = ["title",
-                    "publishedAt",
-                    "channelId",
-                    "channelTitle",
-                    "categoryId"]
-
-# Any characters to exclude, generally these are things that become problematic in CSV files
-unsafe_characters = ['\n', '"']
-
-################################################################################
-#Definisco il consumer
-consumer = KafkaConsumer(
-  bootstrap_servers=["kafka:9092"],
-  auto_offset_reset="latest",
-  value_deserializer=lambda v: json.loads(v.decode("utf-8")))
-consumer.subscribe(["yt_video"])
-################################################################################
 
 #preparo il code path e il client mongo
 def setup(code_path): #, host = 'mongo', port=27017, username = 'admin', password = 'DataMan2019!'):
@@ -166,14 +144,43 @@ def get_data(clientMongo, database = "yt_data", collection = "videos"):
             i = 0
 
 def consume():
+    '''
+    Esegue tutti i passaggi per leggere da Kafka i dati, salvarli su MongoDB e in json
+    '''
     global output_dir
     global country_codes
-    
-    country_code_path = "country_codes.txt"
-    output_dir = "output_consumed/"
+    global unsafe_characters, i
 
     country_codes, clientMongo = setup(country_code_path)
    
     get_data(clientMongo)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-o', '--output', type=str, required=False, help="Inserire la directory di output", default="output_consumed/")
+    parser.add_argument('-co', '--country_path', type=str, required=False, help="Inserire il path del file dove ci sono i country code", default="country_codes.txt")
+    parser.add_argument('-ch', '--channel_kafka', type=str, required=False, help="Inserire il nome del canale kafka da consumare", default="yt_video")
+    args = parser.parse_args()
     
-consume()
+    # Setting variabili globali
+    # scheduler inizializzazione
+    scheduler = sched.scheduler(time.time, time.sleep)
+    output_dir = args.output
+    country_code_path = args.country_path
+    channel_kafka = args.channel_kafka
+    i = 0 #indice per la stampa su file
+    country_codes = ""
+    # List of simple to collect features
+    snippet_features = ["title", "publishedAt", "channelId",
+                        "channelTitle", "categoryId"]
+    # Elenco ci caratteri problematici
+    unsafe_characters = ['\n', '"']
+
+    #Definisco il consumer
+    consumer = KafkaConsumer(
+    bootstrap_servers=["kafka:9092"],
+    auto_offset_reset="latest",
+    value_deserializer=lambda v: json.loads(v.decode("utf-8")))
+    consumer.subscribe([channel_kafka])
+
+    consume()
