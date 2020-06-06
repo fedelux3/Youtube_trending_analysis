@@ -5,7 +5,7 @@ import json
 
 def list_directory(data):
     '''
-    Estrae lista di directory nelle quali ho i file json
+    Estrae lista di directories nelle quali ho i files json
     @params:
         data:   - Required   : cartella di sottocartelle di file json
     '''
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     Conversione dei file csv in input in file json immagazzinati nella cartella 
     "json" (la crea se non presente)
     @params:
-        -d: directory di directorys dei file csv
+        -d: directory di directories dei files csv
     '''
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="data")
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     try:
-        l_dir = list_directory(args.data) #lista di directory da inserire
+        l_dir = list_directory(args.data) #lista di directories da inserire
         print(l_dir)
     except:
         print("error import csv" + str(args.data))

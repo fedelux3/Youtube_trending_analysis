@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import json
 import os
+import re
 
 def tag_list(string):
     '''
@@ -89,9 +90,11 @@ def add_country(df, nameFile):
         nameFile:   nome del file csv
     '''
     code = nameFile[11:13] #DA MIGLIORARE
+    #Possibilità? r = re.search("_(\D{2})_", nameFile)
+    #code = r.group(1))
     df['country_code'] = code
 
-def add_category_name(df, categorys):
+def add_category_name(df, categories):
     '''
     Aggiunge colonna category_name con nome categoria per esteso
     @params:
@@ -99,16 +102,16 @@ def add_category_name(df, categorys):
         categorys:  dizionario con codici e nomi estesi di categorie
     '''
     # basandosi sul categoryId estraggo nome per esteso della categoria di video
-    df['category_name'] = df['categoryId'].apply(lambda  x : row_category(x,categorys))
+    df['category_name'] = df['categoryId'].apply(lambda  x : row_category(x,categories))
 
-def row_category(cat, categorys):
+def row_category(cat, categories):
     '''
     Ricerca la categoria in input
     @params:
         cat:    codice categoria da ricercare
         categorys:  elenco codice e nome categoria
     '''
-    for category in categorys:
+    for category in categories:
         if category['id'] == str(cat):
             return category['snippet']['title']
 
