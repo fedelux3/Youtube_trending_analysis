@@ -1,3 +1,4 @@
-.ipynb_checkpoints
+*.ipynb_checkpoints
 videos2.hyper
 expl_20.04.16 (fede)
+*.log

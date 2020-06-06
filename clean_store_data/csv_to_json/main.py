@@ -1,6 +1,4 @@
-from csv_to_json import df_to_listdict
-#from fix_datasets import conc_dataframe
-from csv_to_json import conc_dataframe
+import csv_to_json
 import argparse
 import os
 import json
@@ -42,14 +40,14 @@ if __name__ == '__main__':
     for i in l_dir:
         print(i)
         # concatena i vari csv pulendoli
-        df = conc_dataframe(args.data + '\\' + i)
+        df = csv_to_json.conc_dataframe(args.data + '\\' + i)
         print("dataframe cleaned and merged")
         # nel caso in cui non venga generato alcun dataframe
         if df is None:
             print("df none")
             continue
         # trasforma il dataframe in lista di dizionari
-        l_dict = df_to_listdict(df) 
+        l_dict = csv_to_json.df_to_listdict(df) 
         # salvataggio dei dizionari in un file json nella cartella json
         n_json = i + '.json'
         # se la cartella json non esiste la crea

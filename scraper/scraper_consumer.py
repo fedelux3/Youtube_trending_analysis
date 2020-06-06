@@ -1,5 +1,18 @@
 '''
-asdf
+Scraper Kafka consumer per leggere i dati dei video in tendenza di youtube tramite
+Kafka. Li formatta correttamente, li salva in formato json e carica su db mongoDB.
+@params:
+    -o: output directory
+    -kp:    path dove trovare il file della API key
+    -co:    path dove trovare il file dei country codes
+    -ch:    kafka topic dove scrive i dati (default="yt_video")
+    -ho:    nome dell'host del server mongoDB (default="localhost")
+    -p:     numero della porta in cui comunica il server mongoDB (default=27017)
+    -u:     nome utente del server mongoDB (default="admin")
+    -pass:  password del server mongoDB (default="DataMan2019!")
+    -db:    nome del database mongoDB in cui salvare i dati (default="yt_data")
+    -col:   nome della collezione mongoDB nella quale inserire i dati (default="videos")
+    
 '''
 
 from kafka import KafkaConsumer
@@ -9,8 +22,19 @@ import requests, sys, time, os, argparse
 import sched
 import json
 
-#preparo il code path e il client mongo
 def setup(code_path, host, port, user, passw): 
+    '''
+    Inizializzazione dei codici dei paesi da cui voglio scaricare i dati e del client mongoDB
+    @params:
+        code_path:  path in cui ho i codici dei paesi dello scraping
+        host:       host del server mongoDB
+        port:       porta del server mongoDB
+        user:       nome utente del server mongoDB
+        passw:      password per accedere all'utente mongoDB
+    @return:
+        country_codes:  codici paesi scraping
+        client:         client mongoDB
+    '''
     with open(code_path) as file:
         country_codes = [x.rstrip() for x in file]
     
@@ -21,6 +45,15 @@ def setup(code_path, host, port, user, passw):
 
 # funzione che sistema il timestamp
 def fix_timestamp(timestamp, country_code, c_gmt):
+    '''
+    Sistema il timestamp in base al fuso orario del paese in questione
+    @params:
+        timestamp:  timestamp della rilevazione
+        country_code:   codice paese per calcolare fuso orario
+        c_gmt:      dizionario dei codici paesi con nomi e fusi orario
+    @return:    
+        timestamp formattato correttamente
+    '''
     fuso = c_gmt[str(country_code)]['GMT']
     dt = datetime.strptime(str(timestamp), "%d-%m-%Y %H:%M")
     dt_new = dt + timedelta(hours=fuso)
@@ -28,26 +61,40 @@ def fix_timestamp(timestamp, country_code, c_gmt):
 
 #restituisce il nome esteso del paese
 def find_country_name(country_code, c_gmt):
+    '''
+    Restituisce il nome per esteso del country
+    @params:
+        country_code:   codice paese per il quale cercare il nome esteso
+        c_gmt:      dizionario dei codici paesi con nomi e fusi orario
+    @return
+        nome esteso
+    '''
     return c_gmt[str(country_code)]['name']
 
 # restituisce il nome della categoria per esteso
 def find_category_name(category_id, categorys):
+    '''
+    Restituisce il nome della categoria per esteso
+    @params:
+        category_id:    codice categoria 
+        categorys:      dizionario dei codici categoria con nom
+    @returns:
+        nome esteso categoria
+    '''
     for category in categorys:
         if category['id'] == str(category_id):
             return category['snippet']['title']
-    
-#rimuovi i caratteri non sicuri
-def prepare_feature(feature):
-    for ch in unsafe_characters:
-        feature = str(feature).replace(ch, "")
-    return f'"{feature}"'
 
-#sistama i tag da inserire in una lista
-def get_tags(tags_list):
-    return prepare_feature("|".join(tags_list))
-
-#si occupa dell'estrazione dei video in una pagina e li restituisce
 def get_videos(items, service):
+    '''
+    Esegue la trasformazione della lista di dizionari sui video in input in lista di liste
+    per il csv in output
+    @params:
+        items:  lista di dizionari
+        service:    informazioni di timestamp e country da appendere al dizionario
+    @return:
+        lines:  lista di liste
+    '''
     lines = []
     
     # carico il file con i dati relativi ai paesi
@@ -70,7 +117,6 @@ def get_videos(items, service):
         # Snippet e statistics contengono informazioni interne
         snippet = video['snippet']
         statistics = video['statistics']
-        #print(statistics)
         # estraggo da snippet le info che mi servono
         features = [snippet.get(feature, "") for feature in snippet_features]
         # pulisco la description
@@ -88,7 +134,7 @@ def get_videos(items, service):
             "dislikes" : dislikes,
             "comment_count" : comment_count
         }
-        # Compiles all of the various bits of info into one consistently formatted line
+        # Formatta i campi nei vari elementi del dizionario
         line = {}
         line['video_id'] = video_id 
         line['timestamp'] = timestamp
@@ -110,8 +156,13 @@ def get_videos(items, service):
         
     return lines
 
-#si occupa della scrittura su file json
 def write_to_file(output_data, pos):
+    '''
+    Si occupa della scrittura su file json della lista di dizionari dei video
+    @params:
+        output_data:    lista di dizionari da salvare
+        pos:            indice per distinguere i diversi files
+    '''
     print(f"Writing data to file...")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -123,6 +174,13 @@ def write_to_file(output_data, pos):
         
 # raccoglie i dati, li scrive su file e su mongoDB
 def get_data(clientMongo, database = "yt_data", collection = "videos"):
+    '''
+    Rimane in ascolto su kafka e appena arrivano dei dati li consuma 
+    @params:
+        clienMongo:     istanza di mongo client
+        database:       nome database
+        collection:     nome collezione
+    '''
     global i
     #video è un json fatto con i suoi campi
     for video in consumer:
@@ -135,10 +193,10 @@ def get_data(clientMongo, database = "yt_data", collection = "videos"):
         #salvo i video su file
         write_to_file(l_video, i)
         #inserisco i video in mongoDB
-        #db = clientMongo[database]
-        #col = db[collection]
-        #col.insert_many(l_video)
-        #print("inserted in mongo")
+        db = clientMongo[database]
+        col = db[collection]
+        col.insert_many(l_video)
+        print("inserted in mongo")
         i += 1
         if i > 9999:
             i = 0
@@ -146,6 +204,9 @@ def get_data(clientMongo, database = "yt_data", collection = "videos"):
 def consume(db, col):
     '''
     Esegue tutti i passaggi per leggere da Kafka i dati, salvarli su MongoDB e in json
+    @params:
+        db:     database mongo
+        col:    collection mongo
     '''
     global output_dir
     global country_codes
@@ -187,7 +248,7 @@ if __name__ == "__main__":
     # Elenco ci caratteri problematici
     unsafe_characters = ['\n', '"']
 
-    #Definisco il consumer
+    # Definisco il consumer
     consumer = KafkaConsumer(
     bootstrap_servers=["kafka:9092"],
     auto_offset_reset="latest",

@@ -1,5 +1,12 @@
 '''
 File che carica i json in MongoDB
+@params:
+    -d: directory di directories dei json file
+    -u: mongoDB user
+    -p: mongoDB password
+    -port: mongoDB porta in cui comunica
+    -db: nome database mongodb
+    -c: nome collezione mongodb in cui immagazzinare i dati
 '''
 
 from pymongo import MongoClient
@@ -21,15 +28,6 @@ def list_directory(data):
     return l
 
 if __name__ == '__main__':
-    '''
-    @params:
-        -d: directory di directories dei json file
-        -u: mongoDB user
-        -p: mongoDB password
-        -port: mongoDB porta in cui comunica
-        -db: nome database mongodb
-        -c: nome collezione mongodb in cui immagazzinare i dati
-    '''
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="data")
     parser.add_argument('-u', '--user', type=str, required=False, help="Inserire l'user mongodb", default="")

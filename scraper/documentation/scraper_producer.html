@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module scraper_producer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>scraper_producer</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cfede9%5Cdocuments%5Cgithub%5Cyoutube_trending_analysis%5Cscraper%5Cscraper_producer.py">c:\users\fede9\documents\github\youtube_trending_analysis\scraper\scraper_producer.py</a></font></td></tr></table>
+    <p><tt>Scraper&nbsp;Kafka&nbsp;producer&nbsp;per&nbsp;scaricare&nbsp;i&nbsp;dati&nbsp;dei&nbsp;video&nbsp;in&nbsp;tendenza&nbsp;di&nbsp;youtube&nbsp;tramite<br>
+API&nbsp;keys.&nbsp;Li&nbsp;invia&nbsp;poi&nbsp;ad&nbsp;un&nbsp;canale&nbsp;Kafka.<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-o:&nbsp;output&nbsp;directory<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-kp:&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;dove&nbsp;trovare&nbsp;il&nbsp;file&nbsp;della&nbsp;API&nbsp;key<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-co:&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;dove&nbsp;trovare&nbsp;il&nbsp;file&nbsp;dei&nbsp;country&nbsp;codes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-ch:&nbsp;&nbsp;&nbsp;&nbsp;kafka&nbsp;topic&nbsp;dove&nbsp;scrive&nbsp;i&nbsp;dati</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="requests.html">requests</a><br>
+</td><td width="25%" valign=top><a href="sched.html">sched</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-api_request"><strong>api_request</strong></a>(page_token, country_code)</dt><dd><tt>Effettua&nbsp;la&nbsp;richesta&nbsp;API&nbsp;a&nbsp;Youtube<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;page_token:&nbsp;pagina&nbsp;token&nbsp;attuale&nbsp;con&nbsp;cui&nbsp;effettuo&nbsp;la&nbsp;richiesta<br>
+&nbsp;&nbsp;&nbsp;&nbsp;country_code:&nbsp;&nbsp;&nbsp;codice&nbsp;paese&nbsp;dei&nbsp;video<br>
+@return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request.json:&nbsp;&nbsp;&nbsp;json&nbsp;restituito&nbsp;da&nbsp;Youtube</tt></dd></dl>
+ <dl><dt><a name="-get_data"><strong>get_data</strong></a>()</dt><dd><tt>Esegue&nbsp;una&nbsp;sessione&nbsp;di&nbsp;scraping&nbsp;per&nbsp;ogni&nbsp;country&nbsp;code</tt></dd></dl>
+ <dl><dt><a name="-get_pages"><strong>get_pages</strong></a>(country_code, next_page_token='&amp;')</dt><dd><tt>Funzione&nbsp;per&nbsp;scaricare&nbsp;una&nbsp;pagina&nbsp;di&nbsp;dati&nbsp;(massimo&nbsp;50&nbsp;video)&nbsp;e&nbsp;successivamente<br>
+li&nbsp;invia&nbsp;al&nbsp;canale&nbsp;kafka<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;country_code:&nbsp;&nbsp;&nbsp;codice&nbsp;paese<br>
+&nbsp;&nbsp;&nbsp;&nbsp;next_page_token:&nbsp;&nbsp;&nbsp;&nbsp;carattere&nbsp;per&nbsp;richiedere&nbsp;la&nbsp;pagina&nbsp;dati&nbsp;successiva</tt></dd></dl>
+ <dl><dt><a name="-scrape"><strong>scrape</strong></a>(n_scheduler)</dt><dd><tt>Si&nbsp;occupa&nbsp;dello&nbsp;scraping&nbsp;e&nbsp;viene&nbsp;richiamata&nbsp;ogni&nbsp;volta&nbsp;che&nbsp;scatta&nbsp;lo&nbsp;scheduler<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;n_scheduler:&nbsp;&nbsp;&nbsp;&nbsp;oggetto&nbsp;scheduler</tt></dd></dl>
+ <dl><dt><a name="-setup"><strong>setup</strong></a>(api_path, code_path)</dt><dd><tt>Inizializzazione&nbsp;delle&nbsp;API&nbsp;e&nbsp;i&nbsp;codici&nbsp;dei&nbsp;paesi&nbsp;da&nbsp;cui&nbsp;voglio&nbsp;scaricare&nbsp;i&nbsp;dati.<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;api_path:&nbsp;&nbsp;&nbsp;path&nbsp;in&nbsp;cui&nbsp;ho&nbsp;la&nbsp;chiave&nbsp;per&nbsp;le&nbsp;API&nbsp;di&nbsp;youtube<br>
+&nbsp;&nbsp;&nbsp;&nbsp;code_path:&nbsp;&nbsp;path&nbsp;in&nbsp;cui&nbsp;ho&nbsp;i&nbsp;codici&nbsp;dei&nbsp;paesi&nbsp;dello&nbsp;scraping<br>
+@return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;api_key:&nbsp;&nbsp;&nbsp;&nbsp;chiave&nbsp;per&nbsp;API<br>
+&nbsp;&nbsp;&nbsp;&nbsp;country_codes:&nbsp;&nbsp;codici&nbsp;paesi&nbsp;scraping</tt></dd></dl>
+</td></tr></table>
+</body></html>
