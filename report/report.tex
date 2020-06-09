@@ -56,19 +56,31 @@ Avendo una grande mole di dati ci siamo dovuti anche occupare di verificare la p
 
 \subsection*{Scalabilità dell'algoritmo}
 
-Visto che una delle V che abbiamo deciso di usare concernenti i Big Data è stata quella relativa al volume dobbiamo occuparci di vedere come si comporta la nostra elaborazione dati con volumi di dati sempre crescenti. Per farlo ci occupiamo di effettuare la nostra analisi su partizionamenti sempre maggiori del nostro dataset e registriamo il tempo di esecuzione del nostro programma, effettuiamo poi una semplice regressione per vedere di che tipo di crescita stiamo parlando, ovviamente più la crescita è minore più il nostro algoritmo scala bene per volumi di dati maggiori. Presentiamo di seguito la registrazione dei tempi rispetto al partizionamento dei dati. 
+Visto che una delle V che abbiamo deciso di usare concernenti i Big Data è stata quella relativa al volume dobbiamo occuparci di vedere come si comporta la nostra elaborazione dati con volumi di dati sempre crescenti. Abbiamo deciso di implementare lo \textbf{Sharding} su MongoDB. In particolare, abbiamo deciso di costruire 3 shard replica group formati da 3 repliche dello shard in modo da garantire la ridondanza nel caso di guasti e la frammentazione per rendere più efficienti le query. La chiave di sharding scelta è quella del campo "\textbf{country\_name}" perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti in ciascun paese. 
+
+Segue lo schema logico applicato:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{pics/sharding.png}
+	\caption{pipeline sharding}
+\end{figure}
+
+QUERY ANALISI:
+
+
+%Per farlo ci occupiamo di effettuare la nostra analisi su partizionamenti sempre maggiori del nostro dataset e registriamo il tempo di esecuzione del nostro programma, effettuiamo poi una semplice regressione per vedere di che tipo di crescita stiamo parlando, ovviamente più la crescita è minore più il nostro algoritmo scala bene per volumi di dati maggiori. Presentiamo di seguito la registrazione dei tempi rispetto al partizionamento dei dati. 
 
 %\begin{figure}[H]
 %	\centering
 %	\includegraphics[height=0.3 \linewidth]{pict/times.png}
 %	\caption{Crescita del tempo di esecuzione rispetto all'aumentare del partizionamento.}
 %\end{figure}
-Per gestire la crescita di Volume abbiamo utilizzato il processo di sharding, che consiste nel salvare i dati attraverso molteplici macchine in modo che l'algoritmo scali orizzontalmente.
+
 \section*{Visualizzazione}
 Per la scelta delle visualizzazione abbiamo dovuto pensare per prima cosa a delle domande di ricerca a cui rispondere. Le domande che ci siamo posti sono le seguenti:
 \begin{itemize}
-	\item Come varia la partecipazione dei video in tendenza nel tempo?
-	\item Quali sono le categorie più viste per ogni paese?
+	\item Variazione della tipologia di video in tendenza da periodo pre covid-19 a periodo covid-19
+	\item È vero che la fruizione di video su Youtube riguardanti i contagi di Covid-19 segue l'andamento dei dati sull'epidemia?
 \end{itemize}
 
 \subsection*{Scelta features}
