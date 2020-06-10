@@ -144,4 +144,20 @@ Lo schema logico dei documenti json è sostanzialmente lo stesso di quello dei c
 				\}
 \end{itemize}
 \subsection*{Dati Covid-19}
-Qua dobbiamo scrivere come/dove abbiamo preso i dati covid
+
+I dati relativi ai Covid-19 sono stati estrapolati da  \href{https://ourworldindata.org/coronavirus-testing}{questo link.} I dati vengono estrapolati in formato \textit{csv}; dopo averli puliti essi contengono le seguenti informazioni:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l|l}
+		\textbf{Attributo} & \textbf{Descrizione} \\
+		\hline
+		\textbf{iso\_code} & codice unico riferito al paese \\\hline
+		\textbf{location} & nome esteso del paese\\\hline
+		\textbf{date} & data della rilevazione\\\hline
+		\textbf{total\_cases} & numero totale dei casi\\\hline
+		\textbf{new\_cases} & nuovi casi registrati in quella giornata.\\\hline
+
+	\end{tabular}
+	\caption{Schema degli attributi dei dati sul Covid-19.}
+\end{table}
+
