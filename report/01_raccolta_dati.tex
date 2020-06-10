@@ -126,5 +126,22 @@ I dati così raccolti sono stati salvati in formato json nella cartella [INSERIR
 
 \underline{Nota}: abbiamo scelto di salvare i dati in formato Json in modo che fosse facile caricarli in un nuovo server mongoDB e renderli più trasportabili. Per il caricamento vedi lo script: \textit{json\_to\_mongo.py}
 
+Lo schema logico dei documenti json è sostanzialmente lo stesso di quello dei csv visto precedentemente in \textit{Tabella 1} ma con due variazioni:
+\begin{itemize}
+	\item \textbf{tags} immagazzinati come array di stringhe
+	
+	Ad esempio:
+	
+	tags: ["covid-19", "quarantena"]
+	\item informazioni relative ai likes, dislikes, view\_count e comment\_count innestati in un oggetto \textbf{statistics}
+	
+	Ad esempio:
+	
+	statistics: \{view\_count: 14235,
+				likes: 513,
+				dislikes: 34,
+				comment\_count: 254
+				\}
+\end{itemize}
 \subsection*{Dati Covid-19}
 Qua dobbiamo scrivere come/dove abbiamo preso i dati covid

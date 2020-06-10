@@ -20,7 +20,7 @@
 \begin{document}
 
 \begin{center}
-\huge\textbf{Effetto del Covid-19 su Youtube?} (titolo provvisorio) [fede]
+\huge\textbf{YouTube al tempo del Covid-19}
 
 Un'analisi dei video in tendenza
 \end{center}
@@ -53,6 +53,42 @@ Avendo una grande mole di dati ci siamo dovuti anche occupare di verificare la p
 	\item Buchi: Questo problema è nato dal fatto che Google non permette di avanzare troppe richieste per la presa dati nella stessa giornata, per arginare questo problema abbiamo utilizzato 3 chiavi diverse con cui mandare le richieste a Google in modo tale da coprire la maggior parte della giornata. Ci sono stati però dei punti in cui la presa dati non è riuscita. Il metodo che abbiamo utilizzato per riempire quei buchi è stato quello di duplicare i dati della presa dati precedente. Questo metodo è stato possibile poiché la presa dati è stat effettuata in intervalli di tempo in cui i dati non vengono modificati significativamente.
 	
 \end{itemize}
+
+\subsection*{Integrazione dati}
+	Per poter rispondere alle nostre domande di ricerca abbiamo dovuto effettuare un'integrazione tra i dati dei video di Youtube e i dati relativi ai contagi giornalieri di covid-19. Il merge l'abbiamo effettuato prima del loro caricamento su MongoDB. Lo script che implementa la nostra integrazione è \textit{merge\_to\_mongo.py}. 
+	
+	Sostanzialmente applichiamo un'\textbf{integrazione temporale} considerando, per ciascun video, il \textbf{timestamp} della rilevazione e il paese in cui il video è presente (\textbf{country\_name}). Ricerchiamo il corrispettivo (timestamp, country\_name) nella base dati covid e generiamo un nuovo documento con tutte le informazioni del video di Youtube aggiungendo un sotto documento \textit{covid} con tutti i dati relativi ai contagi avvenuti quel giorno in quello stato. A questo punto i documenti vengono caricati su MongoDB.
+	
+	Un problema riscontrato durante l'integrazione è stato che la rilevazione viene effettuata con il fuso orario di Greenwich GMT, però ciascun paese ha uno o più fusi orari differenti. Pertanto abbiamo corretto i timestamp in base al fuso orario della capitale di ciascun paese. Nel dettaglio visualizzare il file \textit{country\_name.json}.
+	
+	L'operazione di integrazione complessivamente richiede:
+	\begin{itemize}
+		\item senza sharding: 1419 s (23,6 min circa)
+		\item con sharding: 1431 s (24 min circa)
+	\end{itemize}
+\subsection*{Espressione regolare}
+	Per poter distinguere quali video possono essere considerati legati al covid-19 o meno, abbiamo definito la seguente espressione regolare:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.95\linewidth]{pics/er.png}
+	\end{figure}
+
+	Abbiamo cercato di includere tutte le parole legate al contesto del Covid-19 e la loro traduzione in tutte le lingue dei paesi del nostro studio.
+	
+	Questa espressione regolare l'abbiamo applicata sia analizzando i titoli dei video, sia analizzando i tags scelti per descrivere il video. L'applicazione è avvenuta tramite le seguenti query:
+	\begin{enumerate}
+		\item setting tutti video come non covid (sia per titolo che per tags):
+		
+			db.video\_merge.update(\{\},\{\$set : \{covid\_tags : false, covid\_title : false\}\},\{multi : true\})
+		
+		\item setting true tutti i video che hanno almeno un tag che rispetta l'espressione regolare (REGEX):
+		
+			db.video\_merge.update(\{tags : \{\$in : [REGEX]\}\}, \{\$set : \{covid\_tags: true\}\}, \{multi : true\})
+		
+		\item setting true tutti i video il cui titolo rispetta l'espressione regolare (REGEX):
+		
+			db.video\_merge.update(\{title : \{\$in : [REGEX]\}\}, \{\$set : \{covid\_title: true\}\}, \{multi : true\})
+	\end{enumerate}
 
 \subsection*{Scalabilità dell'algoritmo}
 
