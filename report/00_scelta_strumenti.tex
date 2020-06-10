@@ -1,5 +1,6 @@
-\subsection*{Scelta degli strumenti (DA RISCRIVERE)}
+\subsection*{Scelta degli strumenti}
 La prima domanda che ci siamo posti riguardo al progetto è stata: "Quali sono le "V" su cui focalizzare la nostra attenzione?".
-Dopo qualche indagine preliminare abbiamo deciso che che ci saremmo concentrati su "Volume" e su "Velocity", perché i nostri dati venivano raccolti in tempo reale dalle API di Youtube e la quantità di dati aumenta costantemente con l'aumentare del tempo di presa dati.
+Dopo qualche indagine preliminare abbiamo deciso che che ci saremmo concentrati su \textit{Volume} e su \textit{Variety}. La scelta di utilizzare il Volume deriva dal fatto che i dati sono stati raccolti in grande quantità tramite le API di YouTube ($\sim 3Gb$).
+La scelta di usare la Varietà è stata forzata dal fatto che i dati relativi al Covid-19 sono stati scaricati in formato \textit{csv} a differenza da quelli estratti da YouTube che sono in formato \textit{json}. 
 
-Per gestire il flusso di dati ci siamo affidati al software Kafka, permettendoci così di poter disaccoppiare la fase di lettura dei dati dalla fase di  raccolta. Uno script python (\textit{scraper\_producer.py}) si occupava del producer, continuando ad effettuare richieste alle API di youtube, mentre lo script consumer (\textit{scraper\_consumer.py}) si occupava di leggere i file memorizzati nel topic di kafka, e successivamente di immagazzinarli in un database MongoDB in formato JSON. La scelta di MongoDB è stata dettata dalla sorgente dei dati, che venivano forniti in formato documentale.
+Per gestire il flusso di dati ci siamo affidati al software MongoDB che è molto utile per trattare dati di tipo documentale.  
