@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.8)  10 JUN 2020 11:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.8)  10 JUN 2020 12:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -483,32 +483,44 @@ File: pics/sharding.png Graphic file (type png)
 <use pics/sharding.png>
 Package pdftex.def Info: pics/sharding.png  used on input line 98.
 (pdftex.def)             Requested size: 330.05324pt x 203.63008pt.
- [5 <./pics/er.PNG>] [6 <./pics/sharding.PNG>] [7] (./report.aux) ) 
+ [5 <./pics/er.PNG>]
+<pics/prima_infografica.png, id=37, 1138.2525pt x 831.105pt>
+File: pics/prima_infografica.png Graphic file (type png)
+<use pics/prima_infografica.png>
+Package pdftex.def Info: pics/prima_infografica.png  used on input line 143.
+(pdftex.def)             Requested size: 282.51297pt x 206.28249pt.
+ [6 <./pics/sharding.PNG>]
+<pics/seconda_infografica.png, id=42, 937.5025pt x 780.9175pt>
+File: pics/seconda_infografica.png Graphic file (type png)
+<use pics/seconda_infografica.png>
+Package pdftex.def Info: pics/seconda_infografica.png  used on input line 157.
+(pdftex.def)             Requested size: 247.6359pt x 206.28249pt.
+ [7 <./pics/prima_infografica.png>] [8 <./pics/seconda_infografica.png>] [9] (.
+/report.aux) ) 
 Here is how much of TeX's memory you used:
- 6243 strings out of 492167
- 81557 string characters out of 6131559
+ 6257 strings out of 492167
+ 81971 string characters out of 6131559
  189035 words of memory out of 5000000
- 10472 multiletter control sequences out of 15000+600000
+ 10484 multiletter control sequences out of 15000+600000
  14742 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 46i,18n,45p,805b,502s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/
-texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx0700.pfb></usr/
-share/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf-dis
-t/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/p
-ublic/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/
-sfbx2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></
-usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf
--dist/fonts/type1/public/cm-super/sfti0900.pfb></usr/share/texmf-dist/fonts/typ
-e1/public/cm-super/sfti1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-su
-per/sftt1000.pfb>
-Output written on report.pdf (7 pages, 385758 bytes).
+ 46i,18n,45p,821b,502s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
+/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm
+-super/sfbx0700.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1000
+.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/shar
+e/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fo
+nts/type1/public/cm-super/sfbx2074.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/cm-super/sfrm1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm
+2074.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti0900.pfb></usr/
+share/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf-dis
+t/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on report.pdf (9 pages, 569676 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 59 compressed objects within 1 object stream
+ 96 PDF objects out of 1000 (max. 8388607)
+ 63 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

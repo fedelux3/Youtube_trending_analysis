@@ -96,7 +96,7 @@ Segue lo schema logico applicato:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{pics/sharding.png}
-	\caption{pipeline sharding}
+	\caption{Pipeline sharding}
 \end{figure}
 
 QUERY ANALISI:
@@ -120,23 +120,43 @@ Per la scelta delle visualizzazione abbiamo dovuto pensare per prima cosa a dell
 \subsection*{Scelta features}
 Per rispondere in modo coerente alle nostre domande di ricerca abbiamo deciso di concentrarsi sulle seguenti features del nostro dataset.
 \begin{itemize}
-	\item Numero di visualizzazioni.
-	\item Numero di like.
-	\item Numero di dislike.
-	\item Numero di commenti.
-	\item Numero di iscritti ad un canale.
+	\item View Count
+	\item Covid Title
+	\item Covid Tags
+	\item Trending Date
+	\item Title
+	\item Cases New
 \end{itemize}
 
-A partire da queste feature abbiamo inoltre definito un indice fittizio che abbiamo deciso di denominare \textit{Indice di partecipazione.} Questo indice ci è servito per capire quale fosse il video con il maggior numero di partecipazioni rispetto al numero di visualizzazioni ottenute in modo da poter capire quanto le tendenze siano influenzate da questo indice. In particolare:
-\[ I = \frac{like+dislike+comment}{views}\]
 \subsection*{Scelta della visualizzazione}
-La visualizzazione che meglio si presta a dati con natura fortemente temporale è una visualizzazione a righe. Per arricchire la visualizzazione di contenuti abbiamo inserito ulteriori caratteristiche a questa visualizzazione. In particolare la visualizzazione è composta nel seguente modo:
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[height=0.3 \linewidth]{pict/prima.png}
-%	\caption{Prima infografica.}
-%\end{figure}
-In questo caso 
+
+Per rispondere alle due domande di ricerca che ci siamo posti abbiamo deciso di utilizzare due infografiche diverse. La scelta di utilizzare due infografiche diverse è stata data dal fatto che le due domande sono incompatibili tra loro e quindi sarebbe stato impossibile utilizzarne una unica.
+
+\paragraph{Prima infografica} La prima infografica consiste nella combinazione di due diverse visualizzazioni:
+\begin{itemize}
+	\item La prima visualizzazione è costituita da un istogramma temporale che rappresenta il numero video entrato in tendenza ogni giorno.
+	\item La seconda riguarda è costituita da un bubble chart e riguarda il numero di video per ogni categoria entrato in tendenza quel giorno.
+\end{itemize}
+La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo pre Covid-19 e post Covid-19 differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e vedere il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per step in modo da avvicinare l'utente piano piano a tutte le informazioni che questa infografica può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.5 \linewidth]{pics/prima_infografica.png}
+	\caption{Prima infografica.}
+\end{figure}
+
+\paragraph{Seconda infografica} Per quanto riguarda la risposta alla seconda domanda di ricerca abbiamo deciso di utilizzare una infografica composta da due visualizzazioni. In particolare:
+\begin{itemize}
+	\item La prima visualizzazione è un misto tra un bar chart e un line chart temporale. In questa visualizzazione abbiamo fatto risaltare la differenza percentuale tra una rilevazione e la precedente. In particolare il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19 mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. Abbiamo utilizzato questo tipo di grafico in modo da poter vedere se la divulgazione negativa dei dati riguardanti il Covid-19 abbia influito sulla fruizione online dei video riguardanti lo stesso argomento. La scelta di creare due forme diverse per i due andamenti è motivata dal fatto che dai questionari è risultata più apprezzata per riconoscere le due variabili.
+	\item La seconda visualizzazione è uno stacked bar chart che rappresenta il numero di video per categoria che riguardano il Covid-19 che può essere filtrata per giorno semplicemente interagendo con la prima visualizzazione.
+\end{itemize}
+
+La combinazione di queste due visualizzazioni consente di rispondere alla seconda domanda di ricerca che ci siamo posti precedentemente. Proponiamo di seguito una visione sommaria dell'infografica comprensiva dei contesti.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.5 \linewidth]{pics/seconda_infografica.png}
+	\caption{Seconda infografica.}
+\end{figure}
 \subsection*{Valutazione della qualità}
 La valutazione della qualità della nostra infografica si è articolata in tre macro passaggi:
 
