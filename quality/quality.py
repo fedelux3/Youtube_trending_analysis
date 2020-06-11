@@ -1,5 +1,3 @@
-# -*- coding: iso-8859-15 -*-
-
 '''
 Breve file che mostra i grafici più significativi delle risposte date durante l'analisi di qualita
 In fase di importazione:
@@ -11,6 +9,7 @@ import numpy as np
 from scipy.stats import linregress
 import seaborn as sns
 from matplotlib.collections import EllipseCollection
+import statsmodels.api as sm
 
 def correlation_plot(data, out_dir):
     '''
@@ -83,7 +82,7 @@ def scatter_plot_1(x, y, out_dir):
     plt.xlabel('Dichiarato', size = 35) 
     plt.ylabel('Calcolato', size = 35) 
     plt.legend(loc="best", prop={'size': 15})
-    plt.title("Scatter plot seconda infografica", size = 35)
+    plt.title("Scatter plot seconda infografica", size = 35, pad = 20)
     plt.show()
     plt.ioff()
     plt.savefig(out_dir + '/risposte_scatter_plot_first.png', bbox_inches='tight', dpi = 600)
@@ -109,7 +108,7 @@ def scatter_plot_2(x, y, out_dir):
     plt.xlabel('Dichiarato', size = 35) 
     plt.ylabel('Calcolato', size = 35) 
     plt.legend(loc="best", prop={'size': 15})
-    plt.title("Scatter plot seconda infografica", size = 35)
+    plt.title("Scatter plot seconda infografica", size = 35, pad = 20)
     plt.show()
     plt.ioff()
     plt.savefig(out_dir + '/risposte_scatter_plot_second.png', bbox_inches='tight', dpi = 600)
@@ -129,8 +128,8 @@ def quality(out_dir):
 
     # Rename the columns.
 
-    risposte_prima_info.columns = ['timestamp', 'chiarezza', 'utilita', 'bellezza', 'intuitivita', 'informativita','totale']
-    risposte_seconda_info.columns = ['timestamp', 'chiarezza', 'utilita', 'bellezza', 'intuitivita', 'informativita','totale']
+    risposte_prima_info.columns = ['timestamp', 'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','totale']
+    risposte_seconda_info.columns = ['timestamp', 'chiarezza', 'utilità', 'bellezza', 'intuitività', 'informatività','totale']
 
     # Drop the column time_stemp
 
@@ -138,27 +137,28 @@ def quality(out_dir):
     risposte_seconda_info = risposte_seconda_info.drop('timestamp', axis = 1)
 
     
-    risposte_prima_info['percepito'] = primo_coefficiente*risposte_prima_info['chiarezza'] + secondo_coefficiente*risposte_prima_info['utilita'] + terzo_coefficiente*risposte_prima_info['bellezza'] 
-    + quarto_coefficiente*risposte_prima_info['intuitivita'] + quinto_coefficiente*risposte_prima_info['informativita']
+    risposte_prima_info['percepito'] = primo_coefficiente*risposte_prima_info['chiarezza'] + secondo_coefficiente*risposte_prima_info['utilità'] + terzo_coefficiente*risposte_prima_info['bellezza'] 
+    + quarto_coefficiente*risposte_prima_info['intuitività'] + quinto_coefficiente*risposte_prima_info['informatività']
 
-    risposte_seconda_info['percepito'] = primo_coefficiente*risposte_seconda_info['chiarezza'] + secondo_coefficiente*risposte_seconda_info['utilita'] + terzo_coefficiente*risposte_seconda_info['bellezza'] 
-    + quarto_coefficiente*risposte_seconda_info['intuitivita'] + quinto_coefficiente*risposte_seconda_info['informativita']
+    risposte_seconda_info['percepito'] = primo_coefficiente*risposte_seconda_info['chiarezza'] + secondo_coefficiente*risposte_seconda_info['utilità'] + terzo_coefficiente*risposte_seconda_info['bellezza'] 
+    + quarto_coefficiente*risposte_seconda_info['intuitività'] + quinto_coefficiente*risposte_seconda_info['informatività']
     
     # Creates the new summarize column
  
     
-    dati_prima_info = risposte_prima_info[['chiarezza','utilita','bellezza','intuitivita','informativita','totale']]
-    dati_seconda_info = risposte_seconda_info[['chiarezza','utilita','bellezza','intuitivita','informativita','totale']]
-    # Calcoliamo ora com'è la correlazione tra la valutazione totale di un utente e la percezione teorica. Mostriamo anche su uno scatter plot la distribuzione.
-
-    '''
-    totale = np.array(risposte_seconda_info['totale'])
-    percepito = np.array(risposte_seconda_info['percepito'])
-    r = round((np.corrcoef(totale, percepito)[0, 1])**2, 3)
-
+    dati_prima_info = risposte_prima_info[['chiarezza','utilità','bellezza','intuitività','informatività','totale']]
+    dati_seconda_info = risposte_seconda_info[['chiarezza','utilità','bellezza','intuitività','informatività','totale']]
     
-    print("L'indice r^2 vale", r)
-    '''
+    
+    # Calcoliamo ora com'è la correlazione tra la valutazione totale di un utente e la percezione teorica. Mostriamo anche su uno scatter plot la distribuzione.    
+    x_prima = sm.add_constant(dati_prima_info['totale'])
+    model_prima = sm.OLS(risposte_prima_info['percepito'], x_prima).fit()
+    print("Il coefficiente R2 del valore percepito della prima infografica è: ", round(model_prima.rsquared,2), "\n")
+
+    x_seconda = sm.add_constant(dati_seconda_info['totale'])
+    model_seconda = sm.OLS(risposte_seconda_info['percepito'], x_seconda).fit()
+    print("Il coefficiente R2 del valore percepito della prima infografica è: ", round(model_seconda.rsquared,2), "\n")
+
     # Disegno tutti i grafici.
     box_plot_1(dati_prima_info, out_dir)
     box_plot_2(dati_seconda_info, out_dir)
@@ -167,6 +167,7 @@ def quality(out_dir):
     scatter_plot_2(risposte_seconda_info['totale'], risposte_seconda_info['percepito'], out_dir)
 
     correlation_plot(risposte_prima_info, out_dir)
+
 
     
 

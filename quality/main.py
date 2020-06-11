@@ -16,4 +16,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     out = args.output
     quality.quality(out)
-    #times.times(out)
+    times.times(out)
