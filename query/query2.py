@@ -28,7 +28,7 @@ if __name__ == '__main__':
         user = args.user
         password = args.password
         # definizione del client mongo da utilizzare
-        client = MongoClient('localhost', args.port, username = args.user, password = args.password)
+        client = MongoClient('localhost', int(args.port), username = args.user, password = args.password)
         db = client[args.database] # connessione al db
         col = db[args.collection] # connesione alla collection
     except:
@@ -86,4 +86,4 @@ if __name__ == '__main__':
                 file.write("\n")
                 i += 1
     
-    print("file generato")
+    print("eseguita")
