@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from datetime import datetime
 import argparse
 import os
 import json
@@ -72,6 +73,19 @@ def merge_videos(videos, covid):
         # Update Progress Bar
         printProgressBar(i + 1, tot, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
+def convert_types(dict) :
+    '''
+    Converte i tipi di timestamp e dati integer
+    @params:
+        dict:   dizionario di un singolo video
+    '''
+    dict["timestamp"] = datetime.strptime(dict["timestamp"], "%m-%d-%Y %H:%M")
+    dict["statistics"]["view_count"] = int(dict["statistics"]["view_count"]) 
+    dict["statistics"]["likes"] = int(dict["statistics"]["likes"]) 
+    dict["statistics"]["dislikes"] = int(dict["statistics"]["dislikes"]) 
+    dict["statistics"]["comment_count"] = int(dict["statistics"]["comment_count"]) 
+
+
 if __name__ == '__main__':
     '''
     @params:
@@ -131,6 +145,9 @@ if __name__ == '__main__':
                 # apre il file se .json
                 with open(path + file, "r") as read_file:
                     j_file = json.load(read_file)
+                # converte i tipi di dati utili su mongo
+                for d in j_file:
+                    convert_types(d)
                 # appende alla lista i dizionari dei video del json
                 list_videos.extend(j_file) # aggiunge gli elementi alla lista
         print("upload files")

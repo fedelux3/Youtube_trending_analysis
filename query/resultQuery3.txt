@@ -1,0 +1,14 @@
+Il numero di video a tema covid del paese Giappone è: 215
+Il numero di video a tema covid del paese Germania è: 406
+Il numero di video a tema covid del paese Brasile è: 339
+Il numero di video a tema covid del paese Francia è: 436
+Il numero di video a tema covid del paese Regno Unito è: 458
+Il numero di video a tema covid del paese Russia è: 1679
+Il numero di video a tema covid del paese USA è: 368
+Il numero di video a tema covid del paese Corea del sud è: 462
+Il numero di video a tema covid del paese Messico è: 346
+Il numero di video a tema covid del paese India è: 2938
+Il numero di video a tema covid del paese Canada è: 434
+Il numero di video a tema covid del paese Italia è: 1157
+Explain computation: 
+{'stages': [{'$cursor': {'query': {'$or': [{'covid_tags': {'$eq': True}}, {'covid_title': {'$eq': True}}]}, 'fields': {'country_name': 1, 'covid_tags': 1, 'covid_title': 1, 'title': 1, '_id': 1}, 'queryPlanner': {'plannerVersion': 1, 'namespace': 'YT_data.merge_c', 'indexFilterSet': False, 'parsedQuery': {'$or': [{'covid_tags': {'$eq': True}}, {'covid_title': {'$eq': True}}]}, 'queryHash': 'C9DC722B', 'planCacheKey': 'C9DC722B', 'winningPlan': {'stage': 'SUBPLAN', 'inputStage': {'stage': 'COLLSCAN', 'filter': {'$or': [{'covid_tags': {'$eq': True}}, {'covid_title': {'$eq': True}}]}, 'direction': 'forward'}}, 'rejectedPlans': []}}}, {'$project': {'_id': True, 'country_name': '$country_name', 'title': '$title', 'covid_tags': '$covid_tags', 'covid_title': '$covid_title'}}, {'$group': {'_id': {'country': '$country_name', 'title': '$title'}}}, {'$group': {'_id': '$_id.country', 'count': {'$sum': {'$const': 1}}}}], 'serverInfo': {'host': 'NotebookFede-R2H2N7V', 'port': 27017, 'version': '4.2.3', 'gitVersion': '6874650b362138df74be53d366bbefc321ea32d4'}, 'ok': 1.0}
