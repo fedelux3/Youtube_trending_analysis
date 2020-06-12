@@ -1,22 +1,22 @@
 \section*{Raccolta dati}
-La raccolta dati è basata su due fonti principali: YouTube e [fonte/i covid-19].
+La raccolta dati è basata su due fonti principali: YouTube e OurWorldInData della Oxford University.
 
 \subsection*{Youtube API}
-I video in tendenza su Youtube variano ogni 15 minuti circa (fonte: \url{https://support.google.com/youtube/answer/7239739?hl=it}). Tuttavia questo non significa che cambino effettivamente i contenuti presenti, infatti solitamente si assiste solo a qualche video che scompare dalle tendenze o viceversa. Va specificato inoltre che il numero assoluto di video in tendenza è di circa 200, con qualche calo durante la notte più rilevante.
+I video in tendenza su Youtube variano ogni 15 minuti circa (fonte: \url{https://support.google.com/youtube/answer/7239739?hl=it}). Tuttavia questo non significa che cambino effettivamente i contenuti presenti, infatti solitamente si assiste solo a qualche video che scompare dalle tendenze o viceversa nuovi video che entrano. Va specificato inoltre che il numero assoluto di video in tendenza è di circa 200, con qualche calo durante la notte più rilevante.
 
 Le API di Youtube ci hanno permesso di raccogliere i dati necessari riguardanti i video in tendenza, con delle limitazioni sul numero di richieste gratuite che si potessero fare mediante il Google Developer.
 \\
 Sono state affrontate due sessioni di \textit{scraping} con metodi leggermente differenti:
 \begin{enumerate}
-	\item dal 23 dicembre 2019 al 5 gennaio 2020 (raccolta ogni 30 minuti)
-	\item dal 18 marzo 2020 al 6 maggio 2020 (raccolta ogni 6 ore)
+	\item dal 23 dicembre 2019 al 5 gennaio 2020 (richieste ogni 30 minuti)
+	\item dal 18 marzo 2020 al 6 maggio 2020 (richieste ogni 6 ore)
 \end{enumerate}
 Abbiamo deciso di raccogliere dati delle tendenze dei seguenti paesi:
 
 Italia, USA, Regno Unito, India, Germania, Canada, Francia, Corea del sud, Russia, Giappone, Brasile, Messico\\
 
 \subsection*{Prima sessione}
-L'idea che ha guidato la fase iniziale del progetto era quella di comprendere come l'algoritmo delle tendenze di Youtube sceglie i video, utilizzando caratteristiche come visualizzazioni, likes, dislikes e commenti. La raccolta dati ha seguito il seguente algoritmo, messo in pratica dallo script \textit{scraper\_timed.py}:\\
+L'idea che ha guidato la fase iniziale del progetto era quella di comprendere come l'algoritmo delle tendenze di Youtube sceglie i video, utilizzando caratteristiche come visualizzazioni, likes, dislikes e commenti. La raccolta dati ha seguito il seguente algoritmo, messo in pratica dallo script \textit{scraper\_csv.py}:\\
 \\
 \begin{algorithm}[H]
 	\KwData{country - insieme dei paesi prescelti; videos - insieme di video scaricati da un determinato paese}
@@ -33,7 +33,7 @@ L'idea che ha guidato la fase iniziale del progetto era quella di comprendere co
 		\nl videos = $\emptyset$
 	}
 	}
-	\caption{Scraping youtube $\rightarrow$ csv}
+	\caption{Scraper csv}
 \end{algorithm}
 
 %Alternativa per scrivere l'algoritmo
@@ -76,7 +76,7 @@ I dati vengono salvati in formato \textit{csv} secondo il seguente schema:
 	\caption{schema degli attributi dei dati csv}
 \end{table}
 
-I dati così raccolti sono salvati nella cartella [INSERIRE NOME CARTELLA]
+I dati così raccolti sono salvati in una cartella che può essere definita al momento dell'avvio dello script mediante l'argomento \textit{-o}.
 
 \subsection*{Seconda sessione}
 
@@ -124,18 +124,19 @@ Di seguito si può vedere nel dettaglio il procedimento dei due algoritmi:
 	}
 	\caption{scraper consumer}
 \end{algorithm}
-I dati così raccolti sono stati salvati in formato json nella cartella [INSERIRE NOME CARTELLA].
+I dati così raccolti sono stati salvati in formato json, è possibile definire la cartella di output in cui vengono salvati i file mediante il comando \textit{-o}. 
 
-\underline{Nota}: abbiamo scelto di salvare i dati in formato Json in modo che fosse facile caricarli in un nuovo server mongoDB e renderli più trasportabili. Per il caricamento vedi lo script: \textit{json\_to\_mongo.py}
+\underline{Nota}: I dati sono stati salvati in json per avere una maggior facilità nel caricare i dati su MongoDB. Il caricamento è stato eseguito mediante lo script \textit{json\_to\_mongo.py}
 
-Lo schema logico dei documenti json è sostanzialmente lo stesso di quello dei csv visto precedentemente in \textit{Tabella 1} ma con due variazioni:
+Lo schema logico dei documenti json è sostanzialmente invariato rispetto a quello della prima sessione, eccetto per due variazioni:
 \begin{itemize}
-	\item \textbf{tags} immagazzinati come array di stringhe
+	\item \textbf{tags} immagazzinati come array di stringhe.
 	
 	Ad esempio:
 	
 	tags: ["covid-19", "quarantena"]
-	\item informazioni relative ai likes, dislikes, view\_count e comment\_count innestati in un oggetto \textbf{statistics}
+	
+	\item informazioni relative ai likes, dislikes, view\_count e comment\_count come documenti innestati nella chiave \textbf{statistics}.
 	
 	Ad esempio:
 	
@@ -147,7 +148,7 @@ Lo schema logico dei documenti json è sostanzialmente lo stesso di quello dei c
 \end{itemize}
 \subsection*{Dati Covid-19}
 
-I dati relativi ai Covid-19 sono stati estrapolati da  \href{https://ourworldindata.org/coronavirus-testing}{questo link.} I dati vengono estrapolati in formato \textit{csv}; dopo averli puliti essi contengono le seguenti informazioni:
+I dati relativi alla pandemia, come il numero di contagi totali o giornalieri, sono stati ottenuti dal sito \href{https://ourworldindata.org/coronavirus-testing}{OurWorldInData} dell'università di Oxford. Successivamente abbiamo eseguito una prima manipolazione per ottenere i dati che interessavano i paesi e le date che abbiamo considerato. I risultati vengono visualizzati in un file \textit{csv}:
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l|l}

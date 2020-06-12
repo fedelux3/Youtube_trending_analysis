@@ -46,45 +46,50 @@ Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento
 \input{01_raccolta_dati.tex}
   
 \subsection*{Qualità dati}
-Avendo una grande mole di dati ci siamo dovuti anche occupare di verificare la pulizia o meno del nostro dataset. Per prima cosa abbiamo notato che non c'era presenza di Missing Values, questo è stato di per sé una grande fortuna poiché di solito il Missing Replacement è una operazione molto lunga.  Ci sono state però due problematiche principali che abbiamo dovuto affrontare:
+La grande disponibilità di dati ha rappresentato il problema più rilevante della verifica di qualità. Fortunatamente i dati non presentavano problemi di \textit{missing values} che avrebbero rappresentato difficoltà non trascurabili. Le principali problematiche emerse sono due:
 \begin{itemize}
-	\item Ridondanza: Questo problema è nato dal fatto che i trending di Youtube sono stati presi ogni mezz'ora, con il risultato di avere molti dati simili riguardanti le stesse fasce della giornata. 
-	\item Buchi: Questo problema è nato dal fatto che Google non permette di avanzare troppe richieste per la presa dati nella stessa giornata, per arginare questo problema abbiamo utilizzato 3 chiavi diverse con cui mandare le richieste a Google in modo tale da coprire la maggior parte della giornata. Ci sono stati però dei punti in cui la presa dati non è riuscita. Il metodo che abbiamo utilizzato per riempire quei buchi è stato quello di duplicare i dati della presa dati precedente. Questo metodo è stato possibile poiché la presa dati è stat effettuata in intervalli di tempo in cui i dati non vengono modificati significativamente.
+	
+	\item Ridondanza: I dati di Dicembre-Gennaio presentano richieste effettuate ai server di Youtube ogni mezz'ora, a differenza del periodo successivo. Di conseguenza sono stati rilevati molti dati simili tra loro, senza alcuna sostanziale variazione nelle varie fasce delle giornata. Per risolvere il problema abbiamo optato per scegliere quattro rilevazioni distaccate di sei ore ciascuna, in maniera da uniformare i dati con quelli di marzo-maggio. Pe ulteriori dettagli è possibile visualizzare il notebook jupyter con cui è stato affrontato il problema.
+
+	\item Saturazione richieste: Google non permette di effettuare troppe richieste nella stessa giornata. Per arginare il problema abbiamo utilizzato tre chiavi differenti da alternare durante la presa dati. Nonostante questo espediente ci sono stati alcuni momenti dove non è stato possibile effettuare le richieste ai server. Come risoluzione di questo problema abbiamo duplicato i dati della richiesta precedente, poiché i dati così ravvicinati non presentavano effettive variazioni.
+	
 	
 \end{itemize}
 
 \subsection*{Integrazione dati}
-	Per poter rispondere alle nostre domande di ricerca abbiamo dovuto effettuare un'integrazione tra i dati dei video di Youtube e i dati relativi ai contagi giornalieri di covid-19. Il merge l'abbiamo effettuato prima del loro caricamento su MongoDB. Lo script che implementa la nostra integrazione è \textit{merge\_to\_mongo.py}. 
+	Per poter rispondere alle nostre domande di ricerca abbiamo dovuto effettuare un'integrazione tra i dati dei video di Youtube e i dati relativi alla pandemia da Covid-19. L'integrazione è avvenuta prima del caricamento dei dati su MongoDB, lo script che mostra l'operazione è \textit{merge\_to\_mongo.py}. 
 	
-	Sostanzialmente applichiamo un'\textbf{integrazione temporale} considerando, per ciascun video, il \textbf{timestamp} della rilevazione e il paese in cui il video è presente (\textbf{country\_name}). Ricerchiamo il corrispettivo (timestamp, country\_name) nella base dati covid e generiamo un nuovo documento con tutte le informazioni del video di Youtube aggiungendo un sotto documento \textit{covid} con tutti i dati relativi ai contagi avvenuti quel giorno in quello stato. A questo punto i documenti vengono caricati su MongoDB.
+	Per ricavare le informazioni relative all'andamento della pandemia nella giornata considerata abbiamo effettuato un'\textbf{integrazione temporale}, dove le chiavi considerate sono state il \textbf{timestamp} e il \textbf{country\_name}, cioè la data e il paese. Il procedimento è il seguente: viene ricercata la data del video considerato e il paese di appartenenza, e successivamente viene creato un dizionario con tutte le informazioni della pandemia nella data e paese appena cercato. Infine viene creata una nuova chiave \textit{covid} contenente un nuovo documento innestato, che è il dizionario creato precedentemente. Solo a questo punto i documenti vengono caricati su MongoDB.
 	
-	Un problema riscontrato durante l'integrazione è stato che la rilevazione viene effettuata con il fuso orario di Greenwich GMT, però ciascun paese ha uno o più fusi orari differenti. Pertanto abbiamo corretto i timestamp in base al fuso orario della capitale di ciascun paese. Nel dettaglio visualizzare il file \textit{country\_name.json}.
-	
+	Alcune date presentano un fuso orario che non ha alcun riscontro nel dataset covid, perché alcuni paesi presentano diverse fusi orari. Come risoluzione sono stati spostati tutti gli orari in base al fuso orario della capitale del paese di appartenenza del video. Questa correzione è stata effettuata all'interno dello script \textit{scraper\_consumer} direttamente. I fusi orari utilizzati sono presenti all'interno del file \textit{country\_name.json}.
+
 	L'operazione di integrazione complessivamente richiede:
 	\begin{itemize}
 		\item senza sharding: 1419 s (23,6 min circa)
 		\item con sharding: 1431 s (24 min circa)
 	\end{itemize}
+
 \subsection*{Espressione regolare}
-	Per poter distinguere quali video possono essere considerati legati al covid-19 o meno, abbiamo definito la seguente espressione regolare:
+	Per poter distinguere quali video possano essere considerati legati al Covid-19 o meno, abbiamo definito la seguente espressione regolare:
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.95\linewidth]{pics/er.png}
 	\end{figure}
 
-	Abbiamo cercato di includere tutte le parole legate al contesto del Covid-19 e la loro traduzione in tutte le lingue dei paesi del nostro studio.
+	Come è possibile vedere, si è cercato di includere tutte le parole relative alla pandemia, e la loro traduzione nelle lingue di tutti i paesi che abbiamo considerato.
 	
-	Questa espressione regolare l'abbiamo applicata sia analizzando i titoli dei video, sia analizzando i tags scelti per descrivere il video. L'applicazione è avvenuta tramite le seguenti query:
+	L'espressione regolare è stata applicata sia ai titoli dei video, sia ai tags scelti per descrivere il video. Di seguito le query applicate:
+	
 	\begin{enumerate}
-		\item setting tutti video come non covid (sia per titolo che per tags):
+		\item Vengono create due nuove variabili che identificano se nel video sono presenti riferimenti al Covid-19 o meno, una per il titolo e una per i tags. Questa variabile viene inizializzata come \textit{false}:
 		
 			db.video\_merge.update(\{\},\{\$set : \{covid\_tags : false, covid\_title : false\}\},\{multi : true\})
 		
-		\item setting true tutti i video che hanno almeno un tag che rispetta l'espressione regolare (REGEX):
+		\item I video vengono analizzati singolarmente, e se l'espressione regolare (REGEX) restituisce un match positivo la variabile viene modificata in \textit{true}, prima per i tags:
 		
 			db.video\_merge.update(\{tags : \{\$in : [REGEX]\}\}, \{\$set : \{covid\_tags: true\}\}, \{multi : true\})
 		
-		\item setting true tutti i video il cui titolo rispetta l'espressione regolare (REGEX):
+		\item Successivamente per il titolo:
 		
 			db.video\_merge.update(\{title : \{\$in : [REGEX]\}\}, \{\$set : \{covid\_title: true\}\}, \{multi : true\})
 	\end{enumerate}

@@ -62,7 +62,7 @@ def api_request(page_token, country_code):
 
 def get_tags(tags_list):
     '''
-    Da una lista di tag condensa in una stringa separando i singoli tago con un carattere '|'
+    Da una lista di tag condensa in una stringa separando i singoli tags con un carattere '|'
     @params:
         tags_list:  lista dei tag
     @return:
