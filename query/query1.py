@@ -76,5 +76,7 @@ if __name__ == '__main__':
     for e in result:
         title = e["_id"]["title"]
         data = e["_id"]["timestamp"]
-        print("Il video che ha ricevuto più visualizzazioni in Francia è: " + str(title) + "ed è stato rilevato il " 
-                + str(data.day) + " " + str(data.month) + " " + str(data.year))
+        string = "Il video che ha ricevuto più visualizzazioni in Francia è: " + str(title) + "ed è stato rilevato il "  + str(data.day) + " " + str(data.month) + " " + str(data.year)
+        print(string)
+        with open("resultQuery1.txt", "w") as file:
+            file.write(string)

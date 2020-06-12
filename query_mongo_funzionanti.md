@@ -30,3 +30,67 @@ db.video_merge2.update({tags : {$in : [REGEX]}}, {$set : {covid_tags: true}}, {m
 
 ### Per il title
 db.video_merge2.update({title : {$in : [REGEX]}}, {$set : {covid_title: true}}, {multi : true})
+
+## Query da testare:
+### Contare numero video covid per paese
+db.videos_march.aggregate(
+    [{$match : {
+                covid_tags : true,
+                covid_title : true},
+     {$group : {
+                _id : "country_name", 
+                count : {$sum : 1}}
+     }
+    ]
+)
+### Data con il video con il maggior numero di visualizzazioni in Francia
+
+client = MongoClient('mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false')
+result = client['YT_data']['merge_c'].aggregate([
+    {
+        '$project': {
+            'country_name': '$country_name', 
+            'timestamp': '$timestamp', 
+            'date': {
+                '$dateToParts': {
+                    'date': '$timestamp'
+                }
+            }, 
+            'title': '$title', 
+            'giorno': '$date.hour', 
+            'visualizzazioni': '$statistics.view_count'
+        }
+    }, {
+        '$match': {
+            'country_name': 'Francia'
+        }
+    }, {
+        '$group': {
+            '_id': {
+                'timestamp': '$timestamp', 
+                'title': '$title'
+            }, 
+            'somma': {
+                '$sum': '$visualizzazioni'
+            }
+        }
+    }, {
+        '$group': {
+            '_id': '$_id', 
+            'massViz': {
+                '$max': '$somma'
+            }
+        }
+    }, {
+        '$sort': {
+            'massViz': -1
+        }
+    }, {
+        '$limit': 1
+    }
+])
+
+### Video covid il giorno del massimo aumento giornaliero di casi in Italia
+db.video.find(
+    {}
+)

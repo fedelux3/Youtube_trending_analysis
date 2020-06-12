@@ -27,6 +27,18 @@ def list_directory(data):
         
     return l
 
+def convert_types(dict) :
+    '''
+    Converte i tipi di timestamp e dati integer
+    @params:
+        dict:   dizionario di un singolo video
+    '''
+    dict["timestamp"] = datetime.strptime(dict["timestamp"], "%m-%d-%Y %H:%M")
+    dict["statistics"]["view_count"] = int(dict["statistics"]["view_count"]) 
+    dict["statistics"]["likes"] = int(dict["statistics"]["likes"]) 
+    dict["statistics"]["dislikes"] = int(dict["statistics"]["dislikes"]) 
+    dict["statistics"]["comment_count"] = int(dict["statistics"]["comment_count"]) 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="data")
@@ -66,6 +78,9 @@ if __name__ == '__main__':
             if file.endswith('.json'):
                 with open(path + file, "r") as read_file:
                     j_file = json.load(read_file)
+                # converte i tipi di dati utili su mongo
+                for d in j_file:
+                    convert_types(d)
                 # appende alla lista i dizionari dei video del json
                 list_videos.extend(j_file) 
         # carica la lista di dizionari nella collezione del database mongo specificate

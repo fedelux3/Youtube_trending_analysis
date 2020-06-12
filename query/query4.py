@@ -42,5 +42,10 @@ if __name__ == '__main__':
     }
 
     result = col.find(
-        filter=filter).explain()["executionStats"]
-    print(result)
+        filter=filter)
+    explain = col.find(filter=filter).explain()["executionStats"]
+    with open("resultQuery4.txt", "w", encoding = "utf8") as file:
+        file.write(str(explain))
+    
+    for e in result:
+        print(e)
