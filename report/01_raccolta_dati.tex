@@ -1,9 +1,12 @@
 \section*{Raccolta dati}
 La raccolta dati è basata su due fonti principali: YouTube e [fonte/i covid-19].
+
 \subsection*{Youtube API}
-I video in tendenza su youtube variano ogni 15 minuti circa (fonte: \url{https://support.google.com/youtube/answer/7239739?hl=it}) anche se non per forza e solitamente vi è solo una manciata di video che entra/esce dalle tendenze. Per la raccolta di questi dati ci siamo basati sulle funzioni API messe a disposizione da youtube per poter raccogliere i video in tendenza in un dato momento. Le chiavi di richiesta gratuite fornite da Google developer però ci permettono di effettuare una quantità limitata di richieste. 
+I video in tendenza su Youtube variano ogni 15 minuti circa (fonte: \url{https://support.google.com/youtube/answer/7239739?hl=it}). Tuttavia questo non significa che cambino effettivamente i contenuti presenti, infatti solitamente si assiste solo a qualche video che scompare dalle tendenze o viceversa. Va specificato inoltre che il numero assoluto di video in tendenza è di circa 200, con qualche calo durante la notte più rilevante.
+
+Le API di Youtube ci hanno permesso di raccogliere i dati necessari riguardanti i video in tendenza, con delle limitazioni sul numero di richieste gratuite che si potessero fare mediante il Google Developer.
 \\
-Abbiamo effettuato sostanzialmente due differenti \textbf{sessioni} di scraping, con metodi leggermente differenti, dovuti allo scopo che ci eravamo prefissati: 
+Sono state affrontate due sessioni di \textit{scraping} con metodi leggermente differenti:
 \begin{enumerate}
 	\item dal 23 dicembre 2019 al 5 gennaio 2020 (raccolta ogni 30 minuti)
 	\item dal 18 marzo 2020 al 6 maggio 2020 (raccolta ogni 6 ore)
@@ -13,7 +16,7 @@ Abbiamo deciso di raccogliere dati delle tendenze dei seguenti paesi:
 Italia, USA, Regno Unito, India, Germania, Canada, Francia, Corea del sud, Russia, Giappone, Brasile, Messico\\
 
 \subsection*{Prima sessione}
-Inizialmente pensavamo di utilizzare i dati per analizzare come, in generale, un video riesce ad arrivare nelle tendenze di youtube e in base a questo fatto analizzare il suo comportamento per quanto riguarda visualizzazioni, likes, dislikes, ecc. La raccolta in questa sessione viene effettuata con lo script \textit{scraper\_timed.py} che sostanzialmente esegue questi passaggi:\\
+L'idea che ha guidato la fase iniziale del progetto era quella di comprendere come l'algoritmo delle tendenze di Youtube sceglie i video, utilizzando caratteristiche come visualizzazioni, likes, dislikes e commenti. La raccolta dati ha seguito il seguente algoritmo, messo in pratica dallo script \textit{scraper\_timed.py}:\\
 \\
 \begin{algorithm}[H]
 	\KwData{country - insieme dei paesi prescelti; videos - insieme di video scaricati da un determinato paese}
@@ -21,7 +24,7 @@ Inizialmente pensavamo di utilizzare i dati per analizzare come, in generale, un
 	\nl \ForEach{country}
 	{
 		\nl videos = APIrequest(max(50 video), country)\\
-		\nl \While {video in tendenza non finiti}
+		\nl \While {tendency videos are finished}
 		{
 			\nl videos += APIrequest(max(50 video), country) \\
 		}
@@ -43,10 +46,9 @@ Inizialmente pensavamo di utilizzare i dati per analizzare come, in generale, un
 %	\item attendi 30 minuti (scheduler)
 %	\item ripeti da 1.
 %\end{enumerate}
-\underline{Nota}: per ogni API request al massimo possiamo scaricare 50 video e ogni paese a un numero diverso di video in tendenza (solitamente 150-200).
+\underline{Nota}: per ogni richiesta API è possibile scaricare un massimo di 50 video, inoltre ogni paese ha un numero di video differente (solitamente 150-200).
 
-In questa sessione abbiamo pensato di salvare i dati in formato \textit{csv}
-modo tale che siano facilmente manipolabili. Segue lo schema logico con cui li abbiamo immagazzinati:
+I dati vengono salvati in formato \textit{csv} secondo il seguente schema:
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l|l}
@@ -60,7 +62,7 @@ modo tale che siano facilmente manipolabili. Segue lo schema logico con cui li a
 		\textbf{channelTitle} & nome del canale per esteso\\\hline
 		\textbf{categoryId} & identificativo unico della categoria\\\hline
 		\textbf{trending\_date} & data in cui il video è in tendenza\\\hline
-		\textbf{tags} & stringa dei tag usati separati dal carattere "|"\\\hline
+		\textbf{tags} & stringa contenente i tag usati, separati dal carattere "|"\\\hline
 		\textbf{view\_count} & numero di visualizzazioni\\\hline
 		\textbf{likes} & numero di like (mi piace)\\\hline
 		\textbf{dislikes} & numero di dislike (non mi piace)\\\hline
@@ -78,11 +80,11 @@ I dati così raccolti sono salvati nella cartella [INSERIRE NOME CARTELLA]
 
 \subsection*{Seconda sessione}
 
-Per la seconda sessione di raccolta, in cui abbiamo deciso di concentrarci sugli effetti che l'epidemia del nuovo virus Covid-19, abbiamo adottato un approccio diverso. Innanzitutto abbiamo deciso di immagazzinare i dati in un database mongoDB nativamente. Pertanto oltre a costruire una pipeline di raccolta che salva i dati direttamente su mongoDB abbiamo deciso parallelamente di immagazzinarli in formato \textit{json}. 
+Lo scoppio della pandemia da Covid-19 ci ha permesso di cambiare approccio e domande di ricerca, cercando di valutare come la pandemia abbia influenzato Youtube. Con l'esperienza della presa dati precedente abbiamo cambiato metodo di raccolta, preferendo immagazzinare i dati direttamente, attraverso una pipeline, in un database MongoDB.
 
-Seconda considerazione è stata data la bassa variabilità dei video raccogliendo i dati ogni 30 minuti, vista nella precedente sessione, abbiamo deciso di effettuare lo scraping ogni 6 ore, in modo da avere 4 rilevazioni durante una giornata. 
+Inoltre abbiamo effettuato cambiamenti all'algoritmo di scraping, preferendo effettuare le richieste API ogni sei ore, per un totale di quattro rilevazioni al giorno, invece che ogni 30 minuti come prevedeva precedentemente lo schema.
 
-A scopo didattico abbiamo inoltre deciso di implementare una piccola pipeline Kafka in cui dividiamo la fase di raccolta dati (\textit{scraper\_producer.py}) e la fase di immagazzinamento (\textit{scraper\_consumer.py}). 
+A scopo didattico abbiamo deciso di implementare una piccola pipeline Kafka in cui dividiamo la fase di raccolta dati (\textit{scraper\_producer.py}) e la fase di immagazzinamento (\textit{scraper\_consumer.py}). 
 
 \begin{figure}[H]
 	\centering
@@ -90,7 +92,7 @@ A scopo didattico abbiamo inoltre deciso di implementare una piccola pipeline Ka
 	\caption{pipeline di raccolta dati - seconda sessione}
 \end{figure}
 
-Di seguito il dettaglio della computazione dei 2 script:
+Di seguito si può vedere nel dettaglio il procedimento dei due algoritmi:
 
 \begin{algorithm}[H]
 	\KwData{country - insieme dei paesi prescelti; videos - insieme di video scaricati da un determinato paese; KafkaProducer(data, channel) - sends data to channel kafka}
@@ -99,7 +101,7 @@ Di seguito il dettaglio della computazione dei 2 script:
 		{
 			\nl videos = APIrequest(max(50 video), country)\\
 			\nl KafkaProducer(videos, yt\_video) \\ 
-			\nl \While {video in tendenza non finiti}
+			\nl \While {tendency videos are finished}
 			{
 				\nl videos = APIrequest(max(50 video), country) \\
 				\nl KafkaProducer(videos, yt\_video) \\
