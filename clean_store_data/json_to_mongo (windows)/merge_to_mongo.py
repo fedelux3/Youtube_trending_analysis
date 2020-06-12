@@ -121,7 +121,7 @@ if __name__ == '__main__':
         user = args.user
         password = args.password
         # definizione del client mongo da utilizzare
-        client = MongoClient('localhost', args.port, username = user, password = password)
+        client = MongoClient('localhost', int(args.port), username = user, password = password)
         db = client[args.database] # connessione al db
         col = db[args.collection] # connessione alla collection
     except:

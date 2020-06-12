@@ -105,9 +105,45 @@ Segue lo schema logico applicato:
 	\caption{Pipeline sharding}
 \end{figure}
 
-QUERY ANALISI:
-
-
+\subsection*{Query}
+	Abbiamo eseguito alcune query per testare il funzionamento del database con e senza sharding. In particolare nella cartella \textit{query} si nota come la query 4, 5, 6 abbiano dei risultati interessanti.
+	
+	In particolare:
+	\begin{itemize}
+		\item \textit{query 4}: elenco video a tema covid della categoria intrattenimento d'Italia
+		\item \textit{query 5}: elenco video a tema covid della categoria intrattenimento e musica in Russia
+		\item \textit{query 6}: elenco video a tema covid della categoria news \& politics in Italia e Germania
+	\end{itemize}
+	
+	Per quanto riguarda tempo di esecuzione in millisecondi(\textit{executionTimeMillis}):
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{c|c|c}
+			\textbf{Query} & \textbf{No Sharding} & \textbf{Sharding} \\
+			\hline
+			Query 4 & 635 & 126 \\
+			Query 5 & 802 & 199 \\
+			Query 6 & 1119 & 538 
+		\end{tabular}
+		\caption{differenze tempi in millisecondi}
+	\end{table}
+	
+	Riguardo al numero di documenti esplorati per ottenere la risposta:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{c|c|c}
+			\textbf{Query} & \textbf{No Sharding} & \textbf{Sharding} \\
+			\hline
+			Query 4 & 444207 & 36950 \\
+			Query 5 & 444207 & 28715 \\
+			Query 6 & 444207 & 444207 
+		\end{tabular}
+		\caption{differenze numero di documenti esplorati}
+	\end{table}
+	
+	Si può notare come in particolare per la query 4 e 5 vengono esplorati un numero di video molto minore nel database con sharding rispetto a quello senza, questo si traduce poi nella marcato miglioramento dei tempi. La query 6 essendo che necessità informazioni su più di un paese esplora tutti i dati non sfruttando la divisione secondo shard keys.
+	
+	Per il dettaglio vedere i file di risposta nella cartella \textit{query}.
 %Per farlo ci occupiamo di effettuare la nostra analisi su partizionamenti sempre maggiori del nostro dataset e registriamo il tempo di esecuzione del nostro programma, effettuiamo poi una semplice regressione per vedere di che tipo di crescita stiamo parlando, ovviamente più la crescita è minore più il nostro algoritmo scala bene per volumi di dati maggiori. Presentiamo di seguito la registrazione dei tempi rispetto al partizionamento dei dati. 
 
 %\begin{figure}[H]

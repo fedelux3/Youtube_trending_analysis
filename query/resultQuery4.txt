@@ -1,1 +1,7 @@
-{'executionSuccess': True, 'nReturned': 2481, 'executionTimeMillis': 718, 'totalKeysExamined': 0, 'totalDocsExamined': 444207, 'executionStages': {'stage': 'COLLSCAN', 'filter': {'$and': [{'$or': [{'covid_tags': {'$eq': True}}, {'covid_title': {'$eq': True}}]}, {'category_name': {'$eq': 'Entertainment'}}, {'country_name': {'$eq': 'Italia'}}]}, 'nReturned': 2481, 'executionTimeMillisEstimate': 8, 'works': 444209, 'advanced': 2481, 'needTime': 441727, 'needYield': 0, 'saveState': 3470, 'restoreState': 3470, 'isEOF': 1, 'direction': 'forward', 'docsExamined': 444207}, 'allPlansExecution': []}
+executionSuccess: True
+nReturned: 2481
+executionTimeMillis: 635
+totalKeysExamined: 0
+totalDocsExamined: 444207
+executionStages: {'stage': 'COLLSCAN', 'filter': {'$and': [{'$or': [{'covid_tags': {'$eq': True}}, {'covid_title': {'$eq': True}}]}, {'category_name': {'$eq': 'Entertainment'}}, {'country_name': {'$eq': 'Italia'}}]}, 'nReturned': 2481, 'executionTimeMillisEstimate': 7, 'works': 444209, 'advanced': 2481, 'needTime': 441727, 'needYield': 0, 'saveState': 3470, 'restoreState': 3470, 'isEOF': 1, 'direction': 'forward', 'docsExamined': 444207}
+allPlansExecution: []

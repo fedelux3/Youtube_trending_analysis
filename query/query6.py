@@ -1,6 +1,6 @@
 '''
 Query mongo che risponde alla domanda: 
-Elenco video a tema covid della categoria Intrattenimento d'Italia
+Elenco video a tema covid della categoria News & Politics in Italia e Germania
 '''
 
 from pymongo import MongoClient
@@ -30,7 +30,8 @@ if __name__ == '__main__':
         exit()
 
     filter={
-    'country_name': 'Italia', 
+    '$or' :[{'country_name': 'Germania'},
+            {'country_name': 'Italia'}],
     '$or': [
         {
             'covid_title': True
@@ -38,15 +39,15 @@ if __name__ == '__main__':
             'covid_tags': True
         }
     ], 
-        'category_name': 'Entertainment'
+    'category_name': 'News & Politics'
     }
 
     result = col.find(
         filter=filter)
     explain = col.find(filter=filter).explain()["executionStats"]
-    with open("resultQuery4.txt", "w", encoding = "utf8") as file:
+    with open("resultQuery6.txt", "w", encoding = "utf8") as file:
         for e in explain:
             file.write(str(e) + ": " + str(explain[e]) + "\n")
     
-    for e in result:
-        print(e)
+    for e in explain:
+        print(e, explain[e])

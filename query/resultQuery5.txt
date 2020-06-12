@@ -1,0 +1,7 @@
+executionSuccess: True
+nReturned: 6445
+executionTimeMillis: 802
+totalKeysExamined: 0
+totalDocsExamined: 444207
+executionStages: {'stage': 'COLLSCAN', 'filter': {'$and': [{'$or': [{'category_name': {'$eq': 'Entertainment'}}, {'category_name': {'$eq': 'Music'}}]}, {'country_name': {'$eq': 'Russia'}}]}, 'nReturned': 6445, 'executionTimeMillisEstimate': 37, 'works': 444209, 'advanced': 6445, 'needTime': 437763, 'needYield': 0, 'saveState': 3470, 'restoreState': 3470, 'isEOF': 1, 'direction': 'forward', 'docsExamined': 444207}
+allPlansExecution: []
