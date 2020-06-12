@@ -96,9 +96,10 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 
 \subsection*{Scalabilità dell'algoritmo}
 
-Visto che una delle V che abbiamo deciso di usare concernenti i Big Data è stata quella relativa al volume dobbiamo occuparci di vedere come si comporta la nostra elaborazione dati con volumi di dati sempre crescenti. Abbiamo deciso di implementare lo \textbf{Sharding} su MongoDB. In particolare, abbiamo deciso di costruire 3 shard replica group formati da 3 repliche dello shard in modo da garantire la ridondanza nel caso di guasti e la frammentazione per rendere più efficienti le query. La chiave di sharding scelta è quella del campo "\textbf{country\_name}" perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti in ciascun paese. 
+Una delle V su cui è stata posta la nostra attenzione è la Volume, ovvero come trattare e gestire grandi quantità di dati. Avendo a disposizione il gestore MongoDB abbiamo deciso di implementare il metodo dello \textbf{Sharding}.
+Sono stati costruiti tre shard, tutti in modalità replica set per garantire ridondanza in caso di guasti e frammentazione per rendere le query più efficienti nel momento in cui si andava a interrogare il \textit{router mongos}. I \textit{config server} sono stati anch'essi configurati come replica set. Come chiave di sharding è stata scelta il campo \textbf{country\_name}, perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti in ciascun paese. 
 
-Segue lo schema logico applicato:
+Lo schema logico applicato è il seguente:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{pics/sharding.png}
@@ -106,7 +107,7 @@ Segue lo schema logico applicato:
 \end{figure}
 
 \subsection*{Query}
-	Abbiamo eseguito alcune query per testare il funzionamento del database con e senza sharding. In particolare nella cartella \textit{query} si nota come la query 4, 5, 6 abbiano dei risultati interessanti.
+	Abbiamo eseguito alcune query per testare il funzionamento del database con e senza sharding. In particolare nella cartella \textit{query} si nota come la query 4, 5, 6 presentino dei risultati interessanti.
 	
 	In particolare:
 	\begin{itemize}
@@ -141,7 +142,7 @@ Segue lo schema logico applicato:
 		\caption{differenze numero di documenti esplorati}
 	\end{table}
 	
-	Si può notare come in particolare per la query 4 e 5 vengono esplorati un numero di video molto minore nel database con sharding rispetto a quello senza, questo si traduce poi nella marcato miglioramento dei tempi. La query 6 essendo che necessità informazioni su più di un paese esplora tutti i dati non sfruttando la divisione secondo shard keys.
+	Si può notare come per la query 4 e 5 vengono esplorati un numero di video molto inferiori nel database con sharding rispetto a quello senza, questo si traduce in un miglioramento dei tempi di esecuzione. La query 6, poiché necessità di informazioni riguardanti tutti i paesi, esplora tutti i dati a prescindere degli shard, quindi non ha alcun miglioramento prestazionale.
 	
 	Per il dettaglio vedere i file di risposta nella cartella \textit{query}.
 %Per farlo ci occupiamo di effettuare la nostra analisi su partizionamenti sempre maggiori del nostro dataset e registriamo il tempo di esecuzione del nostro programma, effettuiamo poi una semplice regressione per vedere di che tipo di crescita stiamo parlando, ovviamente più la crescita è minore più il nostro algoritmo scala bene per volumi di dati maggiori. Presentiamo di seguito la registrazione dei tempi rispetto al partizionamento dei dati. 
@@ -153,14 +154,15 @@ Segue lo schema logico applicato:
 %\end{figure}
 
 \section*{Visualizzazione}
-Per la scelta delle visualizzazione abbiamo dovuto pensare per prima cosa a delle domande di ricerca a cui rispondere. Le domande che ci siamo posti sono le seguenti:
+
+La scelta delle visualizzazioni è stata guidata dalle domande di ricerca che ci siamo posti: 
 \begin{itemize}
-	\item Variazione della tipologia di video in tendenza da periodo pre covid-19 a periodo covid-19
-	\item È vero che la fruizione di video su Youtube riguardanti i contagi di Covid-19 segue l'andamento dei dati sull'epidemia?
+	\item Come variano le tipologie dei video in tendenza dal periodo precedente al coronavirus alla quarantena?
+	\item È vero che la fruizione di video su Youtube riguardanti il Covid-19 segue l'andamento dei dati sull'epidemia?
 \end{itemize}
 
 \subsection*{Scelta features}
-Per rispondere in modo coerente alle nostre domande di ricerca abbiamo deciso di concentrarsi sulle seguenti features del nostro dataset.
+Per rispondere in modo coerente alle nostre domande di ricerca abbiamo deciso di concentrarci sulle seguenti features del nostro dataset.
 \begin{itemize}
 	\item View Count
 	\item Covid Title
@@ -172,24 +174,29 @@ Per rispondere in modo coerente alle nostre domande di ricerca abbiamo deciso di
 
 \subsection*{Scelta della visualizzazione}
 
-Per rispondere alle due domande di ricerca che ci siamo posti abbiamo deciso di utilizzare due infografiche diverse. La scelta di utilizzare due infografiche diverse è stata data dal fatto che le due domande sono incompatibili tra loro e quindi sarebbe stato impossibile utilizzarne una unica.
+Abbiamo utilizzato due infografiche diverse per le domande di ricerca, poiché ci è sembrata incompatibile un'unica visualizzazione per entrambe.
+
 
 \paragraph{Prima infografica} La prima infografica consiste nella combinazione di due diverse visualizzazioni:
 \begin{itemize}
-	\item La prima visualizzazione è costituita da un lollipop chart temporale che rappresenta il numero video entrato in tendenza ogni giorno.
-	\item La seconda riguarda è costituita da un bubble chart e riguarda il numero di video per ogni categoria entrato in tendenza quel giorno.
+	\item Un lollipop chart temporale che rappresenta il numero video entrato in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresente le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
+	\item Un bubble chart, dove ogni bolla è un video, la sua grandezza rappresenta il numero di visualizzazioni e il colore la categoria di appartenenza.
 \end{itemize}
-La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo pre Covid-19 e post Covid-19 differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e vedere il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per step in modo da avvicinare l'utente piano piano a tutte le informazioni che questa infografica può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
+
+La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo precedente al Covid-19 e  durante la quarantena differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e vedere il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per passi guidati attraverso una storia, in modo da introdurre all'utente tutte le informazioni che questa visualizzazione può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.5 \linewidth]{pics/prima_infografica.png}
 	\caption{Prima infografica.}
 \end{figure}
 
-\paragraph{Seconda infografica} Per quanto riguarda la risposta alla seconda domanda di ricerca abbiamo deciso di utilizzare una infografica composta da due visualizzazioni. In particolare:
+\paragraph{Seconda infografica} Per quanto riguarda la risposta alla seconda domanda di ricerca abbiamo deciso di utilizzare una infografica composta da due visualizzazioni come precedentemente. In particolare:
 \begin{itemize}
-	\item La prima visualizzazione è un misto tra un bar chart e un line chart temporale. In questa visualizzazione abbiamo fatto risaltare la differenza percentuale tra una rilevazione e la precedente. In particolare il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19 mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. Abbiamo utilizzato questo tipo di grafico in modo da poter vedere se la divulgazione negativa dei dati riguardanti il Covid-19 abbia influito sulla fruizione online dei video riguardanti lo stesso argomento. La scelta di creare due forme diverse per i due andamenti è motivata dal fatto che dai questionari è risultata più apprezzata per riconoscere le due variabili.
-	\item La seconda visualizzazione è uno stacked bar chart che rappresenta il numero di video per categoria che riguardano il Covid-19 che può essere filtrata per giorno semplicemente interagendo con la prima visualizzazione.
+	\item Un misto tra un bar chart e un line chart temporale. In questa visualizzazione abbiamo fatto risaltare la differenza percentuale tra una rilevazione e quella del giorno precedente. Il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19 mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. 
+	Abbiamo utilizzato questo tipo di grafico in modo da poter vedere se le notizie negative o positive dei dati riguardanti il Covid-19 abbia influito sulla fruizione online dei video concernenti lo stesso argomento.
+	L'utilizzo di un bar chart e un line chart è dovuto al fatto che dai questionari è risultata più apprezzata questa scelta per riconoscere le due variabili.
+
+	\item Uno stacked bar chart che rappresenta il numero di video per categoria che riguardano il Covid-19. La visualizzazione può essere filtrata per giorno semplicemente interagendo con la prima visualizzazione.
 \end{itemize}
 
 La combinazione di queste due visualizzazioni consente di rispondere alla seconda domanda di ricerca che ci siamo posti precedentemente. Proponiamo di seguito una visione sommaria dell'infografica comprensiva dei contesti.
@@ -200,39 +207,40 @@ La combinazione di queste due visualizzazioni consente di rispondere alla second
 	\caption{Seconda infografica.}
 \end{figure}
 \subsection*{Valutazione della qualità}
-La valutazione della qualità della nostra infografica si è articolata in tre macro passaggi:
+La valutazione della qualità si è articolata in tre passaggi:
 
-\paragraph{User Test} Durante questa fase ci siamo occupati di sottoporre la nostra infografica a 6 persone lasciando completa libertà di esplorazione. Le varie esplorazioni sono state registrate in modo da far sì che potessero emergere le diverse problematiche di cui non ci siamo accorti in fase di realizzazione delle infografiche. Esponiamo le problematiche emerse durante questa fase di valutazione e le correzioni applicate:
+\paragraph{User Test} Durante questa fase ci siamo occupati di sottoporre la nostra infografica a sei persone lasciando completa libertà di esplorazione. Le varie interazioni sono state registrate in modo da far sì che potessero emergere le diverse problematiche di cui non ci siamo accorti in fase di realizzazione delle infografiche. Esponiamo le problematiche emerse durante questa fase di valutazione e le correzioni applicate:
 
 \begin{itemize}
 	\item \textit{Problema 1:} Il fatto di avere due variabili sotto forma di linea nella prima infografica rende difficoltoso distinguerle nonostante il colore.\\\textit{Soluzione 1:} Abbiamo deciso di assegnare ad una variabile la forma "linea" e all'altra variabile la forma "barra".
-	\item  \textit{Problema 2:}\\\textit{Soluzione 2:} 
-	\item  \textit{Problema 3:} \\\textit{Soluzione 3:} 
+	\item  \textit{Problema 2: Come comprendere che cliccare sul bianco significa non avere nessun giorno selezionato, e quindi una visione complessiva.}\\\textit{Soluzione 2: Introdurre l'infografica mediante storie che possano guidare l'utente nell'esplorazione.} 
+	\item  \textit{Problema 3: Come comprendere quali video sono nella categoria Covid e quali no.} \\\textit{Soluzione 3: Una legenda semplificata e l'utilizzo di bar chart sovrapposti di colori diversi.} 
 \end{itemize}
-\paragraph{Risultati dei task} Durante questa fase ci siamo occupati di sottoporre tre diverse richieste per ogni infografica a 24 utenti; questi task devono essere soddisfatti esplorando interattivamente l' infografica. In particolare i task da risolvere sono stati i seguenti:
+\paragraph{Risultati dei task} Durante questa fase ci siamo occupati di sottoporre tre diverse richieste per ogni infografica a 24 utenti; questi task devono essere soddisfatti esplorando in maniera interattiva. I task da risolvere sono stati i seguenti:
 \begin{enumerate}
 	\item Per la \textit{prima infografica:}
 	\begin{itemize}
-		\item Nella giornata del 20 marzo quale video ha avuto più visualizzazioni e a quale categoria appartiene?  \textit{Education, Recognizing handwashing ... }
+		\item Nella giornata del 20 marzo quale video ha avuto più visualizzazioni e a quale categoria appartiene?  \textit{Science \& technology, IPad Pro}
 		\item Della categoria Entertainment quali sono i canali che hanno fatto più visualizzazioni a Natale e a Pasqua? \textit{The Late Show with Corbin, Mr Beast}
-		\item Nella categoria education confronta il 29 dicembre e 21 marzo in Germania. Qual è il titolo dei video più visti per ciascun giorno?
+		\item Nella categoria education confronta il 29 dicembre e 21 marzo in Germania. Qual è il titolo dei video più visti per ciascun giorno? \textit{How to move the Sun, Recognizing Ignaz}
 	\end{itemize}
 	\item Per la \textit{seconda infografica:}
 \begin{itemize}
 	\item Trova la categoria che ha avuto più video Covid-19 il giorno 27 Marzo in Italia? \textit{News and Politics}
-	\item Quanti video Covid-19 della categoria "People and Blogs" ci sono stati negli USA? \textit{2}
+	\item Quanti video Covid-19 della categoria "People and Blogs" ci sono stati negli USA? \textit{12}
 	\item Quanti nuovi contagi ha avuto la Corea del Sud il 12 Aprile? \textit{62}
 \end{itemize}
 \end{enumerate}
 
-Ci siamo occupati di registrare i tempi in cui gli utenti riuscivano a completare questi obiettivi e abbiamo visualizzato questi record nei seguenti violin plot:
+Sono stati registrati i tempi in cui gli utenti riuscivano a completare questi obiettivi e sono stati visualizzati i risultati nei seguenti box plot:
 %\begin{figure}[H]
 %	\centering
 %	\includegraphics[height=0.3 \linewidth]{pict/violin_plot.png}
 %	\caption{Tempi di completamento dei task.}
 %\end{figure}
-Questa visualizzazione è utile per capire se le nostre infografiche sono troppo dispersive o riescono a centrare gli obietivi facilmente.
-\paragraph{Questionari} Per quanto riguarda quest'ultima fase ci siamo occupati di rivolgere un questionario della valutazione della qualità a 24 persone. In particolare il questionario è stato articolato nella seguente maniera:
+Questa visualizzazione è utile per capire se le nostre infografiche sono troppo dispersive oppure se riescono a essere facili e intuitive.
+
+\paragraph{Questionari} Per quanto riguarda l'ultima fase è stato somministrato un questionario di valutazione della qualità a 24 persone articolato nella seguente maniera:
 \begin{itemize}
 	\item Come valuti la chiarezza dell' infografica?
 	\item Come valuti l'utilità dell'infografica?
@@ -241,14 +249,14 @@ Questa visualizzazione è utile per capire se le nostre infografiche sono troppo
 	\item Quanto è stata informativa l'infografica?
 	\item Come valuti complessivamente l'infografica?
 \end{itemize}
-Le risposte sono state registrate grazie al tool: Questionari di Google. Una volta registrate le risposte ci siamo occupati di vedere se la valutazione complessiva dell'infografica fosse coerente con una ricostruzione complessiva data dalla regressione con i coefficienti di Cabitza-Locoro.
+Le risposte sono state registrate grazie al tool "Questionari di Google". Una volta registrati i risultati è stata controllata che la valutazione dell'infografica fosse coerente con una ricostruzione complessiva della regressione con i coefficienti di Cabitza-Locoro.
 %\begin{figure}[H]
 %	\centering
 %	\includegraphics[height=0.3 \linewidth]{pict/box_plot.png}
 %	\caption{Dispersione delle risposte del questionario.}
 %\end{figure}
-E' stato comodo usare un box plot per la registrazione di queste risposte poiché la media è un indicatore di tendenza centrale e non fornisce alcuna informazione sulla distribuzione di questi dati.
-Per quanto riguarda invece della coerenza della valutazione complessiva rispetto alla ricostruzione data dai coefficienti abbiamo avuto la seguente distribuzione:
+L'utilizzo di un box plot è risultato molto comodo per la registrazione delle risposte poiché la media è un indicatore di tendenza centrale e non fornisce alcuna informazione sulla distribuzione di questi dati.
+Per quanto riguarda invece la coerenza della valutazione rispetto alla ricostruzione data dai coefficienti abbiamo avuto la seguente distribuzione:
 %\begin{figure}[H]
 %	\centering
 %	\includegraphics[height=0.3 \linewidth]{pict/regressione.png}
