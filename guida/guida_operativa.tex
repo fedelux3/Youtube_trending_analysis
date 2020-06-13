@@ -188,7 +188,7 @@ clean_store_data/sharding/codici.txt
 
 \section*{Appendice}
 
-\paragraph{Creazione Config Server}
+\paragraph{Creazione Config Server\\}
 Vengono configurati i tre config server:
 \begin{Verbatim}
 	mongod --config <file.cfg> --configsvr
@@ -199,7 +199,7 @@ Eseguire il comando sul config server PRINCIPALE, vengono indicati i tre membri 
 rs.initiate({ _id: "rs0", configsvr: true, members: [{ _id : 0, host : "localhost:27019" },{ _id : 1, host : "localhost:27020" },{ _id : 2, host : "localhost:27021" }]})
 \end{Verbatim}
 
-\paragraph{Creazione Shard Server} Aprire tutte le istanze di mongod dei vari shard.
+\paragraph{Creazione Shard Server\\} Aprire tutte le istanze di mongod dei vari shard.
 
 \begin{Verbatim}
 mongod --config <file.cfg> --shardsvr
@@ -247,7 +247,7 @@ members: [
 
 \end{itemize}
 
-\paragraph{Router}
+\paragraph{Router\\}
 Dopo aver inizializzato gli shard e i config server aprire il router come istanza di mongos:
 
 \begin{Verbatim}
