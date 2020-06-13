@@ -172,11 +172,117 @@ Lo sharding dei documenti di Mongo è stato eseguito in locale, quindi utilizzan
 	\item \textbf{shard} Sono tre istanze di \textit{mongod}. Ogni shard è configurato in replica-set, e i dati vengono suddivisi nei vari shard.
 \end{itemize}
 
-All'interno di ogni cartella sono presenti i vari file di configurazione, dove deve essere specificato il percorso della cartella \textit{data} di ogni istanza. Per prima cosa inizializzare i replica-set, e successivamente avviarli come shard server o come config server. Una volta collegati quest'ultimi al router è necessario caricare i dati su uno degli shard. Prima di effettuare la procedura va specificata la \textit{shard key}, e va anche specificato il metodo di suddivisione dei dati, se \textit{hashed} o \textit{range}. In questo lavoro è stato utilizzato il primo metodo.
+All'interno di ogni cartella sono presenti i vari file di configurazione, dove deve essere specificato il percorso della cartella \textit{data} di ogni istanza. Inoltre bisogna specificare che, essendo configurato tutto in una macchina locale, è importante utilizzare porte differenti per ogni istanza.
+\\
+Per prima cosa inizializzare i replica-set, e successivamente avviarli come shard server o come config server. Una volta collegati quest'ultimi al router è necessario caricare i dati su uno degli shard. Prima di effettuare la procedura va specificata la \textit{shard key}, e va anche specificato il metodo di suddivisione dei dati, se \textit{hashed} o \textit{ranged}. In questo lavoro è stato utilizzato il primo metodo.
+\\
+Le collezioni che abbiamo shardato sono state due, una contenente i dati di marzo-maggio integrati con i dati Covid, e l'altra contenente i video di dicembre-gennaio e marzo-maggio. I dati vengono caricati attraverso il router sugli shard, specificando la shard key, e automaticamente suddivisi.
+
+Per ulteriori informazioni sui comandi leggere l'appendice.
+
+\begin{verbatim}
+clean_store_data/sharding/codici.txt
+\end{verbatim}
 
 
 
+\section*{Appendice}
 
+\paragraph{Creazione Config Server}
+Vengono configurati i tre config server:
+\begin{Verbatim}
+	mongod --config <file.cfg> --configsvr
+\end{Verbatim}
+
+Eseguire il comando sul config server PRINCIPALE, vengono indicati i tre membri del replica set, il quale nome sarà rs0:
+\begin{Verbatim}
+rs.initiate({ _id: "rs0", configsvr: true, members: [{ _id : 0, host : "localhost:27019" },{ _id : 1, host : "localhost:27020" },{ _id : 2, host : "localhost:27021" }]})
+\end{Verbatim}
+
+\paragraph{Creazione Shard Server} Aprire tutte le istanze di mongod dei vari shard.
+
+\begin{Verbatim}
+mongod --config <file.cfg> --shardsvr
+\end{Verbatim}
+
+Successivamente per ogni gruppo replica-set accedere ad uno ed inizializzare il gruppo:
+\begin{itemize}
+	\item Primo gruppo
+\begin{Verbatim}
+rs.initiate(
+{_id : "rs1",
+members: [
+{ _id : 0, host : "localhost:27022" },
+{ _id : 1, host : "localhost:27023" },
+{ _id : 2, host : "localhost:27024" }
+]
+}
+)
+\end{Verbatim}
+	\item Secondo Gruppo
+\begin{Verbatim}
+rs.initiate(
+{_id : "rs2",
+members: [
+{ _id : 0, host : "localhost:27025" },
+{ _id : 1, host : "localhost:27026" },
+{ _id : 2, host : "localhost:27027" }
+]
+}
+)
+\end{Verbatim}
+
+	\item Terzo gruppo
+\begin{Verbatim}
+rs.initiate(
+{_id : "rs3",
+members: [
+{ _id : 0, host : "localhost:27028" },
+{ _id : 1, host : "localhost:27029" },
+{ _id : 2, host : "localhost:27030" }
+]
+}
+)
+\end{Verbatim}
+
+\end{itemize}
+
+\paragraph{Router}
+Dopo aver inizializzato gli shard e i config server aprire il router come istanza di mongos:
+
+\begin{Verbatim}
+mongos --config <file.cfg>
+\end{Verbatim}
+
+Dopo aver avviato il router connettersi ad esso attraverso il localhost e la porta ad esso associata mediante il comando:
+
+\begin{Verbatim}
+mongo --host <router>
+\end{Verbatim}
+
+Ora è possibile aggiungere i vari shard mediante il comando \textit{sh.addShard()} al router, inserendo tra le parentesi l'indirizzo di collegamento allo shard. Nel nostro caso, avendo impostato come replica-set ogni shard è necessario utilizzare:
+\begin{itemize}
+	\item Primo shard
+	\begin{Verbatim}
+	sh.addShard("rs1/localhost:27022,localhost:27023,localhost:27024")
+	\end{Verbatim}
+	\item Secondo shard
+	\begin{Verbatim}
+	sh.addShard("rs2/localhost:27025,localhost:27026,localhost:27027")
+	\end{Verbatim}
+	\item Terzo shard
+	\begin{Verbatim}
+	sh.addShard("rs3/localhost:27028,localhost:27029,localhost:27030")
+	\end{Verbatim}
+\end{itemize}
+
+Adesso è possibile caricare i dati mediante il router mongos e applicare lo shard, utilizzando come chiave il paese. Il comando da utilizzare è:
+
+\begin{Verbatim}
+sh.shardCollection("YT_data.video_all", {country_name : "hashed"})
+\end{Verbatim}
+
+La collezione risulta ora distribuita su tre shard, tutti configurati come replica-set.
 
 
 \end{document}
