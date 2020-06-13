@@ -35,30 +35,41 @@
 \begin{center}
  Federico Luzzi,  Marco Peracchi, Christian Uccheddu, Gabriele Centemeri (TTC)
 \end{center}
-Di seguito la guida operativa per eseguire il codice in modo da replicare i risultati ottenuti:
+Di seguito la guida operativa per eseguire il codice e replicare i risultati ottenuti:
 
-\section*{Presa dati Dicembre}
+\section*{Presa dati Dicembre-Gennaio}
 
-Eseguire il file:
+Eseguire il file che esegue richieste ogni 30 minuti e salva i dati in formato csv. 
 
 \begin{verbatim}
 scraper/scraper_csv.py
 \end{verbatim}
-Questo script serve ad effettuare una rilevazione dati ogni 6h. I dati così estratti vengono trasformati in csv.
-Trasformare i dati da csv in json usando: 
+
+Il jupyter-notebook serve a selezionare prese dati ogni 6 ore, e si trova all'interno della cartella \textit{clean\_store\_data}.
+
+\begin{verbatim}
+clean_jen_video/fix_jen_json.ipynb
+\end{verbatim}
+
+Per trasformare i dati da formato csv a json.
 
 \begin{verbatim}
 csv_to_json/main.py
 \end{verbatim}
-Per eseguire lo script è necessario fornire il seguente parametro:
+
+Lo script ha bisogno del parametro:
+
 \begin{itemize}
 	\item -d "directory\_dei\_dati"
 \end{itemize}
-Caricare quindi i json su mongo usando: 
+
+In tal modo si indica la directory dove sono i dati da trasformare.
+Per caricare i json su MongoDB avviare lo script:
 
 \begin{verbatim}
-json_to_mongo/json_to_mongo.py
+json_to_mongo(windows)/json_to_mongo.py
 \end{verbatim}
+
 A questo script vanno forniti i seguenti parametri:
 
 \begin{itemize}
@@ -70,43 +81,42 @@ A questo script vanno forniti i seguenti parametri:
 	\item -c "collection in cui vengono inseriti i dati"
 \end{itemize}
 
-\section*{Presa dati periodo Covid}
 
-Aprire il servizio mongo da terminale.
+\section*{Presa dati Marzo-Maggio}
 
-
-Lanciare in due terminali contemporaneamente: 
+Aprire il servizio Mongo da terminale e successivamente avviare in due terminali separati gli script:
 
 \begin{itemize}
 	\item \begin{verbatim}
 	scraper/scraper_consumer.py
 	\end{verbatim}
 	\item \begin{verbatim}
-scraper/scraper_producer.py
+	scraper/scraper_producer.py
 	\end{verbatim}
 \end{itemize}
 
-Questo effettua una rilevazione dati ogni 6h attraverso il servizio kafka. L'utilizzo di kafka non è indispensabile, inizialmente però avevamo deciso di prendere i dati sia dei canali che dei video in live stream quindi kafka aveva senso in quanto venivano usati due topic diversi e fatte le prime operazioni preliminari. Abbiamo deciso di tenerlo per non stravolgere la pipeline di esecuzione.
+Mediante l'utilizzo del servizio Kafka vengono rilevati i dati ogni 6 ore.
 
 \section*{Presa dati Covid}
 
-Scaricare i dati in formato csv da \href{https://ourworldindata.org/coronavirus-testing}{questo sito}
-\\Eseguire il codice:
+Scaricare i dati in formato csv da \href{https://ourworldindata.org/coronavirus-testing}{OurWorldInData}
+ed eseguire il codice:
 
 \begin{verbatim}
 covid/cleaner.py
 \end{verbatim}
-Questo script permette di eseguire una pulizia dei dati in modo da renderli integrabili con i json raccolti in precedenza.
 
+Questo script permette di eseguire una pulizia dei dati in modo da renderli integrabili con i json dei video precedenti.
 
 \section*{Integrazione dei dati}
 
 
-Per eseguire l'integrazione tra i dati covid e i dati di youtube bisogna eseguire il seguente script:
+Per eseguire l'integrazione tra i dati Covid e i dati di Youtube bisogna eseguire il seguente script:
 
 \begin{verbatim}
-clean_store_data/merge_to_mongo.py
+json_to_mongo(windows)/merge_to_mongo.py
 \end{verbatim}
+
 A questo script vanno forniti i seguenti parametri:
 
 \begin{itemize}
@@ -117,23 +127,22 @@ A questo script vanno forniti i seguenti parametri:
 	\item-db "Nome del database in output"
 	\item -c "collection in cui vengono inseriti i dati"
 \end{itemize}
-Questo script integra i due dataset e carica tutto su mongo.
 
+I dati vengono quindi integrati sulla data e il paese e successivamente caricati su Mongo.
 
 \section*{Query mongo}
 
-
-Per le visualizzazioni che intendiamo fare abbiamo bisogno di poter distinguere quando un video contenga nel titolo o nei tag una delle parole che si rifanno al coronavirus. Per controllare questo è stata costruita la seguente espressione regolare:
+La seconda domanda di ricerca ci chiede di distinguere quali video riguardino il coronavirus o meno. L'espressione regolare seguente analizza tags e titoli per verificare se è presente una parola riferita alla pandemia.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=0.4 \linewidth]{rexpression.png}
+	\includegraphics[height=0.4 \linewidth]{er.png}
 	\caption{Regular expression usata}
 \end{figure}
 
+Eseguire ora i seguenti comandi all'interno della shell di MongoDB.
 
-
-Creare due nuovi campi chiamati \textbf{covid\_title} e \textbf{covid\_tags} settati entrambi a \textbf{False} 
+Creare due nuovi campi chiamati \textbf{covid\_title} e \textbf{covid\_tags} inizializzati entrambi a \textbf{False} 
 
 \begin{Verbatim}[frame=single,baselinestretch=0.1]
 db.video_merge.update({},{$set : {covid_tags : false, 
@@ -152,6 +161,22 @@ db.video_merge.update({title : {$in : [REGEX]}},
 			{$set : {covid_title: true}}, 
 			{multi : true})
 \end{Verbatim}
+
+\section*{Sharding}
+
+Lo sharding dei documenti di Mongo è stato eseguito in locale, quindi utilizzando \textit{localhost} come host. All'interno della cartella \textit{sharding} è possibile visualizzare le cartelle contenenti i vari file di configurazione per tutti i componenti.
+
+\begin{itemize}
+	\item \textbf{configsvr} Sono tre istanze di \textit{mongod}, configurate come replica set. Il \textit{config server} conosce dove ogni dato è allocato dei vari shard, quindi è importante configurarlo come replica-set, così che in caso di guasti non si perdano le informazioni.
+	\item \textbf{router} \`E un'istanza di \textit{mongos}. Per interrogare i vari shard è necessario interfacciarsi con essa.
+	\item \textbf{shard} Sono tre istanze di \textit{mongod}. Ogni shard è configurato in replica-set, e i dati vengono suddivisi nei vari shard.
+\end{itemize}
+
+All'interno di ogni cartella sono presenti i vari file di configurazione, dove deve essere specificato il percorso della cartella \textit{data} di ogni istanza. Per prima cosa inizializzare i replica-set, e successivamente avviarli come shard server o come config server. Una volta collegati quest'ultimi al router è necessario caricare i dati su uno degli shard. Prima di effettuare la procedura va specificata la \textit{shard key}, e va anche specificato il metodo di suddivisione dei dati, se \textit{hashed} o \textit{range}. In questo lavoro è stato utilizzato il primo metodo.
+
+
+
+
 
 
 \end{document}
