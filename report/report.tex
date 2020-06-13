@@ -49,9 +49,9 @@ Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento
 La grande disponibilità di dati ha rappresentato il problema più rilevante della verifica di qualità. Fortunatamente i dati non presentavano problemi di \textit{missing values} che avrebbero rappresentato difficoltà non trascurabili. Le principali problematiche emerse sono due:
 \begin{itemize}
 	
-	\item Ridondanza: I dati di Dicembre-Gennaio presentano richieste effettuate ai server di Youtube ogni mezz'ora, a differenza del periodo successivo. Di conseguenza sono stati rilevati molti dati simili tra loro, senza alcuna sostanziale variazione nelle varie fasce delle giornata. Per risolvere il problema abbiamo optato per scegliere quattro rilevazioni distaccate di sei ore ciascuna, in maniera da uniformare i dati con quelli di marzo-maggio. Pe ulteriori dettagli è possibile visualizzare il notebook jupyter con cui è stato affrontato il problema.
+	\item Ridondanza: I dati di Dicembre-Gennaio presentano richieste effettuate ai server di Youtube ogni mezz'ora, a differenza del periodo successivo. Di conseguenza sono stati rilevati molti dati simili tra loro, senza alcuna sostanziale variazione nelle varie fasce delle giornata. Per risolvere il problema abbiamo optato per scegliere quattro rilevazioni distaccate di sei ore ciascuna, in maniera da uniformare i dati con quelli di marzo-maggio. Per ulteriori dettagli è possibile visualizzare il notebook jupyter con cui è stato affrontato il problema.
 
-	\item Saturazione richieste: Google non permette di effettuare troppe richieste nella stessa giornata. Per arginare il problema abbiamo utilizzato tre chiavi differenti da alternare durante la presa dati. Nonostante questo espediente ci sono stati alcuni momenti dove non è stato possibile effettuare le richieste ai server. Come risoluzione di questo problema abbiamo duplicato i dati della richiesta precedente, poiché i dati così ravvicinati non presentavano effettive variazioni.
+	\item Saturazione richieste: Google non permette di effettuare troppe richieste nella stessa giornata. Per arginare il problema abbiamo utilizzato tre API key differenti da alternare durante la presa dati. Nonostante questo espediente ci sono stati alcuni momenti dove non è stato possibile effettuare le richieste ai server. Come risoluzione di questo problema abbiamo duplicato i dati della richiesta precedente, poiché le tendenze estratte in tempi ravvicinati non presentano variazioni importanti nei video.
 	
 	
 \end{itemize}
@@ -61,7 +61,7 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 	
 	Per ricavare le informazioni relative all'andamento della pandemia nella giornata considerata abbiamo effettuato un'\textbf{integrazione temporale}, dove le chiavi considerate sono state il \textbf{timestamp} e il \textbf{country\_name}, cioè la data e il paese. Il procedimento è il seguente: viene ricercata la data del video considerato e il paese di appartenenza, e successivamente viene creato un dizionario con tutte le informazioni della pandemia nella data e paese appena cercato. Infine viene creata una nuova chiave \textit{covid} contenente un nuovo documento innestato, che è il dizionario creato precedentemente. Solo a questo punto i documenti vengono caricati su MongoDB.
 	
-	Alcune date presentano un fuso orario che non ha alcun riscontro nel dataset covid, perché alcuni paesi presentano diverse fusi orari. Come risoluzione sono stati spostati tutti gli orari in base al fuso orario della capitale del paese di appartenenza del video. Questa correzione è stata effettuata all'interno dello script \textit{scraper\_consumer} direttamente. I fusi orari utilizzati sono presenti all'interno del file \textit{country\_name.json}.
+	Alcune date presentano un fuso orario che non ha alcun riscontro nel dataset covid, perché alcuni paesi presentano diversi fusi orari. Come risoluzione sono stati spostati tutti gli orari in base al fuso orario della capitale del paese di appartenenza del video. Questa correzione è stata effettuata all'interno dello script \textit{scraper\_consumer} direttamente, in un'ottica process driven. I fusi orari utilizzati sono presenti all'interno del file \textit{country\_name.json}.
 
 	L'operazione di integrazione complessivamente richiede:
 	\begin{itemize}
@@ -93,11 +93,23 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 		
 			db.video\_merge.update(\{title : \{\$in : [REGEX]\}\}, \{\$set : \{covid\_title: true\}\}, \{multi : true\})
 	\end{enumerate}
-
+	L'applicazione delle query viene effettuata dallo script \textit{query\_covid.py}.
+	
 \subsection*{Scalabilità dell'algoritmo}
 
-Una delle V su cui è stata posta la nostra attenzione è la Volume, ovvero come trattare e gestire grandi quantità di dati. Avendo a disposizione il gestore MongoDB abbiamo deciso di implementare il metodo dello \textbf{Sharding}.
+Una delle V su cui è stata posta la nostra attenzione è la Volume, ovvero come trattare e gestire grandi quantità di dati. 
+In particolare abbiamo gestito:
+\begin{itemize}
+	\item prima sessione di scraping: 1.91 Gb
+	\item seconda sessione di scraping: 1.11 Gb
+	\item dati covid: 10 Mb
+\end{itemize}
+Per un totale di circa 3 Gb
+
+Abbiamo deciso di utilizzare per trattare i dati con MongoDB, pertanto abbiamo implementato lo \textbf{Sharding}.
 Sono stati costruiti tre shard, tutti in modalità replica set per garantire ridondanza in caso di guasti e frammentazione per rendere le query più efficienti nel momento in cui si andava a interrogare il \textit{router mongos}. I \textit{config server} sono stati anch'essi configurati come replica set. Come chiave di sharding è stata scelta il campo \textbf{country\_name}, perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti in ciascun paese. 
+
+Per il dettaglio dei file di configurazione e altro vedere cartella \textit{sharding}.
 
 Lo schema logico applicato è il seguente:
 \begin{figure}[H]
@@ -106,8 +118,14 @@ Lo schema logico applicato è il seguente:
 	\caption{Pipeline sharding}
 \end{figure}
 
+In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due collection: 
+\begin{itemize}
+	\item \textit{video\_all}: contiene tutti dati relativi alle due sessioni di presa dati
+	\item \textit{video\_covid}: contiene i dati relativi alla seconda presa dati integrati con quelli relativi al covid
+\end{itemize}
+
 \subsection*{Query}
-	Abbiamo eseguito alcune query per testare il funzionamento del database con e senza sharding. In particolare nella cartella \textit{query} si nota come la query 4, 5, 6 presentino dei risultati interessanti.
+	Abbiamo eseguito alcune query per testare il funzionamento del database con e senza sharding, contenute negli script presenti nella cartella \textit{query}. In particolare si nota come la query 4, 5, 6 presentino dei risultati interessanti.
 	
 	In particolare:
 	\begin{itemize}
@@ -222,7 +240,8 @@ La valutazione della qualità si è articolata in tre passaggi:
 	\begin{itemize}
 		\item Nella giornata del 20 marzo quale video ha avuto più visualizzazioni e a quale categoria appartiene?  \textit{Science \& technology, IPad Pro}
 		\item Della categoria Entertainment quali sono i canali che hanno fatto più visualizzazioni a Natale e a Pasqua? \textit{The Late Show with Corbin, Mr Beast}
-		\item Nella categoria education confronta il 29 dicembre e 21 marzo in Germania. Qual è il titolo dei video più visti per ciascun giorno? \textit{How to move the Sun, Recognizing Ignaz}
+		\item Nella categoria sport confronta il 30 dicembre e 10 aprile in Germania. Qual è il titolo dei video più visti per ciascun giorno?\\
+		\textit{Sampdoria 1-2 Juventus | Ronaldo Header Winds it for the Visitors | Serie A TIM \\ F1 Esports Virtual Grand Prix Highlights | Aramco}
 	\end{itemize}
 	\item Per la \textit{seconda infografica:}
 \begin{itemize}
@@ -262,6 +281,18 @@ Per quanto riguarda invece la coerenza della valutazione rispetto alla ricostruz
 %	\includegraphics[height=0.3 \linewidth]{pict/regressione.png}
 %	\caption{$R^{2} = 0.75$.}
 %\end{figure}
+
+\section*{Conclusioni e prospettive future}
+In conclusione possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube tra prima e durante l'epidemia di Covid-19. 
+
+La prima infografica mostra come la distribuzione dei video nelle varie categorie sia cambiata. Ad esempio per quanto riguarda l'Italia la categoria di Sport subisce una drastica diminuzione, presumibilmente dovuta al blocco di tutti gli sport durante il lockdown; così come la categoria News \& politics trova una più alta presenza nel periodo covid rispetto al periodo precedente.
+
+La seconda infografica mostra che la variazione giornaliera del numero di contagi non influenza strettamente il numero di contenuti nelle tendenze legati al Covid. In alcuni frangenti si nota una certa relazione tra le due misure, ad esempio in Italia nel periodo di fine marzo, inizio aprile. Ne consegue che probabilmente l'impatto dei numeri ufficiali relativi ai contagi non abbiano influenzato in modo significativo le tendenze giornaliere di youtube.
+
+Da queste due infografiche possiamo concludere che i gusti degli utenti di youtube hanno subito un evidente cambiamento durante il periodo dell'epidemia, questo cambiamento è avvenuto gradualmente e non strettamente legato ai numeri ufficiali dei contagi.
+
+\paragraph{Prospettive future}Possibile regressione e vedere cosa succede dopo che le acque si sono calmate 
+
 
 
 \end{document}
