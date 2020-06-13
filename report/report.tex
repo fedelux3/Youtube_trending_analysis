@@ -34,8 +34,8 @@ Gabriele Celeri, Federico Luzzi,  Marco Peracchi, Christian Uccheddu
 \vspace{0.2cm}
 \begin{center}\textbf{Introduzione e obiettivi}\end{center} 
 Negli ultimi mesi il Covid-19 ha avuto un impatto notevole sulle vite di tutti noi. L'obiettivo di questo lavoro è capire se la piattaforma YouTube sia stata influenzata dalla presenza di questo virus che ha costretto a rimanere nelle proprie case gran parte della popolazione mondiale. 
-Per valutare l'impatto della pandemia e della quarantena obbligatoria, abbiamo confrontato i video in tendenza di Youtube nel periodo Dicembre-Gennaio rispetto Marzo-Maggio, con l'obiettivo di verificare se i contenuti presenti sulla piattaforma e la loro tipologia siano cambiati.
-Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento dei contagi, e delle notizie in merito, specialmente se negative, influenzassero in alcun modo la fruizione di video riguardanti il Covid-19.
+Per valutare l'impatto della pandemia e della quarantena obbligatoria, abbiamo confrontato i video in tendenza di Youtube nel periodo di dicembre-gennaio rispetto a quello di marzo-maggio, con l'obiettivo di verificare se i contenuti presenti sulla piattaforma e la loro tipologia siano cambiati.
+Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento dei contagi e delle notizie in merito, specialmente se negative, influenzassero in alcun modo la fruizione di video riguardanti il Covid-19.
 \\\\ \begin{small}
 	\textit{Keyword: Covid-19, YouTube}
 \end{small}
@@ -46,12 +46,12 @@ Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento
 \input{01_raccolta_dati.tex}
   
 \subsection*{Qualità dati}
-La grande disponibilità di dati ha rappresentato il problema più rilevante della verifica di qualità. Fortunatamente i dati non presentavano problemi di \textit{missing values} che avrebbero rappresentato difficoltà non trascurabili. Le principali problematiche emerse sono due:
+La grande disponibilità di dati ha rappresentato il problema più rilevante della verifica di qualità. Fortunatamente i dati non presentavano problemi di \textit{missing values}, che avrebbero costituito una difficoltà non trascurabile. Le principali problematiche emerse sono due:
 \begin{itemize}
 	
-	\item Ridondanza: I dati di Dicembre-Gennaio presentano richieste effettuate ai server di Youtube ogni mezz'ora, a differenza del periodo successivo. Di conseguenza sono stati rilevati molti dati simili tra loro, senza alcuna sostanziale variazione nelle varie fasce delle giornata. Per risolvere il problema abbiamo optato per scegliere quattro rilevazioni distaccate di sei ore ciascuna, in maniera da uniformare i dati con quelli di marzo-maggio. Per ulteriori dettagli è possibile visualizzare il notebook jupyter con cui è stato affrontato il problema.
+	\item Ridondanza: I dati di dicembre-gennaio presentano richieste effettuate ai server di Youtube ogni mezz'ora, a differenza del periodo successivo. Di conseguenza sono stati rilevati molti dati simili tra loro, senza alcuna sostanziale variazione nelle varie fasce delle giornata. Per risolvere il problema abbiamo optato per scegliere quattro rilevazioni distaccate di sei ore ciascuna, in maniera da uniformare i dati con quelli di marzo-maggio. Per ulteriori dettagli è possibile visualizzare il notebook jupyter con cui è stato affrontato il problema.
 
-	\item Saturazione richieste: Google non permette di effettuare troppe richieste nella stessa giornata. Per arginare il problema abbiamo utilizzato tre API key differenti da alternare durante la presa dati. Nonostante questo espediente ci sono stati alcuni momenti dove non è stato possibile effettuare le richieste ai server. Come risoluzione di questo problema abbiamo duplicato i dati della richiesta precedente, poiché le tendenze estratte in tempi ravvicinati non presentano variazioni importanti nei video.
+	\item Saturazione richieste: Google non permette di effettuare troppe richieste nella stessa giornata. Per arginare il problema abbiamo utilizzato tre API key differenti da alternare durante la presa dati. Nonostante questo espediente, ci sono stati alcuni momenti dove non è stato possibile effettuare le richieste ai server. Come risoluzione di questo problema abbiamo duplicato i dati della richiesta precedente, poiché le tendenze estratte in tempi ravvicinati non presentano variazioni importanti nei video.
 	
 	
 \end{itemize}
@@ -59,7 +59,7 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 \subsection*{Integrazione dati}
 	Per poter rispondere alle nostre domande di ricerca abbiamo dovuto effettuare un'integrazione tra i dati dei video di Youtube e i dati relativi alla pandemia da Covid-19. L'integrazione è avvenuta prima del caricamento dei dati su MongoDB, lo script che mostra l'operazione è \textit{merge\_to\_mongo.py}. 
 	
-	Per ricavare le informazioni relative all'andamento della pandemia nella giornata considerata abbiamo effettuato un'\textbf{integrazione temporale}, dove le chiavi considerate sono state il \textbf{timestamp} e il \textbf{country\_name}, cioè la data e il paese. Il procedimento è il seguente: viene ricercata la data del video considerato e il paese di appartenenza, e successivamente viene creato un dizionario con tutte le informazioni della pandemia nella data e paese appena cercato. Infine viene creata una nuova chiave \textit{covid} contenente un nuovo documento innestato, che è il dizionario creato precedentemente. Solo a questo punto i documenti vengono caricati su MongoDB.
+	Per ricavare le informazioni relative all'andamento della pandemia nella giornata considerata abbiamo effettuato un'\textbf{integrazione temporale}, dove le chiavi considerate sono state il \textbf{timestamp} e il \textbf{country\_name}, cioè la data e il paese. Il procedimento è il seguente: viene ricercata la data del video considerato e il paese di appartenenza, e successivamente viene creato un dizionario con tutte le informazioni della pandemia nella data e paese appena cercato. Infine, viene creata una nuova chiave \textit{covid} contenente un nuovo documento nidificato, che è il dizionario creato precedentemente. Solo a questo punto i documenti vengono caricati su MongoDB.
 	
 	Alcune date presentano un fuso orario che non ha alcun riscontro nel dataset covid, perché alcuni paesi presentano diversi fusi orari. Come risoluzione sono stati spostati tutti gli orari in base al fuso orario della capitale del paese di appartenenza del video. Questa correzione è stata effettuata all'interno dello script \textit{scraper\_consumer} direttamente, in un'ottica process driven. I fusi orari utilizzati sono presenti all'interno del file \textit{country\_name.json}.
 
@@ -76,16 +76,16 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 		\includegraphics[width=0.95\linewidth]{pics/er.png}
 	\end{figure}
 
-	Come è possibile vedere, si è cercato di includere tutte le parole relative alla pandemia, e la loro traduzione nelle lingue di tutti i paesi che abbiamo considerato.
+	Come è possibile vedere, si è cercato di includere tutte le parole relative alla pandemia e la loro traduzione nelle lingue di tutti i paesi considerati.
 	
-	L'espressione regolare è stata applicata sia ai titoli dei video, sia ai tags scelti per descrivere il video. Di seguito le query applicate:
+	L'espressione regolare è stata applicata sia ai titoli dei video, sia ai tag scelti per descrivere il video. Di seguito le query applicate:
 	
 	\begin{enumerate}
-		\item Vengono create due nuove variabili che identificano se nel video sono presenti riferimenti al Covid-19 o meno, una per il titolo e una per i tags. Questa variabile viene inizializzata come \textit{false}:
+		\item Vengono create due nuove variabili che identificano se nel video sono presenti riferimenti al Covid-19 o meno, una per il titolo e una per i tag. Questa variabile viene inizializzata come \textit{false}:
 		
 			db.video\_merge.update(\{\},\{\$set : \{covid\_tags : false, covid\_title : false\}\},\{multi : true\})
 		
-		\item I video vengono analizzati singolarmente, e se l'espressione regolare (REGEX) restituisce un match positivo la variabile viene modificata in \textit{true}, prima per i tags:
+		\item I video vengono analizzati singolarmente e, se l'espressione regolare (REGEX) restituisce un match positivo, la variabile viene modificata in \textit{true}, prima per i tag:
 		
 			db.video\_merge.update(\{tags : \{\$in : [REGEX]\}\}, \{\$set : \{covid\_tags: true\}\}, \{multi : true\})
 		
@@ -104,12 +104,12 @@ In particolare abbiamo gestito:
 	\item seconda sessione di scraping: 1.11 Gb
 	\item dati covid: 10 Mb
 \end{itemize}
-Per un totale di circa 3 Gb
+Per un totale di circa 3 Gb.
 
 Abbiamo deciso di utilizzare per trattare i dati con MongoDB, pertanto abbiamo implementato lo \textbf{Sharding}.
 Sono stati costruiti tre shard, tutti in modalità replica set per garantire ridondanza in caso di guasti e frammentazione per rendere le query più efficienti nel momento in cui si andava a interrogare il \textit{router mongos}. I \textit{config server} sono stati anch'essi configurati come replica set. Come chiave di sharding è stata scelta il campo \textbf{country\_name}, perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti in ciascun paese. 
 
-Per il dettaglio dei file di configurazione e altro vedere cartella \textit{sharding}.
+Per il dettaglio dei file di configurazione e altro si fa riferimento alla cartella \textit{sharding}.
 
 Lo schema logico applicato è il seguente:
 \begin{figure}[H]
@@ -125,7 +125,7 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 \end{itemize}
 
 \subsection*{Query}
-	Abbiamo eseguito alcune query per testare il funzionamento del database con e senza sharding, contenute negli script presenti nella cartella \textit{query}. In particolare si nota come la query 4, 5, 6 presentino dei risultati interessanti.
+	Abbiamo eseguito alcune query, per testare il funzionamento del database con e senza sharding, contenute negli script presenti nella cartella \textit{query}. In particolare si nota come la query 4, 5, 6 presentino dei risultati interessanti.
 	
 	In particolare:
 	\begin{itemize}
@@ -160,7 +160,7 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 		\caption{differenze numero di documenti esplorati}
 	\end{table}
 	
-	Si può notare come per la query 4 e 5 vengono esplorati un numero di video molto inferiori nel database con sharding rispetto a quello senza, questo si traduce in un miglioramento dei tempi di esecuzione. La query 6, poiché necessità di informazioni riguardanti tutti i paesi, esplora tutti i dati a prescindere degli shard, quindi non ha alcun miglioramento prestazionale.
+	Si può notare come per le query 4 e 5 vengono esplorati un numero di video molto inferiori nel database con sharding rispetto a quello senza, questo si traduce in un miglioramento dei tempi di esecuzione. La query 6, poiché necessità di informazioni riguardanti tutti i paesi, esplora tutti i dati a prescindere degli shard, quindi non ha alcun miglioramento prestazionale.
 	
 	Per il dettaglio vedere i file di risposta nella cartella \textit{query}.
 %Per farlo ci occupiamo di effettuare la nostra analisi su partizionamenti sempre maggiori del nostro dataset e registriamo il tempo di esecuzione del nostro programma, effettuiamo poi una semplice regressione per vedere di che tipo di crescita stiamo parlando, ovviamente più la crescita è minore più il nostro algoritmo scala bene per volumi di dati maggiori. Presentiamo di seguito la registrazione dei tempi rispetto al partizionamento dei dati. 
@@ -197,7 +197,7 @@ Abbiamo utilizzato due infografiche diverse per le domande di ricerca, poiché c
 
 \paragraph{Prima infografica} La prima infografica consiste nella combinazione di due diverse visualizzazioni:
 \begin{itemize}
-	\item Un lollipop chart temporale che rappresenta il numero video entrato in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresente le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
+	\item Un lollipop chart temporale che rappresenta il numero video entrato in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresenta le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
 	\item Un bubble chart, dove ogni bolla è un video, la sua grandezza rappresenta il numero di visualizzazioni e il colore la categoria di appartenenza.
 \end{itemize}
 
@@ -268,7 +268,7 @@ Questa visualizzazione è utile per capire se le nostre infografiche sono troppo
 	\item Quanto è stata informativa l'infografica?
 	\item Come valuti complessivamente l'infografica?
 \end{itemize}
-Le risposte sono state registrate grazie al tool "Questionari di Google". Una volta registrati i risultati è stata controllata che la valutazione dell'infografica fosse coerente con una ricostruzione complessiva della regressione con i coefficienti di Cabitza-Locoro.
+Le risposte sono state registrate grazie al tool "Moduli di Google". Una volta registrati i risultati è stata controllata che la valutazione dell'infografica fosse coerente con una ricostruzione complessiva della regressione con i coefficienti di Cabitza-Locoro.
 %\begin{figure}[H]
 %	\centering
 %	\includegraphics[height=0.3 \linewidth]{pict/box_plot.png}
@@ -285,18 +285,18 @@ Per quanto riguarda invece la coerenza della valutazione rispetto alla ricostruz
 \section*{Conclusioni e prospettive future}
 In conclusione possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube prima e durante l'epidemia di Covid-19. 
 
-La prima infografica mostra come la distribuzione dei video nelle varie categorie sia cambiata. Ad esempio, per quanto riguarda l'Italia la categoria di Sport subisce una drastica diminuzione, presumibilmente dovuta al blocco di tutte le attività sportive durante la quarantena; così come la categoria News \& politics che risulta essere più presente nel periodo Covid rispetto al precedente.
+La prima infografica mostra come la distribuzione dei video nelle varie categorie sia cambiata. Ad esempio, per quanto riguarda l'Italia la categoria Sport subisce una drastica diminuzione, presumibilmente dovuta al blocco di tutte le attività sportive durante la quarantena; così come la categoria News \& politics che risulta essere più presente nel periodo Covid rispetto al precedente.
 
 La seconda infografica mostra che la variazione giornaliera del numero di contagi non influenza strettamente la quantità di contenuti nelle tendenze legati al Covid. In alcuni frangenti si nota una certa relazione tra le due misure, ad esempio, in Italia nel periodo di fine marzo e inizio aprile. Ne consegue che, probabilmente, l'impatto dei numeri ufficiali relativi ai contagi non abbiano influenzato in modo significativo le tendenze giornaliere di Youtube.
 
-Da queste due infografiche possiamo concludere che i gusti degli utenti di Youtube hanno subito un evidente cambiamento durante il periodo dell'epidemia, e che questo mutamento è avvenuto gradualmente e non necessariamente legato al numero ufficiale dei contagi.
+Da queste due infografiche possiamo concludere che i gusti degli utenti di Youtube hanno subito un evidente cambiamento durante il periodo dell'epidemia, e che questo mutamento è avvenuto gradualmente e non è necessariamente legato al numero ufficiale dei contagi.
 
 \paragraph{Prospettive future\\}
 
 Una delle principali espansioni che possono essere eseguite su questo lavoro riguarda l'approfondimento del legame che esiste tra la variazione giornaliera di contagi e il numero di contenuti Covid presenti sulla piattaforma. Un'analisi statistica attraverso regressioni semplici o complesse potrebbe rispondere alla nostra seconda domanda in maniera più completa. Potrebbero essere considerati non solo i nuovi contagi giornalieri, ma anche altri fattori, come il numero di decessi o la quantità di contagi totale nel paese.
-Ulteriori analisi potrebbero essere svolte su altre piattaforme, per avere un quadro più generale dei movimenti online che la pandemia ha generato. In tal modo sarebbe possibile comprendere come i gusti delle persone sono cambiati, o come il tempo a casa abbiamo cambiato gli interessi.
+Ulteriori analisi potrebbero essere svolte su altre piattaforme, per avere un quadro più generale dei movimenti online che la pandemia ha generato. In tal modo sarebbe possibile comprendere come i gusti delle persone sono cambiati, o come il tempo passato in casa abbia cambiato gli interessi.
 
-Un'ultima considerazione andrebbe fatta riguardo alla fase 2 e oltre, per verificare se i cambiamenti che sono avvenuti saranno definitivi oppure è stato solo un periodo unico.
+Un'ultima considerazione andrebbe fatta riguardo alla fase 2 e oltre, per verificare se i cambiamenti che sono avvenuti siano definitivi oppure se si tratti solamente di un periodo unico.
 
 
 
