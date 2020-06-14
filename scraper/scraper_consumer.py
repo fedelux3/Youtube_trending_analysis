@@ -38,12 +38,11 @@ def setup(code_path, host, port, user, passw):
     with open(code_path) as file:
         country_codes = [x.rstrip() for x in file]
     
-    #definisco il client mongo
+    # Definizione del client mongo
     client = MongoClient(host, port, username = user, password = passw)
     
     return country_codes, client
 
-# funzione che sistema il timestamp
 def fix_timestamp(timestamp, country_code, c_gmt):
     '''
     Sistema il timestamp in base al fuso orario del paese in questione
@@ -59,7 +58,6 @@ def fix_timestamp(timestamp, country_code, c_gmt):
     dt_new = dt + timedelta(hours=fuso)
     return dt_new.strftime("%m-%d-%Y %H:%M")
 
-#restituisce il nome esteso del paese
 def find_country_name(country_code, c_gmt):
     '''
     Restituisce il nome per esteso del country
@@ -71,7 +69,6 @@ def find_country_name(country_code, c_gmt):
     '''
     return c_gmt[str(country_code)]['name']
 
-# restituisce il nome della categoria per esteso
 def find_category_name(category_id, categorys):
     '''
     Restituisce il nome della categoria per esteso
@@ -97,10 +94,10 @@ def get_videos(items, service):
     '''
     lines = []
     
-    # carico il file con i dati relativi ai paesi
+    # Caricamento del file con i dati relativi ai paesi
     with open('country_names.json') as c_names:
         c_gmt = json.load(c_names)
-    # carico il file con i dati relativi alle categorie
+    # Caricamento del file con i dati relativi alle categorie
     with open('category_id.json') as c_names:
         categorys = json.load(c_names)['items']
         
@@ -109,7 +106,7 @@ def get_videos(items, service):
     timestamp = fix_timestamp(service['timestamp'], country_code, c_gmt)
     for video in items:
 
-        # se non sono presenti le statistiche saltiamo il video
+        # Se non sono presenti statistiche il video viene ignorato
         if "statistics" not in video:
             continue
 
@@ -117,9 +114,9 @@ def get_videos(items, service):
         # Snippet e statistics contengono informazioni interne
         snippet = video['snippet']
         statistics = video['statistics']
-        # estraggo da snippet le info che mi servono
+        # Estrazione da snippet delle info utili
         features = [snippet.get(feature, "") for feature in snippet_features]
-        # pulisco la description
+        # Pulizia della description
         description = snippet.get("description", "")
         thumbnail_link = snippet.get("thumbnails", dict()).get("default", dict()).get("url", "")
         trending_date = time.strftime("%y.%d.%m")
@@ -134,7 +131,7 @@ def get_videos(items, service):
             "dislikes" : dislikes,
             "comment_count" : comment_count
         }
-        # Formatta i campi nei vari elementi del dizionario
+        # Formattazione dei campi nei vari elementi del dizionario
         line = {}
         line['video_id'] = video_id 
         line['timestamp'] = timestamp
@@ -172,7 +169,6 @@ def write_to_file(output_data, pos):
     with open(f"{output_dir}/{subdir}/{time.strftime('%Y.%m.%d')}_%04i_videos.json" %(pos), "w+", encoding='utf-8') as file:
         json.dump(output_data, file, indent=3)
         
-# raccoglie i dati, li scrive su file e su mongoDB
 def get_data(clientMongo, database = "yt_data", collection = "videos"):
     '''
     Rimane in ascolto su kafka e appena arrivano dei dati li consuma 
@@ -182,17 +178,17 @@ def get_data(clientMongo, database = "yt_data", collection = "videos"):
         collection:     nome collezione
     '''
     global i
-    #video è un json fatto con i suoi campi
+    #Ogni video è un json fatto con i suoi campi
     for video in consumer:
-        #nel caso per qualche errore di rete non arrivassero items
+        # Nel caso per qualche errore di rete non arrivassero items continua
         if "items" not in video.value:
             print("!! ERROR: no items field - " + datetime.today().strftime("%d-%m-%Y %H:%M"))
             continue
 
         l_video = get_videos(video.value['items'], video.value['service'])
-        #salvo i video su file
+        # Slavataggio dei video su file
         write_to_file(l_video, i)
-        #inserisco i video in mongoDB
+        # Inserimento dei video in mongoDB
         db = clientMongo[database]
         col = db[collection]
         col.insert_many(l_video)
@@ -228,8 +224,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    # Setting variabili globali
-    # scheduler inizializzazione
+    # Setting delle variabili globali
+    # Inizializzazione dello scheduler
     scheduler = sched.scheduler(time.time, time.sleep)
     output_dir = args.output
     country_code_path = args.country_path
@@ -240,22 +236,22 @@ if __name__ == "__main__":
     passw = args.password
     db = args.database
     col = args.collection
-    i = 0 #indice per la stampa su file
+    i = 0 # Indice per la stampa su file
     country_codes = ""
-    # List of simple to collect features
+    # Lista di features semplici
     snippet_features = ["title", "publishedAt", "channelId",
                         "channelTitle", "categoryId"]
     # Elenco ci caratteri problematici
     unsafe_characters = ['\n', '"']
 
-    # Definisco il consumer
+    # Definizione del consumer
     consumer = KafkaConsumer(
     bootstrap_servers=["kafka:9092"],
     auto_offset_reset="latest",
     value_deserializer=lambda v: json.loads(v.decode("utf-8")))
     consumer.subscribe([channel_kafka])
     
-    # eseguo il setup iniziale
+    # Esecuzione del setup iniziale
     country_codes, clientMongo = setup(country_code_path, host, port, user, passw)
     
     consume(db, col)

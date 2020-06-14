@@ -41,14 +41,13 @@ def api_request(page_token, country_code):
     @return:
         request.json:   json restituito da Youtube
     '''
-    # Costruisce la richiesta URL con cui effettuo la richiesta 
+    # Costruzione della richiesta URL con cui effettuare la richiesta 
     request_url = f"https://www.googleapis.com/youtube/v3/videos?part=id,statistics,snippet{page_token}chart=mostPopular&regionCode={country_code}&maxResults=50&key={api_key}"
-    # esegue la richiesta
+    # Esecuzione della richiesta
     request = requests.get(request_url)
     
     return request.json()
 
-#ottiene le pagine di dati di un determinato paese
 def get_pages(country_code, next_page_token="&"):
     '''
     Funzione per scaricare una pagina di dati (massimo 50 video) e successivamente
@@ -58,35 +57,33 @@ def get_pages(country_code, next_page_token="&"):
         next_page_token:    carattere per richiedere la pagina dati successiva
 
     '''
-    #itero sulle pagine restituite dallo scraper
+    #Iterazione sulle pagine trovate dallo scraper
     while next_page_token is not None:
-        # una pagina è una lista di video (massimo 50)
-        # mando la richiesta API
+        # Ogni pagina è una lista di video (massimo 50)
+        # Invio della richiesta API
         video_data_page = api_request(next_page_token, country_code)
-        #aggiungo il paese alle informazioni ricevute
+        # Aggiunta del paese alle informazioni ricevute
         video_data_page['service'] = { "country" : country_code, "timestamp": dt.strftime(format_date)}
         
-        #Mando i dati al topic kafka
+        # Invio dei dati al topic kafka
         producer.send(topic=topic, value=video_data_page)
-        #stampo per dare un feedback su console
+        # Print di un feedback su console
         print("data page of " + str(country_code) + " sent")
         
-        # ottengo il token per la prossima pagina di dati e costruisco la stringa per la prossima richiesta
+        # Ottenimento del token per la prossima pagina di dati e costruizione della stringa per la prossima richiesta
         next_page_token = video_data_page.get("nextPageToken", None)
         next_page_token = f"&pageToken={next_page_token}&" if next_page_token is not None else next_page_token
-        #finisce il ciclo termila la raccolta per quel paese
-#end get_pages
+        # Termine del ciclo per la raccolta di quel paese
 
 def get_data():
     '''
     Esegue una sessione di scraping per ogni country code
     '''
     for country_code in country_codes:
-        # scarica tutte le pagine di estrazioni disponibili per quel country
+        # Download di tutte le pagine disponibili per quel paese
         get_pages(country_code)
     print("last sent: ", dt.strftime(format_date))
 
-#funzione che inizializza lo scraping
 def scrape(n_scheduler):
     '''
     Si occupa dello scraping e viene richiamata ogni volta che scatta lo scheduler
@@ -104,9 +101,9 @@ def scrape(n_scheduler):
     # api_key, country_codes = setup(key_path, country_code_path)
     dt = datetime.now()
     
-    # lancio scraping
+    # Avvio scraping
     get_data()
-    #scheduler aspetta 6 ore
+    # Scheduler in attesa per 6 ore
     scheduler.enter(21600, 1, scrape, (n_scheduler,))
 
 if __name__ == "__main__":
@@ -118,7 +115,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Setting variabili globali
-    # scheduler inizializzazione
+    # Inizializzazione scheduler
     scheduler = sched.scheduler(time.time, time.sleep)
     output_dir = args.output
     key_path = args.key_path
@@ -128,14 +125,14 @@ if __name__ == "__main__":
     country_codes = ""
     format_date = "%d-%m-%Y %H:%M"
 
-    #creazione oggetto producer per mandare i dati a kafka
+    # Creazione oggetto producer per mandare i dati a kafka
     producer = KafkaProducer(
             bootstrap_servers=["kafka:9092"],
             value_serializer=lambda v: json.dumps(v).encode("utf-8"))
 
-    # set-up variabili
+    # set-up delle variabili
     api_key, country_codes = setup(key_path, country_code_path)
     
-    # scheduler start esegue funzione di scrape
+    # scheduler start esegue la funzione di scrape
     scheduler.enter(1, 1, scrape, (scheduler,))
     scheduler.run() 
