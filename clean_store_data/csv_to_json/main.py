@@ -5,9 +5,11 @@ import json
 
 def list_directory(data):
     '''
-    Estrae lista di directories nelle quali ho i files json
+    Estrae lista di directory nelle quali ho i files json
     @params:
         data:   - Required   : cartella di sottocartelle di file json
+    @return:
+    	l: lista con il nome delle cartelle
     '''
     l = []
     print(data)
@@ -20,7 +22,7 @@ def list_directory(data):
 if __name__ == '__main__':
     '''
     Conversione dei file csv in input in file json immagazzinati nella cartella 
-    "json" (la crea se non presente)
+    "json" (creata se non presente)
     @params:
         -d: directory di directories dei files csv
     '''
@@ -30,27 +32,27 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     try:
-        l_dir = list_directory(args.data) #lista di directories da inserire
+        l_dir = list_directory(args.data) #lLista di directory da inserire
         print(l_dir)
     except:
         print("error import csv" + str(args.data))
         exit()
 
-    # per ogni directory 
+    # Per ogni directory 
     for i in l_dir:
         print(i)
-        # concatena i vari csv pulendoli
+        # Concatena i vari csv correggendoli
         df = csv_to_json.conc_dataframe(args.data + '\\' + i)
         print("dataframe cleaned and merged")
-        # nel caso in cui non venga generato alcun dataframe
+        # Nel caso in cui non venga generato alcun dataframe
         if df is None:
             print("df none")
             continue
-        # trasforma il dataframe in lista di dizionari
+        # Trasforma il dataframe in una lista di dizionari
         l_dict = csv_to_json.df_to_listdict(df) 
-        # salvataggio dei dizionari in un file json nella cartella json
+        # Salvataggio dei dizionari in un file json nella cartella json
         n_json = i + '.json'
-        # se la cartella json non esiste la crea
+        # Se la cartella json non esiste la crea
         if not os.path.exists("json"):
             os.makedirs("json")
         with open('json\\' + n_json, "w") as file_json:
