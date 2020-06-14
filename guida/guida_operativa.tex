@@ -165,7 +165,7 @@ db.video_merge.update({title : {$in : [REGEX]}},
 			{multi : true})
 \end{Verbatim}
 
-\`E possibile eseguire da file le precedenti espressioni, attraverso lo script \textit{query\_covid.py}. Esso viene chiamato come funzione esterna durante l'integrazione nello script \textit{merge\_to\_mongo.py} automaticamente.
+\`E possibile eseguire da file le precedenti espressioni, attraverso lo script \textit{query\_covid.py}. Esso viene chiamato come funzione esterna \textit{compute\_covid} durante l'integrazione nello script \textit{merge\_to\_mongo.py} automaticamente.
 
 \section*{Sharding}
 
