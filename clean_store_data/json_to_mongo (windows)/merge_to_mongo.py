@@ -1,5 +1,20 @@
+'''
+Esegue il merge tra i dati youtube e covid, li carica su mongodb ed infine
+esegue le query per definire covid_title e covid_tags
+@params:
+    -d: directory di directories dei json file
+    -dc: path file dati covid
+    -u: mongoDB user
+    -p: mongoDB password
+    -port: mongoDB porta in cui comunica
+    -db: nome database mongodb
+    -c: nome collezione mongodb in cui immagazzinare i dati
+    -e: path dove prendere l'espressione regolare
+'''
+    
 from pymongo import MongoClient
 from datetime import datetime
+import query_covid
 import argparse
 import os
 import json
@@ -85,18 +100,24 @@ def convert_types(dict) :
     dict["statistics"]["dislikes"] = int(dict["statistics"]["dislikes"]) 
     dict["statistics"]["comment_count"] = int(dict["statistics"]["comment_count"]) 
 
+def compute_covid(col, path_er):
+    '''
+    Esegue le query per aggiungere i campi covid_tags e covid_title ai video
+    @params:
+        col:    collezione mongoDB
+        path_er:    path in cui trovare l'espressione regolare
+    '''
+    with open(path_er, "r", encoding='utf8') as file:
+        ER = file.readline()
+    
+    result = query_covid.query1(col)
+    print("Query1", result.modified_count, "documenti modificati")
+    result = query_covid.query2(col, ER)
+    print("Query2 (covid_tags)", result.modified_count, "documenti modificati")
+    result = query_covid.query3(col, ER)
+    print("Query3 (covid_title)", result.modified_count, "documenti modificati")
 
 if __name__ == '__main__':
-    '''
-    @params:
-        -d: directory di directories dei json file
-        -dc: path file dati covid
-        -u: mongoDB user
-        -p: mongoDB password
-        -port: mongoDB porta in cui comunica
-        -db: nome database mongodb
-        -c: nome collezione mongodb in cui immagazzinare i dati
-    '''
     # start timer
     time_start = time.clock()
     parser = argparse.ArgumentParser()
@@ -107,6 +128,7 @@ if __name__ == '__main__':
     parser.add_argument('-port', '--port', type=str, required=False, help="Inserire la porta con cui dialogare con mongodb", default=27017)
     parser.add_argument('-db', '--database', type=str, required=False, help="Inserire il database mongo di output", default="YT_data")
     parser.add_argument('-c', '--collection', type=str, required=False, help="Inserire la collection in cui immagazzinare i dati", default="video")
+    parser.add_argument('-e', '--er', type=str, required=False, help="Inserire path file ER", default="ER.txt")
     
     args = parser.parse_args()
     try:
@@ -163,3 +185,7 @@ if __name__ == '__main__':
     print("files json correctly uploaded on mongoDB !!!")
     time_elapsed = (time.clock() - time_start)
     print("computation time: " + str(time_elapsed))
+    #esegue le query covid
+    print("Executing query Covid title/tags")
+    compute_covid(col, args.er)
+    print("Query covid tags and title computed")
