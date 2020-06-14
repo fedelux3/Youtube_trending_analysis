@@ -23,7 +23,7 @@ import time
 
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
     """
-    Chiamato nel ciclo per stampare barra di progressione
+    Chiamato nel ciclo per stampare la barra di progressione
     @params:
         iteration   - Required  : iterazione corrente (Int)
         total       - Required  : iterazioini totali (Int)
@@ -38,7 +38,7 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
     print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = printEnd)
-    # stampa una linea nuova al termine
+    # Stampa di una nuova linea al termine
     if iteration == total: 
         print()
 
@@ -49,6 +49,8 @@ def list_directory(data):
     Estrae lista di directory nelle quali ho i file json
     @params:
         data:   - Required   : cartella di sottocartelle di file json
+    @return:
+    	l: lista di directory
     '''
     l = []
     print(data)
@@ -64,17 +66,17 @@ def merge_videos(videos, covid):
         covid:      covid data (dataframe)
 
     '''
-    # init barra di progressione
+    # Inizializzazione della barra di progressione
     tot = len(videos)
     printProgressBar(0, tot, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
-    for  i, video in enumerate(videos): #passa tutti i video
+    for  i, video in enumerate(videos): # Passaggio di tutti i video
         date = video["trending_date"]
         c_name = video["country_name"]
-        # cerca in covid date e c_name del video corrente
+        # Ricerca in covid della data (date) e del paese (c_name) corrispondenti al video corrente
         row = covid.loc[(covid["date"] == date) & (covid["location"] == c_name)]
-        # estrae le informazioni covid di interesse
-        # le immagazzina in un dizionario
+        # Estrazione delle informazioni sul covid di interesse
+        # Immagazzina in un dizionario
         d = {
             "cases_tot" : int(row["total_cases"].values[0]),
             "cases_new" : int(row["new_cases"].values[0]),
@@ -82,15 +84,15 @@ def merge_videos(videos, covid):
             "deaths_new" : int(row["new_deaths"].values[0]),
             "country_population" : int(row["population"].values[0])
             }
-        # aggiunge il dizionario al video
+        # Aggiunta del dizionario al video come campo
         video["covid"] = d
         
-        # Update Progress Bar
+        # Update della Progress Bar
         printProgressBar(i + 1, tot, prefix = 'Progress:', suffix = 'Complete', length = 50)
 
 def convert_types(dict) :
     '''
-    Converte i tipi di timestamp e dati integer
+    Converte i formati del timestamp in datetime e dei dati in integer
     @params:
         dict:   dizionario di un singolo video
     '''
@@ -133,7 +135,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     try:
         dir_main = args.data
-        l_dir = list_directory(dir_main) # lista di directory da cui prendo i file mongo
+        l_dir = list_directory(dir_main) # Lista di directory da cui prendere i file mongo
         print(l_dir)
     except:
         print("error json directory path")
@@ -142,42 +144,42 @@ if __name__ == '__main__':
     try:
         user = args.user
         password = args.password
-        # definizione del client mongo da utilizzare
+        # Definizione del client mongo da utilizzare
         client = MongoClient('localhost', int(args.port), username = user, password = password)
-        db = client[args.database] # connessione al db
-        col = db[args.collection] # connessione alla collection
+        db = client[args.database] # Connessione al db
+        col = db[args.collection] # Connessione alla collection
     except:
         print("error mongo connection")
         exit()
     
     try:
-        df_covid = pd.read_csv(args.data_covid) # lettura dati covid
+        df_covid = pd.read_csv(args.data_covid) # Lettura dati covid
     except:
         print("error covid data path")
         exit()
 
-    list_videos = [] # lista in cui salvo i video da caricare su mongo
+    list_videos = [] # Lista in cui vengono salvati i video da caricare su mongo
 
-    for directory in l_dir: #per ogni cartella
+    for directory in l_dir: # Per ogni cartella
         path = dir_main + "\\" + directory + "\\"
         files = os.listdir(path)
         
-        for file in files: #per ogni file json nella cartella
+        for file in files: # Per ogni file json nella cartella
             if file.endswith('.json'):
-                # apre il file se .json
+                # Apertura del file solo se .json
                 with open(path + file, "r") as read_file:
                     j_file = json.load(read_file)
-                # converte i tipi di dati utili su mongo
+                # cConversione dei formati dei dati
                 for d in j_file:
                     convert_types(d)
-                # appende alla lista i dizionari dei video del json
-                list_videos.extend(j_file) # aggiunge gli elementi alla lista
+                # Aggiunta alla lista dei dizionari con video in json
+                list_videos.extend(j_file) 
         print("upload files")
         print(directory + " merging ...")
-        # merging function
+        # Funzione di merge
         merge_videos(list_videos, df_covid) 
         print("merge_fatto")
-        # carico la lista di dizionari nella collezione del database mongo specificate
+        # Caricamento della lista di dizionari nella collezione del database mongo specificata
         col.insert_many(list_videos)
         list_videos = []
         print("directory " + directory + " correctly uploaded on mongoDB")
@@ -185,7 +187,7 @@ if __name__ == '__main__':
     print("files json correctly uploaded on mongoDB !!!")
     time_elapsed = (time.clock() - time_start)
     print("computation time: " + str(time_elapsed))
-    #esegue le query covid
+    # Esecuzione delle query mongo
     print("Executing query Covid title/tags")
     compute_covid(col, args.er)
     print("Query covid tags and title computed")

@@ -19,6 +19,8 @@ def list_directory(data):
     Estrae lista di directory nelle quali ho i file json
     @params:
         data:   - Required   : cartella di sottocartelle di file json
+    @return:
+    	l: lista di directory
     '''
     l = []
     print(data)
@@ -29,7 +31,7 @@ def list_directory(data):
 
 def convert_types(dict) :
     '''
-    Converte i tipi di timestamp e dati integer
+    Converte il formato dei timestamp e i dati in integer
     @params:
         dict:   dizionario di un singolo video
     '''
@@ -51,8 +53,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     try:
         dir_main = args.data
-        list_videos = [] # lista in cui salva i video da caricare su mongo
-        l_dir = list_directory(dir_main) # lista di directory da cui prende i file mongo
+        list_videos = [] # Lista in cui vengono salvati i video da caricare su mongo
+        l_dir = list_directory(dir_main) # Lista di directory da cui vengono presi i file mongo
         print(l_dir)
     except:
         print("error json directory path")
@@ -61,29 +63,29 @@ if __name__ == '__main__':
     try:
         user = args.user
         password = args.password
-        # definizione del client mongo da utilizzare
+        # Definizione del client mongo da utilizzare
         client = MongoClient('localhost', int(args.port), username = args.user, password = args.password)
-        db = client[args.database] # connessione al db
-        col = db[args.collection] # connesione alla collection
+        db = client[args.database] # Connessione al db
+        col = db[args.collection] # Connesione alla collection
     except:
         print("error mongo connection")
         exit()
 
-    for directory in l_dir: #per ogni cartella nella lista
+    for directory in l_dir: # Per ogni cartella nella lista
         path = dir_main + "\\" + directory + "\\"
         files = os.listdir(path)
         
-        for file in files: #per ogni file json nella cartella
-            # apre il file se .json
+        for file in files: # Per ogni file json nella cartella
+            # Apertura del file solo se in formato json
             if file.endswith('.json'):
                 with open(path + file, "r") as read_file:
                     j_file = json.load(read_file)
-                # converte i tipi di dati utili su mongo
+                # Conversione dei formati dei dati attraverso la funzione convert_types
                 for d in j_file:
                     convert_types(d)
-                # appende alla lista i dizionari dei video del json
+                # Aggiunta alla lista dei dizionari con i video dentro al json
                 list_videos.extend(j_file) 
-        # carica la lista di dizionari nella collezione del database mongo specificate
+        # Caricamento della lista di dizionari nella collezione del database mongo specificato
         col.insert_many(list_videos)
         list_videos = []
         print("directory " + directory + " correctly uploaded on mongoDB")
