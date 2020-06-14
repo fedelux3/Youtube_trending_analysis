@@ -14,12 +14,12 @@ def box_plot(data, out_dir):
         data:   Dati di cui disegnare i violin plot.
     '''
     data = data.melt(var_name='Tasks', value_name='Times')
-    fig = plt.subplots(figsize=(15, 8))
+    fig = plt.figure(figsize=(15, 8)) 
     sns.boxplot(x="Tasks", y="Times",data = data, palette="Set3", notch = True)
     plt.grid()
     plt.title("Box plot dei tempi di esecuzione dei task", size = 30, pad = 20)
     plt.show()
-    plt.savefig(out_dir + '/tempi_box_plot_seaborn.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/tempi_box_plot_seaborn.png', bbox_inches='tight', dpi = 600)
 
 def times(out_dir):
     '''

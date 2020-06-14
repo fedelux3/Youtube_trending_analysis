@@ -29,12 +29,13 @@ def correlation_plot(data, out_dir):
 
     # Draw the heatmap with the mask and correct aspect ratio
     
-    sns.heatmap(corr, cmap=cmap,  annot=True, 
+    svm = sns.heatmap(corr, cmap=cmap,  annot=True, 
             linewidths=1.3, linecolor='black', cbar=True, ax=ax)
     plt.yticks(rotation = 0)
     plt.title("Correlazioni tra le variabili", size = 30, pad = 20)
     plt.show()
-    plt.savefig(out_dir + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
+    fig = svm.get_figure() 
+    fig.savefig(out_dir + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
 
 def box_plot_1(data, out_dir):
     '''
@@ -73,7 +74,7 @@ def scatter_plot_1(x, y, out_dir):
         x:  Prima grandezza da confrontare 
         y:  Seconda grandezza da confrontare
     '''
-    fig = plt.subplots(figsize=(15, 8))
+    fig = plt.figure(figsize=(15, 8)) 
     plt.plot(x,y, 'o', color = (0.2,0.1,0.3))
 
     
@@ -90,7 +91,7 @@ def scatter_plot_1(x, y, out_dir):
     plt.title("Scatter plot prima infografica", size = 35, pad = 20)
     plt.show()
     plt.ioff()
-    plt.savefig(out_dir + '/risposte_scatter_plot_first.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_scatter_plot_first.png', bbox_inches='tight', dpi = 600)
 
 
 def scatter_plot_2(x, y, out_dir):
@@ -100,7 +101,7 @@ def scatter_plot_2(x, y, out_dir):
         x:  Prima grandezza da confrontare 
         y:  Seconda grandezza da confrontare
     '''
-    fig = plt.subplots(figsize=(15, 8))  
+    fig = plt.figure(figsize=(15, 8))  
     plt.plot(x,y, 'o', color = (0.2,0.1,0.3))
 
 
@@ -117,7 +118,7 @@ def scatter_plot_2(x, y, out_dir):
     plt.grid()
     plt.show()
     plt.ioff()
-    plt.savefig(out_dir + '/risposte_scatter_plot_second.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_scatter_plot_second.png', bbox_inches='tight', dpi = 600)
 
 def quality(out_dir):
     '''
