@@ -140,6 +140,8 @@ La seconda domanda di ricerca ci chiede di distinguere quali video riguardino il
 	\caption{Regular expression usata}
 \end{figure}
 
+Per applicare la query sui documenti si possono eseguire singolarmente i comandi in una shell mongo, come viene descritto qui di seguito, oppure è possibile chiamare una funzione che esegue automaticamente tutte e tre le query. 
+
 Eseguire ora i seguenti comandi all'interno della shell di MongoDB.
 
 Creare due nuovi campi chiamati \textbf{covid\_title} e \textbf{covid\_tags} inizializzati entrambi a \textbf{False} 
@@ -161,6 +163,8 @@ db.video_merge.update({title : {$in : [REGEX]}},
 			{$set : {covid_title: true}}, 
 			{multi : true})
 \end{Verbatim}
+
+\`E possibile eseguire da file le precedenti espressioni, attraverso lo script \textit{query\_covid.py}. Esso viene chiamato come funzione esterna durante l'integrazione nello script \textit{merge\_to\_mongo.py} automaticamente.
 
 \section*{Sharding}
 
