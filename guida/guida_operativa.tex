@@ -29,7 +29,7 @@
 
 \begin{document}
 \begin{center}
-\large\textbf{Guida operativa}
+{\Large\textbf{Guida operativa}}
 \end{center}
 
 \begin{center}
@@ -76,26 +76,26 @@ A questo script vanno forniti i seguenti parametri:
 	\item -d "directory dei dati"
 	\item -u "utente mongo"
 	\item -p "password utente"
-	\item -port "porta in cui è attivo l'utente"
-	\item-db "Nome del database in output"
+	\item -port "porta in cui è attivo mongoDB"
+	\item-db "nome del database mongo"
 	\item -c "collection in cui vengono inseriti i dati"
 \end{itemize}
 
 
 \section*{Presa dati Marzo-Maggio}
 
-Aprire il servizio Mongo da terminale e successivamente avviare in due terminali separati gli script:
+Aprire il servizio MongoDB, zookeeper e conseguentemente Kafka. Eseguire in due terminali separati secondo il seguente ordine gli script:
 
-\begin{itemize}
+\begin{enumerate}
 	\item \begin{verbatim}
 	scraper/scraper_consumer.py
 	\end{verbatim}
 	\item \begin{verbatim}
 	scraper/scraper_producer.py
 	\end{verbatim}
-\end{itemize}
+\end{enumerate}
 
-Mediante l'utilizzo del servizio Kafka vengono rilevati i dati ogni 6 ore.
+Ogni 6 ore il \textit{producer} effettua le richieste dati che invia poi al canale Kafka letto dal \textit{consumer} che si occupa della pulizia e immagazzinamento dei dati.
 
 \section*{Presa dati Covid}
 
@@ -123,9 +123,10 @@ A questo script vanno forniti i seguenti parametri:
 	\item -d "directory dei dati"
 	\item -u "utente mongo"
 	\item -p "password utente"
-	\item -port "porta in cui è attivo l'utente"
-	\item-db "Nome del database in output"
+	\item -port "porta in cui è attivo mongodb"
+	\item-db "ome del database mongo"
 	\item -c "collection in cui vengono inseriti i dati"
+	\item -e "path dove c'è file dell'espressione regolare"
 \end{itemize}
 
 I dati vengono quindi integrati sulla data e il paese e successivamente caricati su Mongo.
@@ -184,12 +185,6 @@ Le collezioni che abbiamo shardato sono state due, una contenente i dati di marz
 
 Per ulteriori informazioni sui comandi leggere l'appendice.
 
-\begin{verbatim}
-clean_store_data/sharding/codici.txt
-\end{verbatim}
-
-
-
 \section*{Appendice}
 
 \paragraph{Creazione Config Server\\}
@@ -200,7 +195,11 @@ Vengono configurati i tre config server:
 
 Eseguire il comando sul config server PRINCIPALE, vengono indicati i tre membri del replica set, il quale nome sarà rs0:
 \begin{Verbatim}
-rs.initiate({ _id: "rs0", configsvr: true, members: [{ _id : 0, host : "localhost:27019" },{ _id : 1, host : "localhost:27020" },{ _id : 2, host : "localhost:27021" }]})
+rs.initiate({ _id: "rs0", 
+configsvr: true, members: [{ _id : 0, host : "localhost:27019" },
+{ _id : 1, host : "localhost:27020" },
+{ _id : 2, host : "localhost:27021" }
+]})
 \end{Verbatim}
 
 \paragraph{Creazione Shard Server\\} Aprire tutte le istanze di mongod dei vari shard.
