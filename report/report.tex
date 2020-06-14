@@ -106,8 +106,8 @@ In particolare abbiamo gestito:
 \end{itemize}
 Per un totale di circa 3 Gb.
 
-Abbiamo deciso di utilizzare per trattare i dati con MongoDB, pertanto abbiamo implementato lo \textbf{Sharding}.
-Sono stati costruiti tre shard, tutti in modalità replica set per garantire ridondanza in caso di guasti e frammentazione per rendere le query più efficienti nel momento in cui si andava a interrogare il \textit{router mongos}. I \textit{config server} sono stati anch'essi configurati come replica set. Come chiave di sharding è stata scelta il campo \textbf{country\_name}, perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti in ciascun paese. 
+Abbiamo deciso di utilizzare per trattare i dati MongoDB, pertanto abbiamo implementato lo \textbf{Sharding}.
+Sono stati costruiti tre shard, tutti in modalità replica set per garantire ridondanza in caso di guasti e frammentazione per rendere le query più efficienti nel momento in cui si andava a interrogare il \textit{router mongos}. I \textit{config server} sono stati anch'essi configurati come replica set. Come chiave di sharding è stato scelto il campo \textbf{country\_name}, perché le query per rispondere alle nostre domande vengono fatte sul singolo paese. Questo approccio è stato pensato anche nell'ottica di dividere la grande mole di dati in server disposti per ciascun paese. 
 
 Per il dettaglio dei file di configurazione e altro si fa riferimento alla cartella \textit{sharding}.
 
