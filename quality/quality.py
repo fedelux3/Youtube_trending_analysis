@@ -34,7 +34,7 @@ def correlation_plot(data, out_dir):
     plt.yticks(rotation = 0)
     plt.title("Correlazioni tra le variabili", size = 30, pad = 20)
     plt.show()
-    fig.savefig(out_dir + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
+    plt.savefig(out_dir + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
 
 def box_plot_1(data, out_dir):
     '''
@@ -43,11 +43,13 @@ def box_plot_1(data, out_dir):
         data:   Dati di cui disegnare i violin plot.
     '''
     data = data.melt(var_name='Categories', value_name='Vote')
-    sns.boxplot(x="Categories", y="Vote",data = data, palette="Set3", notch = True)
+    svm = sns.boxplot(x="Categories", y="Vote",data = data, palette="Set3", notch = True)
     plt.grid()
+    plt.ylim(0,7)
     plt.title("Risposte della prima infografica", pad = 20)
     plt.show()
-    plt.savefig(out_dir + '/risposte_box_plot_first.png', bbox_inches='tight', dpi = 600)
+    fig = svm.get_figure()
+    fig.savefig(out_dir + '/risposte_box_plot_first.png', bbox_inches='tight', dpi = 600)
 
 def box_plot_2(data, out_dir):
     '''
@@ -56,11 +58,13 @@ def box_plot_2(data, out_dir):
         data:   Dati di cui disegnare i violin plot.
     '''
     data = data.melt(var_name='Categories', value_name='Vote')
-    sns.boxplot(x="Categories", y="Vote",data = data, palette="Set3", notch = True)
+    svm = sns.boxplot(x="Categories", y="Vote",data = data, palette="Set3", notch = True)
     plt.grid()
+    plt.ylim(0,7)
     plt.title("Risposte della seconda infografica", pad = 20)
-    plt.show()  
-    plt.savefig(out_dir + '/risposte_box_plot_second.png', bbox_inches='tight', dpi = 600)
+    plt.show() 
+    fig = svm.get_figure() 
+    fig.savefig(out_dir + '/risposte_box_plot_second.png', bbox_inches='tight', dpi = 600)
 
 def scatter_plot_1(x, y, out_dir):
     '''
@@ -69,20 +73,21 @@ def scatter_plot_1(x, y, out_dir):
         x:  Prima grandezza da confrontare 
         y:  Seconda grandezza da confrontare
     '''
-    
-    plt.plot(x,y, '+', color = (0.2,0.1,0.3))
+    fig = plt.subplots(figsize=(15, 8))
+    plt.plot(x,y, 'o', color = (0.2,0.1,0.3))
 
     
     #Plot of the bisector, the line in which the poinst must be in the neighborhood
-    plt.plot([0,6],[0,6], "r--", color = "deepskyblue", label = "Perfect Correlation")
+    plt.plot([0,7],[0,7], "r--", color = "deepskyblue", label = "Perfect Correlation")
     plt.xticks( fontsize = 20)
     plt.yticks( fontsize = 20)
-    plt.xlim(0,6)
-    plt.ylim(0,6)
+    plt.xlim(0,7)
+    plt.ylim(0,7)
     plt.xlabel('Dichiarato', size = 35) 
     plt.ylabel('Calcolato', size = 35) 
     plt.legend(loc="best", prop={'size': 15})
-    plt.title("Scatter plot seconda infografica", size = 35, pad = 20)
+    plt.grid()
+    plt.title("Scatter plot prima infografica", size = 35, pad = 20)
     plt.show()
     plt.ioff()
     plt.savefig(out_dir + '/risposte_scatter_plot_first.png', bbox_inches='tight', dpi = 600)
@@ -95,20 +100,21 @@ def scatter_plot_2(x, y, out_dir):
         x:  Prima grandezza da confrontare 
         y:  Seconda grandezza da confrontare
     '''
-        
-    plt.plot(x,y, '+', color = (0.2,0.1,0.3))
+    fig = plt.subplots(figsize=(15, 8))  
+    plt.plot(x,y, 'o', color = (0.2,0.1,0.3))
 
 
     #Plot of the bisector, the line in which the poinst must be in the neighborhood
-    plt.plot([0,6],[0,6], "r--", color = "deepskyblue", label = "Perfect Correlation")
+    plt.plot([0,7],[0,7], "r--", color = "deepskyblue", label = "Perfect Correlation")
     plt.xticks( fontsize = 20)
     plt.yticks( fontsize = 20)
-    plt.xlim(0,6)
-    plt.ylim(0,6)
+    plt.xlim(0,7)
+    plt.ylim(0,7)
     plt.xlabel('Dichiarato', size = 35) 
     plt.ylabel('Calcolato', size = 35) 
     plt.legend(loc="best", prop={'size': 15})
     plt.title("Scatter plot seconda infografica", size = 35, pad = 20)
+    plt.grid()
     plt.show()
     plt.ioff()
     plt.savefig(out_dir + '/risposte_scatter_plot_second.png', bbox_inches='tight', dpi = 600)

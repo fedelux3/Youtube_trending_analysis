@@ -14,7 +14,7 @@ def box_plot(data, out_dir):
         data:   Dati di cui disegnare i violin plot.
     '''
     data = data.melt(var_name='Tasks', value_name='Times')
-    #fig = plt.subplots(figsize=(15, 8))
+    fig = plt.subplots(figsize=(15, 8))
     sns.boxplot(x="Tasks", y="Times",data = data, palette="Set3", notch = True)
     plt.grid()
     plt.title("Box plot dei tempi di esecuzione dei task", size = 30, pad = 20)
