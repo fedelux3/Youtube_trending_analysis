@@ -26,7 +26,8 @@ def times(out_dir):
     Legge i tempi di esecuzione che sono stati registrati e disegna i violin plot.
     '''
     tempi = pd.read_csv("tempi.csv")
-    tempi = tempi.rename(columns = {"task_1":"Task 1", "task_2":"Task 2", "task_3":"Task 3", "task_4":"Task 4", "task_5":"Task 5", "task_6":"Task 6"})
+    tempi = tempi.rename(columns = {"task_1":"Task 1 prima", "task_2":"Task 2 prima", "task_3":"Task 3 prima", 
+                                    "task_4":"Task 1 seconda", "task_5":"Task 2 seconda", "task_6":"Task 3 seconda"})
 
     # Disegno tutti i grafici.
     box_plot(tempi,out_dir)

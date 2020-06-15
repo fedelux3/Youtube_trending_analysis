@@ -11,7 +11,7 @@ import seaborn as sns
 from matplotlib.collections import EllipseCollection
 import statsmodels.api as sm
 
-def correlation_plot(data, out_dir):
+def correlation_plot_1(data, out_dir):
     '''
     Disegna un grafico di correlazione:
     @params:
@@ -32,10 +32,36 @@ def correlation_plot(data, out_dir):
     svm = sns.heatmap(corr, cmap=cmap,  annot=True, 
             linewidths=1.3, linecolor='black', cbar=True, ax=ax)
     plt.yticks(rotation = 0)
-    plt.title("Correlazioni tra le variabili", size = 30, pad = 20)
+    plt.title("Correlazioni prima infografica", size = 30, pad = 20)
     plt.show()
     fig = svm.get_figure() 
-    fig.savefig(out_dir + '/risposte_correlation_plot.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_correlation_plot_first.png', bbox_inches='tight', dpi = 600)
+
+def correlation_plot_2(data, out_dir):
+    '''
+    Disegna un grafico di correlazione:
+    @params:
+        data:   dati di cui diesgnare le correlazioni.
+    '''
+    corr = data.corr()
+    mask = np.zeros_like(corr, dtype=np.bool)
+    mask[np.triu_indices_from(mask)] = True
+
+    # Set up the matplotlib figure
+    fig, ax = plt.subplots(figsize=(11, 9))
+
+    # Generate a custom diverging colormap
+    cmap = sns.diverging_palette(220, 20, sep=20, as_cmap=True)
+
+    # Draw the heatmap with the mask and correct aspect ratio
+    
+    svm = sns.heatmap(corr, cmap=cmap,  annot=True, 
+            linewidths=1.3, linecolor='black', cbar=True, ax=ax)
+    plt.yticks(rotation = 0)
+    plt.title("Correlazioni seconda infografica", size = 30, pad = 20)
+    plt.show()
+    fig = svm.get_figure() 
+    fig.savefig(out_dir + '/risposte_correlation_plot_second.png', bbox_inches='tight', dpi = 600)
 
 def box_plot_1(data, out_dir):
     '''
@@ -173,7 +199,8 @@ def quality(out_dir):
     scatter_plot_1(risposte_prima_info['totale'], risposte_prima_info['percepito'], out_dir)
     scatter_plot_2(risposte_seconda_info['totale'], risposte_seconda_info['percepito'], out_dir)
 
-    correlation_plot(risposte_prima_info, out_dir)
+    correlation_plot_1(risposte_prima_info, out_dir)
+    correlation_plot_2(risposte_seconda_info, out_dir)
 
 
     

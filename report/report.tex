@@ -238,8 +238,8 @@ La valutazione della qualità si è articolata in tre passaggi:
 \begin{enumerate}
 	\item Per la \textit{prima infografica:}
 	\begin{itemize}
-		\item Nella giornata del 20 marzo quale video ha avuto più visualizzazioni e a quale categoria appartiene?  \textit{Science \& technology, IPad Pro}
-		\item Della categoria Entertainment quali sono i canali che hanno fatto più visualizzazioni a Natale e a Pasqua? \textit{The Late Show with Corbin, Mr Beast}
+		\item Nella giornata del 20 marzo in USA quale video ha avuto più visualizzazioni e a quale categoria appartiene?  \textit{Entertainment, Eminem Godzilla}
+		\item Della categoria Entertainment quali sono i canali che hanno fatto più visualizzazioni a Natale e a Pasqua in Germania? \textit{The Late Show with Corbin, Mr Beast}
 		\item Nella categoria sport confronta il 30 dicembre e 10 aprile in Germania. Qual è il titolo dei video più visti per ciascun giorno?\\
 		\textit{Sampdoria 1-2 Juventus | Ronaldo Header Winds it for the Visitors | Serie A TIM \\ F1 Esports Virtual Grand Prix Highlights | Aramco}
 	\end{itemize}
@@ -252,12 +252,12 @@ La valutazione della qualità si è articolata in tre passaggi:
 \end{enumerate}
 
 Sono stati registrati i tempi in cui gli utenti riuscivano a completare questi obiettivi e sono stati visualizzati i risultati nei seguenti box plot:
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[height=0.3 \linewidth]{pict/violin_plot.png}
-%	\caption{Tempi di completamento dei task.}
-%\end{figure}
-Questa visualizzazione è utile per capire se le nostre infografiche sono troppo dispersive oppure se riescono a essere facili e intuitive.
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.5 \linewidth]{../quality/tempi_box_plot_seaborn.png}
+	\caption{Tempi di completamento dei task.}
+\end{figure}
+Questa visualizzazione è utile per capire se le nostre infografiche sono troppo dispersive oppure se riescono a essere facili e intuitive. Come si nota l'esecuzione del primo della seconda infografica è quella che permette di andare 
 
 \paragraph{Questionari} Per quanto riguarda l'ultima fase è stato somministrato un questionario di valutazione della qualità a 24 persone articolato nella seguente maniera:
 \begin{itemize}
@@ -269,19 +269,26 @@ Questa visualizzazione è utile per capire se le nostre infografiche sono troppo
 	\item Come valuti complessivamente l'infografica?
 \end{itemize}
 Le risposte sono state registrate grazie al tool "Moduli di Google". Una volta registrati i risultati è stata controllata che la valutazione dell'infografica fosse coerente con una ricostruzione complessiva della regressione con i coefficienti di Cabitza-Locoro.
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[height=0.3 \linewidth]{pict/box_plot.png}
-%	\caption{Dispersione delle risposte del questionario.}
-%\end{figure}
+\begin{figure}[H]
+   \includegraphics[width=0.475\textwidth]{../quality/risposte_box_plot_first.png}
+   \hfill
+   \includegraphics[width=0.475\textwidth]{../quality/risposte_box_plot_second.png}
+\end{figure}
 L'utilizzo di un box plot è risultato molto comodo per la registrazione delle risposte poiché la media è un indicatore di tendenza centrale e non fornisce alcuna informazione sulla distribuzione di questi dati.
 Per quanto riguarda invece la coerenza della valutazione rispetto alla ricostruzione data dai coefficienti abbiamo avuto la seguente distribuzione:
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[height=0.3 \linewidth]{pict/regressione.png}
-%	\caption{$R^{2} = 0.75$.}
-%\end{figure}
+\begin{figure}[H]
+   \includegraphics[width=0.475\textwidth]{../quality/risposte_scatter_plot_first.png}
+   \hfill
+   \includegraphics[width=0.475\textwidth]{../quality/risposte_scatter_plot_second.png}
+   \caption{$R_1^2 = 0.82, R_2^2 = 0.76$}
+\end{figure}
 
+La correlazione tra le variabili sono le seguenti:
+\begin{figure}[H]
+   \includegraphics[width=0.475\textwidth]{../quality/risposte_correlation_plot_first.png}
+   \hfill
+   \includegraphics[width=0.475\textwidth]{../quality/risposte_correlation_plot_second.png}
+\end{figure}
 \section*{Conclusioni e prospettive future}
 In conclusione possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube prima e durante l'epidemia di Covid-19. 
 
