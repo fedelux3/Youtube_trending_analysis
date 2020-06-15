@@ -34,7 +34,7 @@ Gabriele Celeri 847335 (TTC), Federico Luzzi 816753 (DS),\\  Marco Peracchi 8005
 \vspace{0.2cm}
 \begin{center}\textbf{Introduzione e obiettivi}\end{center} 
 Negli ultimi mesi il Covid-19 ha avuto un impatto notevole sulle vite di tutti noi. L'obiettivo di questo lavoro è capire se la piattaforma YouTube sia stata influenzata dalla presenza di questo virus che ha costretto a rimanere nelle proprie case gran parte della popolazione mondiale. 
-Per valutare l'impatto della pandemia e della quarantena obbligatoria, abbiamo confrontato i video in tendenza di Youtube nel periodo di dicembre-gennaio rispetto a quello di marzo-maggio, con l'obiettivo di verificare se i contenuti presenti sulla piattaforma e la loro tipologia siano cambiati.
+Per valutare l'impatto della pandemia e della quarantena obbligatoria, abbiamo confrontato i video in tendenza di YouTube nel periodo di dicembre-gennaio rispetto a quello di marzo-maggio, con l'obiettivo di verificare se i contenuti presenti sulla piattaforma e la loro tipologia siano cambiati.
 Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento dei contagi e delle notizie in merito, specialmente se negative, influenzassero in alcun modo la fruizione di video riguardanti il Covid-19.
 \\\\ \begin{small}
 	\textit{Keyword: Covid-19, YouTube}
@@ -163,13 +163,6 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 	Si può notare come per le query 4 e 5 vengono esplorati un numero di video molto inferiori nel database con sharding rispetto a quello senza, questo si traduce in un miglioramento dei tempi di esecuzione. La query 6, poiché necessità di informazioni riguardanti tutti i paesi, esplora tutti i dati a prescindere degli shard, quindi non ha alcun miglioramento prestazionale.
 	
 	Per il dettaglio vedere i file di risposta nella cartella \textit{query}.
-%Per farlo ci occupiamo di effettuare la nostra analisi su partizionamenti sempre maggiori del nostro dataset e registriamo il tempo di esecuzione del nostro programma, effettuiamo poi una semplice regressione per vedere di che tipo di crescita stiamo parlando, ovviamente più la crescita è minore più il nostro algoritmo scala bene per volumi di dati maggiori. Presentiamo di seguito la registrazione dei tempi rispetto al partizionamento dei dati. 
-
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[height=0.3 \linewidth]{pict/times.png}
-%	\caption{Crescita del tempo di esecuzione rispetto all'aumentare del partizionamento.}
-%\end{figure}
 
 \section*{Visualizzazione}
 
@@ -192,16 +185,16 @@ Per rispondere in modo coerente alle nostre domande di ricerca abbiamo deciso di
 
 \subsection*{Scelta della visualizzazione}
 
-Abbiamo utilizzato due infografiche diverse per le domande di ricerca, poiché ci è sembrata incompatibile un'unica visualizzazione per entrambe.
+Abbiamo utilizzato due infografiche diverse per le domande di ricerca, poiché ci è sembrata incompatibile un'unica visualizzazione per rispondere ad entrambe le domande di ricerca.
 
 
 \paragraph{Prima infografica} La prima infografica consiste nella combinazione di due diverse visualizzazioni:
 \begin{itemize}
-	\item Un lollipop chart temporale che rappresenta il numero video entrato in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresenta le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
-	\item Un bubble chart, dove ogni bolla è un video, la sua grandezza rappresenta il numero di visualizzazioni e il colore la categoria di appartenenza.
+	\item Un \textbf{lollipop chart} temporale che rappresenta il numero video entrato in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresenta le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
+	\item Un \textbf{bubble chart}, dove ogni bolla rappresenta un video, la sua grandezza rappresenta il numero di visualizzazioni e il colore la categoria di appartenenza.
 \end{itemize}
 
-La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo precedente al Covid-19 e  durante la quarantena differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e vedere il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per passi guidati attraverso una storia, in modo da introdurre all'utente tutte le informazioni che questa visualizzazione può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
+La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo precedente al Covid-19 e durante la quarantena differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e vedere il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per passi guidati attraverso una storia, in modo da accompagnare l'utente attraverso tutte le informazioni che questa visualizzazione può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.5 \linewidth]{pics/prima_infografica.png}
@@ -210,7 +203,7 @@ La combinazione di queste due visualizzazioni permette di capire se il contenuto
 
 \paragraph{Seconda infografica} Per quanto riguarda la risposta alla seconda domanda di ricerca abbiamo deciso di utilizzare una infografica composta da due visualizzazioni come precedentemente. In particolare:
 \begin{itemize}
-	\item Un misto tra un bar chart e un line chart temporale. In questa visualizzazione abbiamo fatto risaltare la differenza percentuale tra una rilevazione e quella del giorno precedente. Il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19 mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. 
+	\item Un misto tra un \textbf{bar chart e un line chart} temporale. In questa visualizzazione abbiamo fatto risaltare la differenza percentuale tra una rilevazione e quella del giorno precedente. Il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19 mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. 
 	Abbiamo utilizzato questo tipo di grafico in modo da poter vedere se le notizie negative o positive dei dati riguardanti il Covid-19 abbia influito sulla fruizione online dei video concernenti lo stesso argomento.
 	L'utilizzo di un bar chart e un line chart è dovuto al fatto che dai questionari è risultata più apprezzata questa scelta per riconoscere le due variabili.
 
@@ -234,7 +227,7 @@ La valutazione della qualità si è articolata in tre passaggi:
 	\item  \textit{Problema 2: Come comprendere che cliccare sul bianco significa non avere nessun giorno selezionato, e quindi una visione complessiva.}\\\textit{Soluzione 2: Introdurre l'infografica mediante storie che possano guidare l'utente nell'esplorazione.} 
 	\item  \textit{Problema 3: Come comprendere quali video sono nella categoria Covid e quali no.} \\\textit{Soluzione 3: Una legenda semplificata e l'utilizzo di bar chart sovrapposti di colori diversi.} 
 \end{itemize}
-\paragraph{Risultati dei task} Durante questa fase ci siamo occupati di sottoporre tre diverse richieste per ogni infografica a 24 utenti; questi task devono essere soddisfatti esplorando in maniera interattiva. I task da risolvere sono stati i seguenti:
+\paragraph{Risultati dei task} Durante questa fase ci siamo occupati di sottoporre tre diverse richieste per ogni infografica ad almeno 6 utenti; questi task devono essere soddisfatti esplorando in maniera interattiva. I task da risolvere sono stati i seguenti:
 \begin{enumerate}
 	\item Per la \textit{prima infografica:}
 	\begin{itemize}
@@ -283,28 +276,26 @@ Per quanto riguarda invece la coerenza della valutazione rispetto alla ricostruz
    \caption{$R_1^2 = 0.82, R_2^2 = 0.76$}
 \end{figure}
 
-La correlazione tra le variabili sono le seguenti:
+Ci siamo inoltre preoccupati di calcolare le correlazioni tra le variabili sottoposte nei questionari. Possiamo quindi notare che l'intuitività è la caratteristica che influisce meno delle altre sulla valutazione complessiva della nostra infografica.
 \begin{figure}[H]
    \includegraphics[width=0.475\textwidth]{../quality/risposte_correlation_plot_first.png}
    \hfill
    \includegraphics[width=0.475\textwidth]{../quality/risposte_correlation_plot_second.png}
 \end{figure}
 \section*{Conclusioni e prospettive future}
-In conclusione possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube prima e durante l'epidemia di Covid-19. 
+Visti i risultati di questo lavoro possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube prima e durante l'epidemia di Covid-19. 
 
 La prima infografica mostra come la distribuzione dei video nelle varie categorie sia cambiata. Ad esempio, per quanto riguarda l'Italia la categoria Sport subisce una drastica diminuzione, presumibilmente dovuta al blocco di tutte le attività sportive durante la quarantena; così come la categoria News \& politics che risulta essere più presente nel periodo Covid rispetto al precedente.
 
-La seconda infografica mostra che la variazione giornaliera del numero di contagi non influenza strettamente la quantità di contenuti nelle tendenze legati al Covid. In alcuni frangenti si nota una certa relazione tra le due misure, ad esempio, in Italia nel periodo di fine marzo e inizio aprile. Ne consegue che, probabilmente, l'impatto dei numeri ufficiali relativi ai contagi non abbiano influenzato in modo significativo le tendenze giornaliere di Youtube.
+\textit{La seconda infografica mostra che la variazione giornaliera del numero di contagi non influenza strettamente la quantità di contenuti nelle tendenze legati al Covid.} In alcuni frangenti si nota una certa relazione tra le due misure, ad esempio, in Italia nel periodo di fine marzo e inizio aprile. Ne consegue che, probabilmente, l'impatto dei numeri ufficiali relativi ai contagi non abbiano influenzato in modo significativo le tendenze giornaliere di Youtube.
 
 Da queste due infografiche possiamo concludere che i gusti degli utenti di Youtube hanno subito un evidente cambiamento durante il periodo dell'epidemia, e che questo mutamento è avvenuto gradualmente e non è necessariamente legato al numero ufficiale dei contagi.
 
 \paragraph{Prospettive future\\}
 
-Una delle principali espansioni che possono essere eseguite su questo lavoro riguarda l'approfondimento del legame che esiste tra la variazione giornaliera di contagi e il numero di contenuti Covid presenti sulla piattaforma. Un'analisi statistica attraverso regressioni semplici o complesse potrebbe rispondere alla nostra seconda domanda in maniera più completa. Potrebbero essere considerati non solo i nuovi contagi giornalieri, ma anche altri fattori, come il numero di decessi o la quantità di contagi totale nel paese.
-Ulteriori analisi potrebbero essere svolte su altre piattaforme, per avere un quadro più generale dei movimenti online che la pandemia ha generato. In tal modo sarebbe possibile comprendere come i gusti delle persone sono cambiati, o come il tempo passato in casa abbia cambiato gli interessi.
+Un aspetto che può essere interessante approfondire riguarda il legame che esiste tra la variazione giornaliera di contagi e il numero di contenuti Covid presenti sulla piattaforma. Un'analisi statistica attraverso regressioni semplici o complesse potrebbe rispondere alla seconda domanda di ricerca in maniera più completa ed esaustiva. Potrebbero essere considerati non solo i nuovi contagi giornalieri, ma anche altri fattori, come il numero di decessi o la quantità di contagi totale nel paese.
+Ulteriori analisi potrebbero essere svolte su altre piattaforme, per avere un quadro più generale dei movimenti online che la pandemia ha generato. In tal modo sarebbe possibile comprendere come i gusti delle persone siano cambiati, o come il tempo passato in casa abbia cambiato gli interessi.
 
-Un'ultima considerazione andrebbe fatta riguardo alla fase 2 e oltre, per verificare se i cambiamenti che sono avvenuti siano definitivi oppure se si tratti solamente di un periodo unico.
-
-
+Un'ultima considerazione andrebbe fatta riguardo al periodo successivo alla fase 2. In questo modo si potrebbe verificare se i cambiamenti che sono avvenuti abbiano davvero cambiato le tipologie di video più usufruite oppure se questa tendenza a spostarsi verso video dai contenuti più informativi si tratti solamente di un periodo transitorio.
 
 \end{document}
