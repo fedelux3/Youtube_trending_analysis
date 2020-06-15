@@ -1,3 +1,10 @@
+'''
+Conversione dei file csv in input in file json immagazzinati nella cartella 
+"json" (creata se non presente)
+@params:
+    -d: directory di directories dei files csv
+'''
+
 import csv_to_json
 import argparse
 import os
@@ -20,12 +27,6 @@ def list_directory(data):
 
 
 if __name__ == '__main__':
-    '''
-    Conversione dei file csv in input in file json immagazzinati nella cartella 
-    "json" (creata se non presente)
-    @params:
-        -d: directory di directories dei files csv
-    '''
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--data', type=str, required=False, help="Inserire la directory da cui prendere i dati", default="data")
     

@@ -10,6 +10,7 @@ File che carica i json in MongoDB
 '''
 
 from pymongo import MongoClient
+from datetime import datetime
 import argparse
 import os
 import json

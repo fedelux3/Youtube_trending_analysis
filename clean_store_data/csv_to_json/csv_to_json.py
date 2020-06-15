@@ -91,10 +91,8 @@ def add_country(df, nameFile):
         df:         dataframe di input
         nameFile:   nome del file csv
     '''
-    code = nameFile[11:13] #DA MIGLIORARE
-    #Possibilità? 
-    #r = re.search("_(\D{2})_", nameFile)
-    #code = r.group(1))
+    r = re.search("_(\D{2})_", nameFile)
+    code = r.group(1)
     df['country_code'] = code
 
 def add_category_name(df, categories):
