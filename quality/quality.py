@@ -73,7 +73,7 @@ def violin_plot_1(data, out_dir):
     svm = sns.violinplot(x="Categories", y="Vote",data = data, palette="Set3")
     plt.grid()
     plt.ylim(0,7)
-    plt.title("Risposte della prima infografica", pad = 20)
+    plt.title("Risposte prima infografica", size = 15, pad = 20)
     plt.show()
     fig = svm.get_figure()
     fig.savefig(out_dir + '/risposte_violin_plot_first.png', bbox_inches='tight', dpi = 600)
@@ -88,7 +88,7 @@ def violin_plot_2(data, out_dir):
     svm = sns.violinplot(x="Categories", y="Vote",data = data, palette="Set3")
     plt.grid()
     plt.ylim(0,7)
-    plt.title("Risposte della seconda infografica", pad = 20)
+    plt.title("Risposte seconda infografica", size = 15, pad = 20)
     plt.show() 
     fig = svm.get_figure() 
     fig.savefig(out_dir + '/risposte_violin_plot_second.png', bbox_inches='tight', dpi = 600)
@@ -104,7 +104,7 @@ def box_plot_1(data, out_dir):
     svm = sns.boxplot(x="Categories", y="Vote",data = data, palette="Set3", notch = True)
     plt.grid()
     plt.ylim(0,7)
-    plt.title("Risposte della prima infografica", pad = 20)
+    plt.title("Risposte prima infografica", size = 15, pad = 20)
     plt.show()
     fig = svm.get_figure()
     fig.savefig(out_dir + '/risposte_box_plot_first.png', bbox_inches='tight', dpi = 600)
@@ -119,7 +119,7 @@ def box_plot_2(data, out_dir):
     svm = sns.boxplot(x="Categories", y="Vote",data = data, palette="Set3", notch = True)
     plt.grid()
     plt.ylim(0,7)
-    plt.title("Risposte della seconda infografica", pad = 20)
+    plt.title("Risposte seconda infografica", size = 15, pad = 20)
     plt.show() 
     fig = svm.get_figure() 
     fig.savefig(out_dir + '/risposte_box_plot_second.png', bbox_inches='tight', dpi = 600)
@@ -223,6 +223,7 @@ def quality(out_dir):
     model_seconda = sm.OLS(risposte_seconda_info['percepito'], x_seconda).fit()
     print("Il coefficiente R2 del valore percepito della prima infografica è: ", round(model_seconda.rsquared,2), "\n")
 
+
     # Disegno tutti i grafici.
     box_plot_1(dati_prima_info, out_dir)
     box_plot_2(dati_seconda_info, out_dir)
@@ -235,7 +236,6 @@ def quality(out_dir):
 
     correlation_plot_1(risposte_prima_info, out_dir)
     correlation_plot_2(risposte_seconda_info, out_dir)
-
 
     
 
