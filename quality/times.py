@@ -15,11 +15,27 @@ def box_plot(data, out_dir):
     '''
     data = data.melt(var_name='Tasks', value_name='Times')
     fig = plt.figure(figsize=(15, 8)) 
-    sns.boxplot(x="Tasks", y="Times",data = data, palette="Set3", notch = True)
+    svm = sns.boxplot(x="Tasks", y="Times",data = data, palette="Set3", notch = True)
     plt.grid()
     plt.title("Box plot dei tempi di esecuzione dei task", size = 30, pad = 20)
     plt.show()
+    fig = svm.get_figure()
     fig.savefig(out_dir + '/tempi_box_plot_seaborn.png', bbox_inches='tight', dpi = 600)
+
+def violin_plot(data, out_dir):
+    '''
+    Disegna il box plot dei dati
+    @params:
+        data:   Dati di cui disegnare i violin plot.
+    '''
+    data = data.melt(var_name='Tasks', value_name='Times')
+    fig = plt.figure(figsize=(15, 8)) 
+    svm = sns.violinplot(x="Tasks", y="Times",data = data, palette="Set3")
+    plt.grid()
+    plt.title("Box plot dei tempi di esecuzione dei task", size = 30, pad = 20)
+    plt.show()
+    fig = svm.get_figure()
+    fig.savefig(out_dir + '/tempi_violin_plot_seaborn.png', bbox_inches='tight', dpi = 600)
 
 def times(out_dir):
     '''
@@ -31,3 +47,4 @@ def times(out_dir):
 
     # Disegno tutti i grafici.
     box_plot(tempi,out_dir)
+    violin_plot(tempi,out_dir)

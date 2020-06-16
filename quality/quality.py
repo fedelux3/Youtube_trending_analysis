@@ -63,6 +63,37 @@ def correlation_plot_2(data, out_dir):
     fig = svm.get_figure() 
     fig.savefig(out_dir + '/risposte_correlation_plot_second.png', bbox_inches='tight', dpi = 600)
 
+def violin_plot_1(data, out_dir):
+    '''
+    Disegna il violin plot della prima infografica
+    @params:
+        data:   Dati di cui disegnare i violin plot.
+    '''
+    data = data.melt(var_name='Categories', value_name='Vote')
+    svm = sns.violinplot(x="Categories", y="Vote",data = data, palette="Set3")
+    plt.grid()
+    plt.ylim(0,7)
+    plt.title("Risposte della prima infografica", pad = 20)
+    plt.show()
+    fig = svm.get_figure()
+    fig.savefig(out_dir + '/risposte_violin_plot_first.png', bbox_inches='tight', dpi = 600)
+
+def violin_plot_2(data, out_dir):
+    '''
+    Disegna il violin plot della seconda infografica
+    @params:
+        data:   Dati di cui disegnare i violin plot.
+    '''
+    data = data.melt(var_name='Categories', value_name='Vote')
+    svm = sns.violinplot(x="Categories", y="Vote",data = data, palette="Set3")
+    plt.grid()
+    plt.ylim(0,7)
+    plt.title("Risposte della seconda infografica", pad = 20)
+    plt.show() 
+    fig = svm.get_figure() 
+    fig.savefig(out_dir + '/risposte_violin_plot_second.png', bbox_inches='tight', dpi = 600)
+
+
 def box_plot_1(data, out_dir):
     '''
     Disegna il box plot della prima infografica
@@ -80,7 +111,7 @@ def box_plot_1(data, out_dir):
 
 def box_plot_2(data, out_dir):
     '''
-    Disegna il box plot della prima infografica
+    Disegna il box plot della seconda infografica
     @params:
         data:   Dati di cui disegnare i violin plot.
     '''
@@ -195,6 +226,9 @@ def quality(out_dir):
     # Disegno tutti i grafici.
     box_plot_1(dati_prima_info, out_dir)
     box_plot_2(dati_seconda_info, out_dir)
+
+    violin_plot_1(dati_prima_info, out_dir)
+    violin_plot_2(dati_seconda_info, out_dir)
 
     scatter_plot_1(risposte_prima_info['totale'], risposte_prima_info['percepito'], out_dir)
     scatter_plot_2(risposte_seconda_info['totale'], risposte_seconda_info['percepito'], out_dir)
