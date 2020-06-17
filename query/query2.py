@@ -1,6 +1,7 @@
 '''
 Query mongo che risponde alla domanda: 
 Elenco video covid il giorno del minimo aumento giornaliero di casi in Italia
+
 @params:
     -u: mongoDB user
     -p: mongoDB password
