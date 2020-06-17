@@ -20,7 +20,7 @@ def box_plot(data, out_dir):
     plt.title("Box plot tempi esecuzione task", size = 25, pad = 20)
     plt.show()
     fig = svm.get_figure()
-    fig.savefig(out_dir + '/tempi_box_plot_seaborn.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/tempi_box_plot_seaborn.png', bbox_inches='tight', dpi = 300)
 
 def violin_plot(data, out_dir):
     '''
@@ -35,7 +35,7 @@ def violin_plot(data, out_dir):
     plt.title("Violin plot tempi esecuzione task", size = 25, pad = 20)
     plt.show()
     fig = svm.get_figure()
-    fig.savefig(out_dir + '/tempi_violin_plot_seaborn.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/tempi_violin_plot_seaborn.png', bbox_inches='tight', dpi = 300)
 
 def times(out_dir):
     '''

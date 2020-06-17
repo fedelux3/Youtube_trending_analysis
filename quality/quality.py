@@ -35,7 +35,7 @@ def correlation_plot_1(data, out_dir):
     plt.title("Correlazioni prima infografica", size = 30, pad = 20)
     plt.show()
     fig = svm.get_figure() 
-    fig.savefig(out_dir + '/risposte_correlation_plot_first.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_correlation_plot_first.png', bbox_inches='tight', dpi = 300)
 
 def correlation_plot_2(data, out_dir):
     '''
@@ -61,7 +61,7 @@ def correlation_plot_2(data, out_dir):
     plt.title("Correlazioni seconda infografica", size = 30, pad = 20)
     plt.show()
     fig = svm.get_figure() 
-    fig.savefig(out_dir + '/risposte_correlation_plot_second.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_correlation_plot_second.png', bbox_inches='tight', dpi = 300)
 
 def violin_plot_1(data, out_dir):
     '''
@@ -76,7 +76,7 @@ def violin_plot_1(data, out_dir):
     plt.title("Risposte prima infografica", size = 15, pad = 20)
     plt.show()
     fig = svm.get_figure()
-    fig.savefig(out_dir + '/risposte_violin_plot_first.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_violin_plot_first.png', bbox_inches='tight', dpi = 300)
 
 def violin_plot_2(data, out_dir):
     '''
@@ -91,7 +91,7 @@ def violin_plot_2(data, out_dir):
     plt.title("Risposte seconda infografica", size = 15, pad = 20)
     plt.show() 
     fig = svm.get_figure() 
-    fig.savefig(out_dir + '/risposte_violin_plot_second.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_violin_plot_second.png', bbox_inches='tight', dpi = 300)
 
 
 def box_plot_1(data, out_dir):
@@ -107,7 +107,7 @@ def box_plot_1(data, out_dir):
     plt.title("Risposte prima infografica", size = 15, pad = 20)
     plt.show()
     fig = svm.get_figure()
-    fig.savefig(out_dir + '/risposte_box_plot_first.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_box_plot_first.png', bbox_inches='tight', dpi = 300)
 
 def box_plot_2(data, out_dir):
     '''
@@ -122,7 +122,7 @@ def box_plot_2(data, out_dir):
     plt.title("Risposte seconda infografica", size = 15, pad = 20)
     plt.show() 
     fig = svm.get_figure() 
-    fig.savefig(out_dir + '/risposte_box_plot_second.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_box_plot_second.png', bbox_inches='tight', dpi = 300)
 
 def scatter_plot_1(x, y, out_dir):
     '''
@@ -148,7 +148,7 @@ def scatter_plot_1(x, y, out_dir):
     plt.title("Scatter plot prima infografica", size = 35, pad = 20)
     plt.show()
     plt.ioff()
-    fig.savefig(out_dir + '/risposte_scatter_plot_first.png', bbox_inches='tight', dpi = 600)
+    fig.savefig(out_dir + '/risposte_scatter_plot_first.png', bbox_inches='tight', dpi = 300)
 
 
 def scatter_plot_2(x, y, out_dir):
