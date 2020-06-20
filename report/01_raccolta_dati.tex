@@ -16,7 +16,7 @@ Abbiamo deciso di raccogliere dati delle tendenze dei seguenti paesi:
 Italia, USA, Regno Unito, India, Germania, Canada, Francia, Corea del sud, Russia, Giappone, Brasile, Messico\\
 
 \subsection*{Prima sessione}
-L'idea che ha guidato la fase iniziale del progetto era quella di comprendere come l'algoritmo delle tendenze di Youtube sceglie i video, utilizzando caratteristiche come visualizzazioni, likes, dislikes e commenti. La raccolta dati ha seguito il seguente algoritmo, messo in pratica dallo script \textit{scraper\_csv.py}:\\
+L'idea che ha guidato la fase iniziale del progetto era quella di comprendere come l'algoritmo delle tendenze di Youtube scelga i video, utilizzando caratteristiche come le visualizzazioni, i likes, i dislikes e i commenti. La raccolta dei dati ha seguito il seguente algoritmo, attuato dallo script \textit{scraper\_csv.py}:\\
 \\
 \begin{algorithm}[H]
 	\KwData{country - insieme dei paesi prescelti; videos - insieme di video scaricati da un determinato paese}
@@ -84,7 +84,7 @@ Lo scoppio della pandemia da Covid-19 ci ha permesso di cambiare approccio e dom
 
 Inoltre abbiamo effettuato cambiamenti all'algoritmo di scraping, preferendo effettuare le richieste API ogni sei ore, per un totale di quattro rilevazioni al giorno, invece che ogni 30 minuti come prevedeva precedentemente lo schema.
 
-A scopo didattico abbiamo deciso di implementare una piccola pipeline Kafka in cui dividiamo la fase di raccolta dati (\textit{scraper\_producer.py}) e la fase di immagazzinamento (\textit{scraper\_consumer.py}). 
+A scopo didattico, abbiamo deciso di implementare una piccola pipeline Kafka in cui dividiamo la fase di raccolta dati (\textit{scraper\_producer.py}) e la fase di immagazzinamento (\textit{scraper\_consumer.py}). 
 
 \begin{figure}[H]
 	\centering
@@ -148,7 +148,7 @@ Lo schema logico dei documenti json è sostanzialmente invariato rispetto a quel
 \end{itemize}
 \subsection*{Dati Covid-19}
 
-I dati relativi alla pandemia, come il numero di contagi totali o giornalieri, sono stati ottenuti dal sito \href{https://ourworldindata.org/coronavirus-testing}{OurWorldInData} dell'università di Oxford. Successivamente abbiamo eseguito una prima manipolazione per ottenere i dati che interessavano i paesi e le date che abbiamo considerato. I risultati vengono visualizzati in un file \textit{csv}:
+I dati relativi alla pandemia, come il numero di contagi totali o giornalieri, sono stati ottenuti dal sito \href{https://ourworldindata.org/coronavirus-testing}{OurWorldInData} dell'università di Oxford. Successivamente abbiamo eseguito una prima manipolazione per ottenere i dati che interessavano i Paesi e le date che abbiamo considerato. I risultati vengono visualizzati in un file \textit{csv}:
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l|l}

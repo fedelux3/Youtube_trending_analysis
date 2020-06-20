@@ -1,6 +1,14 @@
 '''
 Query mongo che risponde alla domanda: 
 Elenco video a tema covid della categoria Intrattenimento e Musica in Russia
+
+@params:
+    -u: mongoDB user
+    -p: mongoDB password
+    -port: mongoDB porta in cui comunica
+    -db: nome database mongodb
+    -c: nome collezione mongodb in cui immagazzinare i dati
+
 '''
 
 from pymongo import MongoClient

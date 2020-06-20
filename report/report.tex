@@ -46,7 +46,7 @@ Inoltre, ci siamo preposti, come secondo obiettivo, di verificare se l'andamento
 \input{01_raccolta_dati.tex}
   
 \subsection*{Qualità dati}
-La grande disponibilità di dati ha rappresentato il problema più rilevante della verifica di qualità. Fortunatamente i dati non presentavano problemi di \textit{missing values}, che avrebbero costituito una difficoltà non trascurabile. Le principali problematiche emerse sono due:
+La grande disponibilità di dati ha rappresentato il problema più rilevante della verifica di qualità. Fortunatamente, i dati non presentavano problemi di \textit{missing values}, che avrebbero costituito una difficoltà non trascurabile. Le principali problematiche emerse sono due:
 \begin{itemize}
 	
 	\item Ridondanza: I dati di dicembre-gennaio presentano richieste effettuate ai server di Youtube ogni mezz'ora, a differenza del periodo successivo. Di conseguenza sono stati rilevati molti dati simili tra loro, senza alcuna sostanziale variazione nelle varie fasce delle giornata. Per risolvere il problema abbiamo optato per scegliere quattro rilevazioni distaccate di sei ore ciascuna, in maniera da uniformare i dati con quelli di marzo-maggio. Per ulteriori dettagli è possibile visualizzare il notebook jupyter con cui è stato affrontato il problema.
@@ -61,7 +61,7 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 	
 	Per ricavare le informazioni relative all'andamento della pandemia nella giornata considerata abbiamo effettuato un'\textbf{integrazione temporale}, dove le chiavi considerate sono state il \textbf{timestamp} e il \textbf{country\_name}, cioè la data e il paese. Il procedimento è il seguente: viene ricercata la data del video considerato e il paese di appartenenza, e successivamente viene creato un dizionario con tutte le informazioni della pandemia nella data e paese appena cercato. Infine, viene creata una nuova chiave \textit{covid} contenente un nuovo documento nidificato, che è il dizionario creato precedentemente. Solo a questo punto i documenti vengono caricati su MongoDB.
 	
-	Alcune date presentano un fuso orario che non ha alcun riscontro nel dataset covid, perché alcuni paesi presentano diversi fusi orari. Come risoluzione sono stati spostati tutti gli orari in base al fuso orario della capitale del paese di appartenenza del video. Questa correzione è stata effettuata all'interno dello script \textit{scraper\_consumer} direttamente, in un'ottica process driven. I fusi orari utilizzati sono presenti all'interno del file \textit{country\_name.json}.
+	Alcune date presentano un fuso orario che non ha alcun riscontro nel dataset covid, perché alcuni paesi presentano diversi fusi orari. Al fine di uniformare i risultati, sono stati spostati tutti gli orari in base al fuso orario della capitale del paese di appartenenza del video. Questa correzione è stata effettuata direttamente all'interno dello script \textit{scraper\_consumer}, in un'ottica process-driven. I fusi orari utilizzati sono presenti all'interno del file \textit{country\_name.json}.
 
 	L'operazione di integrazione complessivamente richiede:
 	\begin{itemize}
@@ -76,7 +76,7 @@ La grande disponibilità di dati ha rappresentato il problema più rilevante del
 		\includegraphics[width=0.95\linewidth]{pics/er.png}
 	\end{figure}
 
-	Come è possibile vedere, si è cercato di includere tutte le parole relative alla pandemia e la loro traduzione nelle lingue di tutti i paesi considerati.
+	Come è possibile osservare, si è cercato di includere tutte le parole relative alla pandemia e la loro traduzione nelle lingue di tutti i paesi considerati.
 	
 	L'espressione regolare è stata applicata sia ai titoli dei video, sia ai tag scelti per descrivere il video. Di seguito le query applicate:
 	
@@ -125,7 +125,7 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 \end{itemize}
 
 \subsection*{Query}
-	Abbiamo eseguito alcune query, per testare il funzionamento del database con e senza sharding, contenute negli script presenti nella cartella \textit{query}. In particolare si nota come la query 4, 5, 6 presentino dei risultati interessanti.
+	Abbiamo eseguito alcune query, per testare il funzionamento del database con e senza sharding, contenute negli script presenti nella cartella \textit{query}. Si può osservare che la query 4, 5, 6 presentino dei risultati interessanti.
 	
 	In particolare:
 	\begin{itemize}
@@ -134,7 +134,7 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 		\item \textit{query 6}: elenco video a tema covid della categoria news \& politics in Italia e Germania
 	\end{itemize}
 	
-	Per quanto riguarda tempo di esecuzione in millisecondi(\textit{executionTimeMillis}):
+	Per quanto riguarda il tempo di esecuzione in millisecondi(\textit{executionTimeMillis}):
 	\begin{table}[H]
 		\centering
 		\begin{tabular}{c|c|c}
@@ -147,7 +147,7 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 		\caption{differenze tempi in millisecondi}
 	\end{table}
 	
-	Riguardo al numero di documenti esplorati per ottenere la risposta:
+	Riguardo, invece, al numero di documenti esplorati per ottenere la risposta:
 	\begin{table}[H]
 		\centering
 		\begin{tabular}{c|c|c}
@@ -160,9 +160,9 @@ In definitiva viene creato un database mongo chiamato \textit{YT\_data} con due 
 		\caption{differenze numero di documenti esplorati}
 	\end{table}
 	
-	Si può notare come per le query 4 e 5 vengono esplorati un numero di video molto inferiori nel database con sharding rispetto a quello senza, questo si traduce in un miglioramento dei tempi di esecuzione. La query 6, poiché necessità di informazioni riguardanti tutti i paesi, esplora tutti i dati a prescindere degli shard, quindi non ha alcun miglioramento prestazionale.
+	Si può notare come per le query 4 e 5 venga esplorato un numero di video molto inferiore nel database con sharding rispetto a quello senza, questo si traduce in un miglioramento dei tempi di esecuzione. La query 6, poiché necessità di informazioni riguardanti tutti i paesi, esplora tutti i dati a prescindere dagli shard, quindi non ha alcun miglioramento prestazionale.
 	
-	Per il dettaglio vedere i file di risposta nella cartella \textit{query}.
+	Per ulteriori dettagli, si faccia riferimento ai file di risposta nella cartella \textit{query}.
 
 \section*{Visualizzazione}
 
@@ -185,28 +185,28 @@ Per rispondere in modo coerente alle nostre domande di ricerca abbiamo deciso di
 
 \subsection*{Scelta della visualizzazione}
 
-Abbiamo utilizzato due infografiche diverse per le domande di ricerca, poiché ci è sembrata incompatibile un'unica visualizzazione per rispondere ad entrambe le domande di ricerca.
+Abbiamo utilizzato due infografiche diverse per le domande di ricerca, poiché ci è sembrata incompatibile un'unica visualizzazione per rispondere ad entrambi i quesiti.
 
 
 \paragraph{Prima infografica} La prima infografica consiste nella combinazione di due diverse visualizzazioni:
 \begin{itemize}
-	\item Un \textbf{lollipop chart} temporale che rappresenta il numero video entrato in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresenta le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
+	\item Un \textbf{lollipop chart} temporale che rappresenta il numero video entrati in tendenza ogni giorno. Sottolineamo che l'asse orizzontale rappresenta le date di dicembre-gennaio e di marzo-maggio, in accordo con la nostra raccolta dati.
 	\item Un \textbf{bubble chart}, dove ogni bolla rappresenta un video, la sua grandezza rappresenta il numero di visualizzazioni e il colore la categoria di appartenenza.
 \end{itemize}
 
-La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo precedente al Covid-19 e durante la quarantena differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e vedere il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per passi guidati attraverso una storia, in modo da accompagnare l'utente attraverso tutte le informazioni che questa visualizzazione può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
+La combinazione di queste due visualizzazioni permette di capire se il contenuto dei video entrati in tendenza nel periodo precedente al Covid-19 e durante la quarantena differiscano significativamente. Per farlo è sufficiente selezionare due giorni contemporaneamente e osservare il cambiamento nelle bolle. L'esplorazione di questa infografica avviene per passi guidati tramite una storia, in modo da accompagnare l'utente attraverso tutte le informazioni che questa visualizzazione può offrire. Di seguito una visione sommaria dell'infografica comprensiva dei contesti:
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=0.5 \linewidth]{pics/prima_infografica.png}
 	\caption{Prima infografica.}
 \end{figure}
 
-\paragraph{Seconda infografica} Per quanto riguarda la risposta alla seconda domanda di ricerca abbiamo deciso di utilizzare un'infografica composta da due visualizzazioni come precedentemente. In particolare:
+\paragraph{Seconda infografica} Per quanto riguarda la risposta alla seconda domanda di ricerca, abbiamo deciso di utilizzare un'infografica composta da due visualizzazioni come in precedenza. In particolare:
 \begin{itemize}
-	\item Un misto tra un \textbf{bar chart} e un \textbf{line chart} temporale. In questa visualizzazione abbiamo fatto risaltare la differenza percentuale tra una rilevazione e quella del giorno precedente. Il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19 mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. 
+	\item Un'unione tra un \textbf{bar chart} e un \textbf{line chart} temporale. In questa visualizzazione è stata evidenziata la differenza percentuale tra una rilevazione e quella del giorno precedente. Il line chart riguarda l'aumento percentuale del numero di video in tendenza relativi al Covid-19, mentre il bar chart riguarda l'aumento percentuale dei nuovi casi di Covid-19 rispetto al giorno precedente. 
 	Il numero di video considerati come riguardanti il coronavirus sono quelli che presentano la feature \textit{covid-title} \textbf{o} \textit{covid-tags} a 1, cioè che mostrano nel titolo \textbf{oppure} nei tag parole inerenti la pandemia.
-	Abbiamo utilizzato questo tipo di grafico in modo da poter vedere se le notizie negative o positive dei dati riguardanti il Covid-19 abbia influito sulla fruizione online dei video concernenti lo stesso argomento.
-	L'utilizzo di un bar chart e un line chart è dovuto al fatto che dai questionari è risultata più apprezzata questa scelta per riconoscere le due variabili.
+	Abbiamo utilizzato questo tipo di grafico per poter verificare se le notizie negative o positive dei dati riguardanti il Covid-19 abbia influito sulla fruizione online dei video concernenti lo stesso argomento.
+	L'utilizzo di un bar chart e di un line chart è dovuto al fatto che dai questionari è risultata più apprezzata questa scelta per riconoscere le due variabili.
 
 	\item Uno \textbf{stacked bar chart} che rappresenta il numero di video per categoria che riguardano il Covid-19. La visualizzazione può essere filtrata per giorno semplicemente interagendo con la prima visualizzazione.
 \end{itemize}
@@ -221,7 +221,7 @@ La combinazione di queste due visualizzazioni consente di rispondere alla second
 \subsection*{Valutazione della qualità}
 La valutazione della qualità si è articolata in tre passaggi:
 
-\paragraph{User Test} Durante questa fase ci siamo occupati di sottoporre la nostra infografica a otto persone lasciando completa libertà di esplorazione. Le varie interazioni sono state registrate in modo da far sì che potessero emergere le diverse problematiche di cui non ci siamo accorti in fase di realizzazione delle infografiche. Esponiamo le problematiche emerse durante questa fase di valutazione e le correzioni applicate:
+\paragraph{User Test} Durante questa fase ci siamo occupati di sottoporre la nostra infografica a otto persone, lasciando completa libertà di esplorazione. Le varie interazioni sono state registrate, affinchè potessero emergere le diverse problematiche non note in fase di realizzazione delle infografiche. Esponiamo, di seguito, le problematiche emerse durante questa fase di valutazione e le correzioni applicate:
 
 \begin{itemize}
 	\item \textit{Problema 1:} Il fatto di avere due variabili sotto forma di linea nella seconda infografica rende difficoltoso distinguerle nonostante il colore.\\\textit{Soluzione 1:} Abbiamo deciso di assegnare ad una variabile la forma "linea" e all'altra la forma "barra".
@@ -253,7 +253,7 @@ Sono stati registrati i tempi in cui gli utenti riuscivano a completare questi o
 \end{figure}
 Questa visualizzazione è utile per comprendere se le nostre infografiche sono troppo dispersive oppure riescono a essere facili e intuitive.
 
-\paragraph{Questionari} Per quanto riguarda l'ultima fase è stato somministrato un questionario di valutazione della qualità a 24 persone articolato nella seguente maniera:
+\paragraph{Questionari} Per quanto riguarda l'ultima fase, è stato somministrato un questionario di valutazione della qualità a 24 persone articolato nella seguente maniera:
 \begin{itemize}
 	\item Come valuti la chiarezza dell'infografica?
 	\item Come valuti l'utilità dell'infografica?
@@ -262,7 +262,7 @@ Questa visualizzazione è utile per comprendere se le nostre infografiche sono t
 	\item Quanto è stata informativa l'infografica?
 	\item Come valuti complessivamente l'infografica?
 \end{itemize}
-Le risposte sono state registrate grazie al tool "Moduli di Google". Una volta registrati i risultati è stata controllata che la valutazione dell'infografica fosse coerente con una ricostruzione complessiva della regressione con i coefficienti di Cabitza-Locoro.
+Le risposte sono state acquisite grazie al tool "Moduli di Google". Una volta registrati i risultati, è stata controllato che la valutazione dell'infografica fosse coerente con una ricostruzione complessiva data dalla regressione con i coefficienti di Cabitza-Locoro.
 \begin{figure}[H]
    \includegraphics[width=0.475\textwidth]{../quality/risposte_violin_plot_first.png}
    \hfill
@@ -277,26 +277,26 @@ Per quanto riguarda invece la coerenza della valutazione rispetto alla ricostruz
    \caption{$R_1^2 = 0.79, R_2^2 = 0.73$}
 \end{figure}
 
-Ci siamo inoltre preoccupati di calcolare la correlazione tra le variabili sottoposte nei questionari. Possiamo quindi notare che l'intuitività è la caratteristica che influisce meno delle altre sulla valutazione complessiva della nostra infografica.
+Ci siamo preoccupati di calcolare la correlazione tra le variabili sottoposte nei questionari, ed è possibile notare che l'intuitività è la caratteristica che influisce meno delle altre sulla valutazione complessiva della nostra infografica.
 \begin{figure}[H]
    \includegraphics[width=0.475\textwidth]{../quality/risposte_correlation_plot_first.png}
    \hfill
    \includegraphics[width=0.475\textwidth]{../quality/risposte_correlation_plot_second.png}
 \end{figure}
 \section*{Conclusioni e prospettive future}
-Visti i risultati di questo lavoro possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube prima e durante l'epidemia di Covid-19. 
+Dati i risultati di questo lavoro, possiamo affermare che vi sono rilevanti differenze nelle tendenze di Youtube prima e durante l'epidemia di Covid-19. 
 
-La prima infografica mostra come la distribuzione dei video nelle varie categorie sia cambiata. Ad esempio, per quanto riguarda l'Italia la categoria Sport subisce una drastica diminuzione, presumibilmente dovuta al blocco di tutte le attività sportive durante la quarantena; così come la categoria News \& politics che risulta essere più presente nel periodo Covid rispetto al precedente.
+La prima infografica mostra come la distribuzione dei video nelle varie categorie sia cambiata. Ad esempio, per quanto riguarda l'Italia la categoria Sport subisce una drastica diminuzione, presumibilmente dovuta al blocco di tutte le attività sportive durante la quarantena; così come la categoria News \& politics, che risulta essere più presente nel periodo Covid rispetto al precedente.
 
-\textit{La seconda infografica mostra che la variazione giornaliera del numero di contagi non influenza strettamente la quantità di contenuti nelle tendenze legati al Covid.} In alcuni frangenti si nota una certa relazione tra le due misure, ad esempio, in Italia nel periodo di fine marzo e inizio aprile. Ne consegue che, probabilmente, l'impatto dei numeri ufficiali relativi ai contagi non abbiano influenzato in modo significativo le tendenze giornaliere di Youtube.
+\textit{La seconda infografica mostra che la variazione giornaliera del numero di contagi non influenza strettamente la quantità di contenuti nelle tendenze legati al Covid.} In alcuni frangenti si nota una certa relazione tra le due misure, ad esempio, in Italia nel periodo di fine marzo e inizio aprile. Ne consegue che, probabilmente, l'impatto dei numeri ufficiali relativi ai contagi non abbia influenzato in modo significativo le tendenze giornaliere di Youtube.
 
 Da queste due infografiche possiamo concludere che i gusti degli utenti di Youtube hanno subito un evidente cambiamento durante il periodo dell'epidemia, e che questo mutamento è avvenuto gradualmente e non è necessariamente legato al numero ufficiale dei contagi.
 
 \paragraph{Prospettive future\\}
 
-Un aspetto che può essere interessante approfondire riguarda il legame che esiste tra la variazione giornaliera di contagi e il numero di contenuti Covid presenti sulla piattaforma. Un'analisi statistica attraverso regressioni semplici o complesse potrebbe rispondere alla seconda domanda di ricerca in maniera più completa ed esaustiva. Potrebbero essere considerati non solo i nuovi contagi giornalieri, ma anche altri fattori, come il numero di decessi o la quantità di contagi totale nel paese.
+Un aspetto interessante da approfondire riguarda il legame che esiste tra la variazione giornaliera di contagi e il numero di contenuti Covid presenti sulla piattaforma. Un'analisi statistica attraverso regressioni semplici o complesse potrebbe rispondere alla seconda domanda di ricerca in maniera più completa ed esaustiva. Potrebbero essere considerati non solo i nuovi contagi giornalieri, ma anche altri fattori, come il numero di decessi o la quantità di contagi totale nel paese.
 Ulteriori analisi potrebbero essere svolte su altre piattaforme, per avere un quadro più generale dei movimenti online che la pandemia ha generato. In tal modo sarebbe possibile comprendere come i gusti delle persone siano cambiati, o come il tempo passato in casa abbia cambiato gli interessi.
 
-Un'ultima considerazione andrebbe fatta riguardo al periodo successivo alla fase 2. In questo modo si potrebbe verificare se i cambiamenti che sono avvenuti abbiano davvero cambiato le tipologie di video più usufruite oppure se questa tendenza a spostarsi verso video dai contenuti più informativi si tratti solamente di un periodo transitorio.
+Un'ultima considerazione andrebbe fatta riguardo al periodo successivo alla fase 2. In questo modo si potrebbe verificare se i cambiamenti che sono avvenuti abbiano davvero cambiato le tipologie di video più usufruite oppure se questa tendenza a spostarsi verso video dai contenuti più informativi rappresenti solamente un periodo transitorio.
 
 \end{document}

@@ -1,6 +1,14 @@
 '''
 Query mongo che risponde alla domanda: 
 Contare numero di video covid per paese
+
+@params:
+    -u: mongoDB user
+    -p: mongoDB password
+    -port: mongoDB porta in cui comunica
+    -db: nome database mongodb
+    -c: nome collezione mongodb in cui immagazzinare i dati
+
 '''
 
 from pymongo import MongoClient

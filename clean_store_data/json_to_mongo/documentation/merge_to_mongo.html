@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module merge_to_mongo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>merge_to_mongo</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/fede9/Documents/GitHub/Youtube_trending_analysis/clean_store_data/json_to_mongo%20%28windows%29/merge_to_mongo.py">/mnt/c/Users/fede9/Documents/GitHub/Youtube_trending_analysis/clean_store_data/json_to_mongo (windows)/merge_to_mongo.py</a></font></td></tr></table>
+    <p><tt>Esegue&nbsp;il&nbsp;merge&nbsp;tra&nbsp;i&nbsp;dati&nbsp;youtube&nbsp;e&nbsp;covid,&nbsp;li&nbsp;carica&nbsp;su&nbsp;mongodb&nbsp;ed&nbsp;infine<br>
+esegue&nbsp;le&nbsp;query&nbsp;per&nbsp;definire&nbsp;covid_title&nbsp;e&nbsp;covid_tags<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-d:&nbsp;directory&nbsp;di&nbsp;directories&nbsp;dei&nbsp;json&nbsp;file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-dc:&nbsp;path&nbsp;file&nbsp;dati&nbsp;covid<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-u:&nbsp;mongoDB&nbsp;user<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-p:&nbsp;mongoDB&nbsp;password<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-port:&nbsp;mongoDB&nbsp;porta&nbsp;in&nbsp;cui&nbsp;comunica<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-db:&nbsp;nome&nbsp;database&nbsp;mongodb<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-c:&nbsp;nome&nbsp;collezione&nbsp;mongodb&nbsp;in&nbsp;cui&nbsp;immagazzinare&nbsp;i&nbsp;dati<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-e:&nbsp;path&nbsp;dove&nbsp;prendere&nbsp;l'espressione&nbsp;regolare</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="query_covid.html">query_covid</a><br>
+<a href="time.html">time</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-compute_covid"><strong>compute_covid</strong></a>(col, path_er)</dt><dd><tt>Esegue&nbsp;le&nbsp;query&nbsp;per&nbsp;aggiungere&nbsp;i&nbsp;campi&nbsp;covid_tags&nbsp;e&nbsp;covid_title&nbsp;ai&nbsp;video<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;col:&nbsp;&nbsp;&nbsp;&nbsp;collezione&nbsp;mongoDB<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path_er:&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;in&nbsp;cui&nbsp;trovare&nbsp;l'espressione&nbsp;regolare</tt></dd></dl>
+ <dl><dt><a name="-convert_types"><strong>convert_types</strong></a>(dict)</dt><dd><tt>Converte&nbsp;i&nbsp;formati&nbsp;del&nbsp;timestamp&nbsp;in&nbsp;datetime&nbsp;e&nbsp;dei&nbsp;dati&nbsp;in&nbsp;integer<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;&nbsp;&nbsp;dizionario&nbsp;di&nbsp;un&nbsp;singolo&nbsp;video</tt></dd></dl>
+ <dl><dt><a name="-list_directory"><strong>list_directory</strong></a>(data)</dt><dd><tt>Estrae&nbsp;lista&nbsp;di&nbsp;directory&nbsp;nelle&nbsp;quali&nbsp;ho&nbsp;i&nbsp;file&nbsp;json<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data:&nbsp;&nbsp;&nbsp;-&nbsp;Required&nbsp;&nbsp;&nbsp;:&nbsp;cartella&nbsp;di&nbsp;sottocartelle&nbsp;di&nbsp;file&nbsp;json<br>
+@return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;l:&nbsp;lista&nbsp;di&nbsp;directory</tt></dd></dl>
+ <dl><dt><a name="-merge_videos"><strong>merge_videos</strong></a>(videos, covid)</dt><dd><tt>Funzione&nbsp;di&nbsp;merge&nbsp;tra&nbsp;<br>
+@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;videos:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Youtube&nbsp;videos&nbsp;(lista&nbsp;dizionari)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;covid:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;covid&nbsp;data&nbsp;(dataframe)</tt></dd></dl>
+ <dl><dt><a name="-printProgressBar"><strong>printProgressBar</strong></a>(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd='\r')</dt><dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;Chiamato&nbsp;nel&nbsp;ciclo&nbsp;per&nbsp;stampare&nbsp;la&nbsp;barra&nbsp;di&nbsp;progressione<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@params:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iteration&nbsp;&nbsp;&nbsp;-&nbsp;Required&nbsp;&nbsp;:&nbsp;iterazione&nbsp;corrente&nbsp;(Int)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Required&nbsp;&nbsp;:&nbsp;iterazioini&nbsp;totali&nbsp;(Int)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Optional&nbsp;&nbsp;:&nbsp;prefisso&nbsp;stringa&nbsp;(Str)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suffix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Optional&nbsp;&nbsp;:&nbsp;suffisso&nbsp;string&nbsp;(Str)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decimals&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Optional&nbsp;&nbsp;:&nbsp;numero&nbsp;di&nbsp;cifre&nbsp;decimali&nbsp;nella&nbsp;percentuale&nbsp;(Int)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Optional&nbsp;&nbsp;:&nbsp;lunghezza&nbsp;della&nbsp;barra&nbsp;(Int)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fill&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Optional&nbsp;&nbsp;:&nbsp;carattere&nbsp;riempitore&nbsp;della&nbsp;barra&nbsp;(Str)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printEnd&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Optional&nbsp;&nbsp;:&nbsp;carattere&nbsp;di&nbsp;chiusura&nbsp;(e.g.&nbsp;"",&nbsp;"<br>
+")&nbsp;(Str)</tt></dd></dl>
+</td></tr></table>
+</body></html>

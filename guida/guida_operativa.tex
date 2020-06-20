@@ -33,7 +33,7 @@
 \end{center}
 
 \begin{center}
- Federico Luzzi,  Marco Peracchi, Christian Uccheddu, Gabriele Centemeri (TTC)
+ Federico Luzzi (DS),  Marco Peracchi (DS), Christian Uccheddu (DS), Gabriele Celeri (TTC)
 \end{center}
 Di seguito la guida operativa per eseguire il codice e replicare i risultati ottenuti:
 
@@ -63,7 +63,7 @@ Lo script ha bisogno del parametro:
 	\item -d "directory\_dei\_dati"
 \end{itemize}
 
-In tal modo si indica la directory dove sono i dati da trasformare.
+In tal modo si indica la directory dove si trovano i dati da trasformare.
 Per caricare i json su MongoDB avviare lo script:
 
 \begin{verbatim}
@@ -111,7 +111,7 @@ Questo script permette di eseguire una pulizia dei dati in modo da renderli inte
 \section*{Integrazione dei dati}
 
 
-Per eseguire l'integrazione tra i dati Covid e i dati di Youtube bisogna eseguire il seguente script:
+Per ottenere l'integrazione tra i dati Covid e i dati di Youtube bisogna eseguire il seguente script:
 
 \begin{verbatim}
 json_to_mongo(windows)/merge_to_mongo.py
@@ -133,7 +133,7 @@ I dati vengono quindi integrati sulla data e il paese e successivamente caricati
 
 \section*{Query mongo}
 
-La seconda domanda di ricerca ci chiede di distinguere quali video riguardino il coronavirus o meno. L'espressione regolare seguente analizza tags e titoli per verificare se è presente una parola riferita alla pandemia.
+La seconda domanda di ricerca richiede di distinguere quali video riguardino il coronavirus o meno. L'espressione regolare seguente analizza tag e titoli per verificare se è presente una parola riferita alla pandemia.
 
 \begin{figure}[H]
 	\centering
@@ -177,7 +177,7 @@ Lo sharding dei documenti di Mongo è stato eseguito in locale, quindi utilizzan
 	\item \textbf{shard} Sono tre istanze di \textit{mongod}. Ogni shard è configurato in replica-set, e i dati vengono suddivisi nei vari shard.
 \end{itemize}
 
-All'interno di ogni cartella sono presenti i vari file di configurazione, dove deve essere specificato il percorso della cartella \textit{data} di ogni istanza. Inoltre bisogna specificare che, essendo configurato tutto in una macchina locale, è importante utilizzare porte differenti per ogni istanza.
+All'interno di ogni cartella sono presenti i vari file di configurazione, dove deve essere specificato il percorso della cartella \textit{data} di ogni istanza. Inoltre bisogna precisare che, essendo configurato tutto in una macchina locale, è importante utilizzare porte differenti per ogni istanza.
 \\
 Per prima cosa inizializzare i replica-set, e successivamente avviarli come shard server o come config server. Una volta collegati quest'ultimi al router è necessario caricare i dati su uno degli shard. Prima di effettuare la procedura va specificata la \textit{shard key}, e va anche specificato il metodo di suddivisione dei dati, se \textit{hashed} o \textit{ranged}. In questo lavoro è stato utilizzato il primo metodo.
 \\
@@ -224,7 +224,7 @@ members: [
 }
 )
 \end{Verbatim}
-	\item Secondo Gruppo
+	\item Secondo gruppo
 \begin{Verbatim}
 rs.initiate(
 {_id : "rs2",
@@ -259,7 +259,7 @@ Dopo aver inizializzato gli shard e i config server aprire il router come istanz
 mongos --config <file.cfg>
 \end{Verbatim}
 
-Dopo aver avviato il router connettersi ad esso attraverso il localhost e la porta ad esso associata mediante il comando:
+Dopo aver avviato il router, connettersi ad esso attraverso il localhost e la porta ad esso associata mediante il comando:
 
 \begin{Verbatim}
 mongo --host <router>
